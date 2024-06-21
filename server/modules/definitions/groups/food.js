@@ -1,170 +1,5 @@
-const { basePolygonDamage, basePolygonHealth, base } = require('../constants.js'),
-
-// Code by Damocles (https://discord.com/channels/366661839620407297/508125275675164673/1090010998053818488)
-// Albeit heavily modified because the math in the original didn't work LOL
-makeRelic = (type, scale = 1, gem, SIZE) => {
-    type = ensureIsClass(type);
-    let relicCasing = {
-        PARENT: 'genericEntity',
-        LABEL: 'Relic Casing',
-        LEVEL_CAP: 45,
-        COLOR: type.COLOR,
-        MIRROR_MASTER_ANGLE: true,
-        SHAPE: [[-0.4,-1],[0.4,-0.25],[0.4,0.25],[-0.4,1]].map(r => r.map(s => s * scale))
-    }, relicBody = {
-        PARENT: 'genericEntity',
-        LABEL: 'Relic Mantle',
-        LEVEL_CAP: 45,
-        COLOR: type.COLOR,
-        MIRROR_MASTER_ANGLE: true,
-        SHAPE: type.SHAPE
-    };
-    Class[Math.random().toString(36)] = relicCasing;
-    Class[Math.random().toString(36)] = relicBody;
-    let width = 6 * scale,
-        y = 8.25 + ((scale % 1) * 5),
-        isEgg = type.SHAPE == 0,
-        casings = isEgg ? 8 : type.SHAPE,
-        fraction = 360 / casings,
-        GUNS = [],
-        TURRETS = [{ POSITION: [32.5, 0, 0, 0, 0, 0], TYPE: relicBody }],
-        PARENT = [type],
-        additionalAngle = type.SHAPE % 2 === 0 ? 0 : fraction / 2;
-
-    if (SIZE) {
-        PARENT.push({ SIZE });
-    }
-
-    for (let i = 0; i < casings; i++) {
-        let angle = i * fraction,
-            gunAngle = angle + additionalAngle;
-        if (isEgg) {
-            GUNS.push({
-                POSITION: [4, width, 2.5, 12,  0, gunAngle, 0]
-            });
-            TURRETS.push({
-                POSITION: [8, -15,  0, angle, 0, 1],
-                TYPE: relicCasing
-            });
-        } else {
-            GUNS.push({
-                POSITION: [4, width, 2.5, 12,  y, gunAngle, 0]
-            });
-            GUNS.push({
-                POSITION: [4, width, 2.5, 12, -y, gunAngle, 0]
-            });
-            TURRETS.push({
-                POSITION: [8, -15,  y, angle, 0, 1],
-                TYPE: relicCasing
-            });
-            TURRETS.push({
-                POSITION: [8, -15, -y, angle, 0, 1],
-                TYPE: relicCasing
-            });
-        }
-    }
-
-    if (gem) {
-        TURRETS.push({
-            POSITION: [8, 0, 0, 0, 0, 1],
-            TYPE: [gem, { MIRROR_MASTER_ANGLE: true }]
-        });
-    }
-
-    return {
-        PARENT,
-        LABEL: type.LABEL + ' Relic',
-        COLOR: "white", // This is the color of the floor, this makes it look hollow.
-        BODY: {
-            ACCELERATION: 0.001
-        },
-        CONTROLLERS: [],
-        VALUE: type.VALUE * 100_000,
-        GUNS,
-        TURRETS
-    };
-},
-
-makeCrasher = type => ({
-    PARENT: type,
-    COLOR: 'pink',
-    TYPE: "crasher",
-    LABEL: 'Crasher ' + type.LABEL,
-    CONTROLLERS: ['nearestDifferentMaster', 'mapTargetToGoal'],
-    MOTION_TYPE: "motor",
-    FACING_TYPE: "smoothWithMotion",
-    HITS_OWN_TYPE: "hard",
-    HAS_NO_MASTER: true,
-    DRAW_HEALTH: true,
-    BODY: {
-        SPEED: 1 + 5 / Math.max(2, type.TURRETS.length + type.SHAPE),
-        ACCELERATION: 5,
-        DAMAGE: 5,
-        PUSHABILITY: 0.5,
-        DENSITY: 10,
-        RESIST: 2,
-    },
-    AI: {
-        NO_LEAD: true,
-    }
-}),
-
-makeRare = (type, level) => {
-    type = ensureIsClass(type);
-    return {
-        PARENT: "food",
-        LABEL: ["Shiny", "Legendary", "Shadow", "Rainbow", "Trans"][level] + " " + type.LABEL,
-        VALUE: [100, 500, 2000, 4000, 5000][level] * type.VALUE,
-        SHAPE: type.SHAPE,
-        SIZE: type.SIZE + level,
-        COLOR: ["lightGreen", "teal", "darkGrey", "rainbow", "trans"][level],
-        ALPHA: level == 2 ? 0.25 : 1,
-        BODY: {
-            DAMAGE: type.BODY.DAMAGE + level,
-            DENSITY: type.BODY.DENSITY + level,
-            HEALTH: [10, 20, 40, 80, 100][level] * type.BODY.HEALTH,
-            PENETRATION: type.BODY.PENETRATION + level,
-            ACCELERATION: type.BODY.ACCELERATION
-        },
-        DRAW_HEALTH: true,
-        INTANGIBLE: false,
-        GIVE_KILL_MESSAGE: true,
-    }
-},
-
-lerp = (a, b, t) => a + (b - a) * t,
-
-makeLaby = (type, level) => {
-    type = ensureIsClass(type);
-    let usableSHAPE = Math.max(type.SHAPE, 3),
-        downscale = Math.cos(Math.PI / usableSHAPE),
-        strenghtMultiplier = 6 ** level;
-    return {
-        PARENT: "food",
-        LABEL: ["", "Beta ", "Alpha ", "Omega ", "Gamma ", "Delta "][level] + type.LABEL,
-        VALUE: type.VALUE * strenghtMultiplier,
-        SHAPE: type.SHAPE,
-        SIZE: level > 3 ? Math.max(40, type.SIZE * 2) * (1 + (level - 3) / 6) : type.SIZE * lerp(2 ** level, 1 + level / 3, Math.min(1, (type.SIZE - 5) / 17)),
-        COLOR: type.COLOR,
-        ALPHA: type.ALPHA,
-        BODY: {
-            DAMAGE: type.BODY.DAMAGE,
-            DENSITY: type.BODY.DENSITY,
-            HEALTH: type.BODY.HEALTH * strenghtMultiplier,
-            PENETRATION: type.BODY.PENETRATION,
-            PUSHABILITY: (type.BODY.PUSHABILITY / (level + 1)) || 0,
-            ACCELERATION: type.BODY.ACCELERATION
-        },
-        VARIES_IN_SIZE: false,
-        DRAW_HEALTH: type.DRAW_HEALTH,
-        GIVE_KILL_MESSAGE: type.GIVE_KILL_MESSAGE || level > 2,
-        GUNS: type.GUNS,
-        TURRETS: [...(type.TURRETS ? type.TURRETS : []), ...Array(level).fill().map((_, i) => ({
-            POSITION: [20 * downscale ** (i + 1), 0, 0, !(i & 1) ? 180 / usableSHAPE : 0, 0, 1],
-            TYPE: [type, { COLOR: -1, MIRROR_MASTER_ANGLE: true }]
-        }))]
-    };
-};
+const { basePolygonDamage, basePolygonHealth, base } = require('../constants.js');
+const { makeRelic, makeRare, makeCrasher, makeLaby } = require('../facilitators.js');
 
 // EGGS
 Class.egg = {
@@ -172,7 +7,7 @@ Class.egg = {
     LABEL: "Egg",
     VALUE: 10,
     SHAPE: 0,
-    SIZE: 5,
+    SIZE: 4.5,
     COLOR: "veryLightGrey",
     INTANGIBLE: true,
     BODY: {
@@ -189,7 +24,7 @@ Class.gem = {
     LABEL: "Gem",
     VALUE: 2e3,
     SHAPE: 6,
-    SIZE: 5,
+    SIZE: 4.5,
     COLOR: "aqua",
     BODY: {
         DAMAGE: basePolygonDamage / 4,
@@ -236,7 +71,7 @@ Class.square = {
     LABEL: "Square",
     VALUE: 30,
     SHAPE: 4,
-    SIZE: 10,
+    SIZE: 14,
     COLOR: "gold",
     BODY: {
         DAMAGE: basePolygonDamage,
@@ -284,7 +119,7 @@ Class.pentagon = {
     LABEL: "Pentagon",
     VALUE: 400,
     SHAPE: 5,
-    SIZE: 20,
+    SIZE: 21,
     COLOR: "purple",
     BODY: {
         DAMAGE: 1.5 * basePolygonDamage,
@@ -362,7 +197,7 @@ Class.hexagon = {
     LABEL: "Hexagon",
     VALUE: 500,
     SHAPE: 6,
-    SIZE: 22,
+    SIZE: 25,
     COLOR: "hexagon",
     BODY: {
         DAMAGE: 3 * basePolygonDamage,
@@ -528,7 +363,7 @@ for (let [gemColor, name] of [
     let gem;
     if (gemColor) {
         gem = Class[name + "Gem"] = {
-            PARENT: ['gem'],
+            PARENT: 'gem',
             LABEL: name + ' Gem',
             SHAPE: 6,
             COLOR: gemColor
@@ -579,7 +414,7 @@ for (let tier = 0; tier < 6; tier++) {
             food = food[0].toLowerCase() + food.slice(1);
 
             Class[`laby${tier}${food}`] = // backwards compatability, DO NOT ADD A SEMICOLON HERE. javascript is funny about whitespace characters :))))))
-            Class[`laby_${poly}_${tier}_${shiny}_0`] = makeLaby(Class[food], tier);
+            Class[`laby_${poly}_${tier}_${shiny}_0`] = makeLaby(Class[food], tier, (polyName == "Triangle" && tier > 0) ? 2/3 : 1);
 
             Class[`laby_${poly}_${tier}_${shiny}_1`] = makeCrasher(Class[`laby_${poly}_${tier}_${shiny}_0`]);
         }

@@ -279,6 +279,48 @@ class io_boomerang extends IO {
         }
     }
 }
+class io_kiva extends IO {
+    constructor(b) {
+        super(b)
+        this.r = 0
+        this.b = b
+        this.m = b.master
+        this.turnover = false
+        let len = 10 * util.getDistance({
+            x: 0,
+            y: 0
+        }, b.master.control.target)
+        this.myGoal = {
+            x: b.master.control.target.x + b.master.x,
+            y: b.master.control.target.y + b.master.y,
+        }
+    }
+    think(input) {
+        if (this.b.range > this.r) this.r = this.b.range
+        let t = 1; //1 - Math.sin(2 * Math.PI * this.b.range / this.r) || 1
+        if (!this.turnover) {
+            if (this.r && this.b.range < this.r * 0.5) {
+                setTimeout(() => this.turnover = true, 500);
+            }
+            return {
+                goal: this.myGoal,
+                power: t,
+            }
+        } else {
+            let tomaster = util.getDistance(this.b, this.m);
+            if (tomaster < this.m.size) {
+              this.b.kill()
+            }
+            return {
+                goal: {
+                    x: this.m.x,
+                    y: this.m.y,
+                },
+                power: t,
+            }
+        }
+    }
+}
 class io_goToMasterTarget extends IO {
     constructor(body) {
         super(body)
@@ -510,7 +552,7 @@ class io_nearestDifferentMaster extends IO {
             this.tick = 100;
         }
         // Think damn hard
-        if (this.tick++ > 15 * c.runSpeed) {
+        if (this.tick++ > 15 * Config.runSpeed) {
             this.tick = 0;
             this.validTargets = this.buildList(range);
             // Ditch our old target if it's invalid
@@ -717,7 +759,7 @@ class io_spin extends IO {
             this.a = Math.atan2(input.target.y, input.target.x);
             return input;
         }
-        this.a += this.speed / c.runSpeed;
+        this.a += this.speed / Config.runSpeed;
         let offset = (this.independent && this.body.bond != null) ? this.body.bound.angle : 0;
         return {
             target: {
@@ -735,7 +777,7 @@ class io_spin2 extends IO {
         this.reverseOnAlt = opts.reverseOnAlt ?? true;
         this.lastAlt = -1;
         this.reverseOnTheFly = opts.reverseOnTheFly ?? false;
-
+      
         // On spawn logic
         let alt = this.body.master.control.alt;
         let reverse = (this.reverseOnAlt && alt) ? -1 : 1;
@@ -743,7 +785,7 @@ class io_spin2 extends IO {
     }
     think(input) {
         if (!this.reverseOnTheFly) return;
-
+      
         // Live logic
         let alt = this.body.master.control.alt;
         if (this.lastAlt != alt) {
@@ -837,7 +879,7 @@ class io_formulaTarget extends IO {
         //     this.originAngle = this.masterAngle ? b.master.facing : getTheGunThatSpawnedMe("how do i do that????").angle;
         // }
 
-        let angle = this.originAngle + this.formula(this.frame += 1 / c.runSpeed, this.body);
+        let angle = this.originAngle + this.formula(this.frame += 1 / Config.runSpeed, this.body);
         return {
             goal: {
                 x: this.body.x + Math.sin(angle),
@@ -877,6 +919,63 @@ class io_whirlwind extends IO {
         this.body.inverseDist = Math.min(trueMaxDistance, Math.max(trueMinDistance, this.body.inverseDist));
     }
 }
+class io_hadron extends IO {
+    constructor(b, opts = {}) {
+        super(b)
+        this.a = opts.startAngle || 0;
+        this.speed = opts.speed ?? 0.04;
+        this.onlyWhenIdle = opts.onlyWhenIdle;
+        this.independent = opts.independent;
+    }
+    think(input) {
+      if (input.alt){
+        if (this.onlyWhenIdle && input.target) {
+            this.a = Math.atan2(input.target.y, input.target.x);
+            return input;
+        }
+        this.a -= this.speed / Config.runSpeed;
+        let offset = (this.independent && this.body.bond != null) ? this.body.bound.angle : 0;
+        return {
+            target: {
+                x: Math.cos(this.a - offset),
+                y: Math.sin(this.a - offset)
+            },
+            main: true,
+        };
+    } else {
+      if (this.onlyWhenIdle && input.target) {
+            this.a = Math.atan2(input.target.y, input.target.x);
+            return input;
+        }
+        this.a += this.speed / Config.runSpeed;
+        let offset = (this.independent && this.body.bond != null) ? this.body.bound.angle : 0;
+        return {
+            target: {
+                x: Math.cos(this.a + offset),
+                y: Math.sin(this.a + offset),
+            },
+            main: true,
+        };
+      } 
+    }
+}
+class io_AimAssist extends IO {
+  constructor(body) {
+    super(body);
+  }
+  think(input) { 
+    this.body.velocity.x = 0;
+    this.body.velocity.y = 0;
+    if (!input.fire && !input.target) {
+    this.body.x = this.body.master.source.x; 
+    this.body.y = this.body.master.source.y;
+    } 
+    if (input.fire && input.target) {
+    this.body.x = this.body.x + input.target.x; 
+    this.body.y = this.body.y + input.target.y;
+    }
+  }
+}
 class io_orbit extends IO {
     constructor(body, opts = {}) {
         super(body);
@@ -900,6 +999,37 @@ class io_orbit extends IO {
         this.body.y = master.y + Math.sin(angle) * this.realDist;
         
         this.body.facing = angle;
+    }
+}
+class io_snake extends IO {
+    constructor(body, opts = {}) {
+        super(body);
+        this.waveInvert = opts.invert ? -1 : 1;
+        this.wavePeriod = opts.period ?? 7.5;
+        this.waveAmplitude = opts.amplitude ?? 100;
+        this.reverseWave = this.body.master.control.alt ? -1 : 1;;
+        this.velocityMagnitude = 0;
+        this.velocityAngle = 0;
+        this.body.damp = 0;
+        this.waveAngle = this.body.master.facing + (opts.angle ?? 0);
+        this.startX = this.body.x;
+        this.startY = this.body.y;
+        this.body.x += Math.cos(this.body.velocity.direction) * this.body.size * 20;
+        this.body.y += Math.sin(this.body.velocity.direction) * this.body.size * 20;
+    }
+    think(input) {
+        // Define a sin wave for the bullet to follow
+        let waveX = 50 * (this.body.RANGE - this.body.range) / this.wavePeriod;
+        let waveY = this.waveAmplitude * Math.sin(waveX / 50) * this.waveInvert * this.reverseWave;
+        // Rotate the sin wave
+        let trueWaveX = Math.cos(this.waveAngle) * waveX - Math.sin(this.waveAngle) * waveY;
+        let trueWaveY = Math.sin(this.waveAngle) * waveX + Math.cos(this.waveAngle) * waveY;
+        // Follow the sin wave
+        this.body.x = util.lerp(this.body.x, this.startX + trueWaveX, this.velocityMagnitude);
+        this.body.y = util.lerp(this.body.y, this.startY + trueWaveY, this.velocityMagnitude);
+        // Accelerate after spawning
+        this.velocityMagnitude = Math.min(this.body.velocity.length, this.velocityMagnitude + (this.body.velocity.length / 55) / Config.runSpeed)
+        //sockets.broadcast(this.velocityBasically.toString())
     }
 }
 
@@ -973,6 +1103,8 @@ let ioTypes = {
     stackGuns: io_stackGuns,
     nearestDifferentMaster: io_nearestDifferentMaster,
     targetSelf: io_targetSelf,
+    hadron: io_hadron,
+    AimAssist: io_AimAssist,
     onlyAcceptInArc: io_onlyAcceptInArc,
     spin: io_spin,
     spin2: io_spin2,
@@ -986,11 +1118,13 @@ let ioTypes = {
     formulaTarget: io_formulaTarget,
     orbit: io_orbit,
     goToMasterTarget: io_goToMasterTarget,
+    snake: io_snake,
     avoid: io_avoid,
     minion: io_minion,
     hangOutNearMaster: io_hangOutNearMaster,
     fleeAtLowHealth: io_fleeAtLowHealth,
     wanderAroundMap: io_wanderAroundMap,
+    kiva: io_kiva,
 };
 
 module.exports = { ioTypes, IO };

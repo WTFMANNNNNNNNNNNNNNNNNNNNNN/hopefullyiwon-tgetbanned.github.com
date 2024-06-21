@@ -9,6 +9,7 @@ const dreadnoughtBody = {
     SHIELD: base.SHIELD * 2.5,
     FOV: base.FOV * 1.4,
     DENSITY: base.DENSITY * 6,
+	REGEN: base.REGEN,
 };
 g.dreadv1Generic = {
 	health: 1.4,
@@ -21,20 +22,22 @@ g.dreadv1Slow = {
 	maxSpeed: 0.65,
 };
 g.dreadv1Drone = {
-	health: 1.3,
-	speed: 0.9,
-	maxSpeed: 0.9,
-	reload: 1.4,
+	health: 1.32,
+	speed: 0.68,
+	maxSpeed: 0.68,
+	reload: 0.8,
 	size: 1.2
 }
 g.dreadv1Trap = {
 	range: 0.9,
 	shudder: 0.2,
-	reload: 1.75
+	speed: 1.15,
+	reload: 3,
+	health: 1.75,
 }
 
 // Comment out the line below to enable this addon, uncomment it to disable this addon.
-//return console.log('--- Dreadnoughts v1 addon [dreadv1.js] is disabled. See lines 32-33 to enable it. ---');
+// return console.log('--- Dreadnoughts v1 addon [dreadv1.js] is disabled. See lines 32-33 to enable it. ---');
 
 // Set the below variable to true to enable the Medicare and Medicaid healing bodies.
 const enableHealers = true;
@@ -154,7 +157,7 @@ Class.weakMinion = {
         {
             POSITION: [17, 9, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.minionGun, {health: 0.4, speed: 0.8, maxSpeed: 0.8}]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.minionGun, {health: 0.45, speed: 0.8, maxSpeed: 0.8}]),
                 WAIT_TO_CYCLE: true,
                 TYPE: "bullet",
             },
@@ -375,7 +378,7 @@ Class.inquisitorOfficialV1 = {
 	GUNS: weaponArray({
 		POSITION: [7, 7.5, 1.3, 7.5, 0, 0, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.dreadv1Drone, {health: 0.95}]),
+			SHOOT_SETTINGS: combineStats([g.drone, g.overseer, g.dreadv1Drone, {speed: 0.95, maxSpeed: 0.95, damage: 0.9, health: 0.92}]),
 			TYPE: "drone",
 			AUTOFIRE: true,
 			SYNCS_SKILLS: true,
@@ -391,19 +394,19 @@ Class.assailantOfficialV1 = {
 	UPGRADE_TOOLTIP: "Minions",
 	GUNS: weaponArray([
 		{
-			POSITION: [13.5, 8, 1, 0, 0, 0, 0],
+			POSITION: [13.75, 8, 1, 0, 0, 0, 0],
 		}, {
-			POSITION: [1.5, 10, 1, 13.5, 0, 0, 0],
+			POSITION: [1, 10, 1, 13.75, 0, 0, 0],
 			PROPERTIES: {
 				MAX_CHILDREN: 4,
-				SHOOT_SETTINGS: combineStats([g.factory, g.overseer, g.dreadv1Drone, {health: 0.65, reload: 0.7}]),
+				SHOOT_SETTINGS: combineStats([g.factory, g.overseer, g.dreadv1Drone, {damage: 0.6, speed: 0.85, maxSpeed: 0.85}]),
 				TYPE: "weakMinion",
 				STAT_CALCULATOR: gunCalcNames.drone,
 				AUTOFIRE: true,
 				SYNCS_SKILLS: true
 			}
 		}, {
-			POSITION: [11.5, 10, 1, 0, 0, 0, 0]
+			POSITION: [12.25, 10, 1, 0, 0, 0, 0]
 		}
 	], 3)
 }
@@ -596,8 +599,8 @@ for (let primary of Class.dreadOfficialV1.UPGRADES_TIER_1) {
 		if (secondary.TURRETS) TURRETS.push(...secondary.TURRETS);
 
 		// Body
-		if (primary.BODY) for (let m in primary.BODY) BODY *= primary.BODY[m];
-		if (secondary.BODY) for (let m in secondary.BODY) BODY *= secondary.BODY[m];
+		if (primary.BODY) for (let m in primary.BODY) BODY[m] *= primary.BODY[m];
+		if (secondary.BODY) for (let m in secondary.BODY) BODY[m] *= secondary.BODY[m];
 
 		// Definition name
 		let definitionName = primaryName + secondaryName;

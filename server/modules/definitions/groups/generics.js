@@ -138,6 +138,12 @@ Class.genericSmasher = {
         DENSITY: 2 * base.DENSITY
     }
 }
+Class.genericLancer = {
+    PARENT: "genericTank",
+    DANGER: 6,
+    SKILL_CAP: [dfltskl, dfltskl, dfltskl, dfltskl, 0, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl],
+    STAT_NAMES: statnames.lancer,
+}
 Class.genericBoss = {
     PARENT: "genericTank",
     TYPE: "miniboss",
@@ -170,7 +176,7 @@ Class.food = {
     MOTION_TYPE: "drift",
     FACING_TYPE: "turnWithSpeed",
     VARIES_IN_SIZE: true,
-    LEVEL_CAP: 45,
+    LEVEL_CAP: 1,
     BODY: {
         STEALTH: 30,
         PUSHABILITY: 1,
@@ -308,7 +314,8 @@ Class.satellite = {
     DRAW_HEALTH: false,
     CLEAR_ON_MASTER_UPGRADE: true,
     BUFF_VS_FOOD: true,
-    MOTION_TYPE: 'motor'
+    MOTION_TYPE: 'motor',
+    CAN_GO_OUTSIDE_ROOM: true
 }
 
 Class.auraBase = {
@@ -356,4 +363,11 @@ Class.auraSymbol = {
     INDEPENDENT: true,
     COLOR: "teal",
     SHAPE: [[-0.598,-0.7796],[-0.3817,-0.9053],[0.9688,-0.1275],[0.97,0.125],[-0.3732,0.9116],[-0.593,0.785]]
+};
+Class.rangeAuraSymbol = {
+    PARENT: "genericTank",
+    CONTROLLERS: [["spin", {speed: -0.04}]],
+    INDEPENDENT: true,
+    COLOR: "teal",
+    SHAPE: "M -0.7671 0.6521 L -0.7671 -0.6521 L -0.6521 -0.7671 L -0.6521 -0.7671 L 0.6521 -0.7671 L 0.7671 -0.6521 L 0.7671 0.6521 L 0.6521 0.7671 L -0.6521 0.7671 L -0.7671 0.6521"
 };

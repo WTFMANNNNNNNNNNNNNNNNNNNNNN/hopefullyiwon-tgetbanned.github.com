@@ -1,5 +1,7 @@
 import { global } from "./global.js";
 import { settings } from "./settings.js";
+import * as socketStuff from "./socketInit.js";
+let { gui } = socketStuff;
 
 class Canvas {
     constructor() {
@@ -7,7 +9,7 @@ class Canvas {
         this.target = global.target;
         this.socket = global.socket;
         this.directions = [];
-
+        this.wikiInput = document.getElementById("wikiTankThing");
         this.chatInput = document.getElementById('chatInput');
         this.chatInput.addEventListener('keydown', event => {
             if (![global.KEY_ENTER, global.KEY_ESC].includes(event.keyCode)) return;
@@ -17,6 +19,17 @@ class Canvas {
             if (!this.chatInput.value) return;
             if (event.keyCode === global.KEY_ENTER) this.socket.talk('M', this.chatInput.value);
             this.chatInput.value = "";
+        });
+        this.wikiInput.addEventListener('keydown', event => {
+          if (global.wiki && global.gameStart) {
+          if (event.keyCode === global.KEY_ENTER) {
+          if (this.wikiInput.value != "") {
+            global.wikidisplaytank = this.wikiInput.value;
+            this.wikiInput.value = "";
+          }
+          this.cv.focus();
+            }
+          }
         });
 
         this.cv = document.getElementById('gameCanvas');
@@ -64,13 +77,21 @@ class Canvas {
                 if (global.showTree) this.treeScrollSpeedMultiplier = 5;
                 else this.socket.cmd.set(6, true);
                 break;
-
+            case global.KEY_PING:
+                global.showDebug = !0;
+                break;
             case global.KEY_ENTER:
+                global.killsoundready = true
                 // Enter to respawn
                 if (global.died) {
-                    this.socket.talk('s', global.playerName, 0, 1 * settings.game.autoLevelUp);
+                    this.socket.talk('s', global.playerName, 0, 1 * settings.game.autoLevelUp, global.skin);
                     global.died = false;
-                    break;
+                break;
+                }
+            
+                if (global.wiki && global.gameStart) {
+                this.wikiInput.focus();
+                break;
                 }
 
                 // or to talk instead
@@ -94,11 +115,19 @@ class Canvas {
             case global.KEY_LEFT_ARROW:
                 if (!global.died && global.showTree) return global.scrollVelocityX = -this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
             case global.KEY_LEFT:
+                if (global.wiki && global.gameStart) {
+                global.wikidisplaytank = parseInt(global.wikidisplaytank) - 1;
+                break;
+                }
                 this.socket.cmd.set(2, true);
                 break;
             case global.KEY_RIGHT_ARROW:
                 if (!global.died && global.showTree) return global.scrollVelocityX = +this.treeScrollSpeed * this.treeScrollSpeedMultiplier;
             case global.KEY_RIGHT:
+                if (global.wiki && global.gameStart) {
+                global.wikidisplaytank = parseInt(global.wikidisplaytank) + 1;
+                break;
+                }
                 this.socket.cmd.set(3, true);
                 break;
             case global.KEY_MOUSE_0:
@@ -124,6 +153,63 @@ class Canvas {
                 break;
             case global.KEY_SUICIDE:
                 this.socket.talk('1');
+                break;
+            case global.KEY_TELEPORT:
+                this.socket.talk('testTeleport');
+                break;
+            case global.KEY_SMALLER_TANK:
+                this.socket.talk('smallerTank');
+                break;
+            case global.KEY_BIGGER_TANK:
+                this.socket.talk('biggerTank');
+                break;
+            case global.KEY_SMALLER_FOV:
+                this.socket.talk('smallerFOV');
+                break;
+            case global.KEY_BIGGER_FOV:
+                this.socket.talk('biggerFOV');
+                break;
+            case global.KEY_GOD_MODE:
+                this.socket.talk('godmodeButton');
+                break;
+            case global.KEY_INVISIBLE:
+                this.socket.talk('invisibility');
+                break;
+            case global.KEY_CAN_BE_ON_LEADERBOARD:
+                this.socket.talk('canBeOnLeaderboard');
+                break;
+            case global.KEY_STRONG:
+                this.socket.talk('keyStrong');
+                break;
+            case global.KEY_WATCH_THIS:
+                this.socket.talk('watchThis');
+                break;
+            case global.KEY_DRAG:
+                this.socket.talk('drag');
+                break;
+            case global.KEY_SPAWN_WALL:
+                this.socket.talk('spawnWall');
+                break;
+            case global.KEY_RANDOM_TEST:
+                  this.socket.talk('randomTestKey');
+                break;
+            case global.KEY_ABILITY:
+                this.socket.cmd.set(7, true);
+                break;
+            
+            case global.KEY_HEAL:
+                this.socket.talk('heal');
+                break;
+            case global.KEY_WIKI:
+                global.wiki = true;
+                document.querySelector("#wikiTankThing").style.display = 'block';
+                break;
+            case global.KEY_ESC:
+                global.wiki = false;
+                document.querySelector("#wikiTankThing").style.display = 'none';
+                break;
+          case global.KEY_CHANGE_SONG:
+                global.music2.currentTime = 999;
                 break;
         }
         if (!event.repeat) {
@@ -170,22 +256,22 @@ class Canvas {
             if (global.canUpgrade) {
                 switch (event.keyCode) {
                     case global.KEY_CHOOSE_1:
-                        this.socket.talk('U', 0);
+                        this.socket.talk('U', 0, parseInt(gui.upgrades[0][0]));
                         break;
                     case global.KEY_CHOOSE_2:
-                        this.socket.talk('U', 1);
+                        this.socket.talk('U', 1, parseInt(gui.upgrades[1][0]));
                         break;
                     case global.KEY_CHOOSE_3:
-                        this.socket.talk('U', 2);
+                        this.socket.talk('U', 2, parseInt(gui.upgrades[2][0]));
                         break;
                     case global.KEY_CHOOSE_4:
-                        this.socket.talk('U', 3);
+                        this.socket.talk('U', 3, parseInt(gui.upgrades[3][0]));
                         break;
                     case global.KEY_CHOOSE_5:
-                        this.socket.talk('U', 4);
+                        this.socket.talk('U', 4, parseInt(gui.upgrades[4][0]));
                         break;
                     case global.KEY_CHOOSE_6:
-                        this.socket.talk('U', 5);
+                        this.socket.talk('U', 5, parseInt(gui.upgrades[5][0]));
                         break;
                 }
             }
@@ -201,6 +287,9 @@ class Canvas {
                 global.scrollVelocityY = 0;
             case global.KEY_UP:
                 this.socket.cmd.set(0, false);
+                break;
+            case global.KEY_PING:
+                global.showDebug = !1;
                 break;
             case global.KEY_DOWN_ARROW:
                 global.scrollVelocityY = 0;
@@ -226,6 +315,9 @@ class Canvas {
             case global.KEY_MOUSE_2:
                 this.socket.cmd.set(6, false);
                 break;
+            case global.KEY_ABILITY:
+                this.socket.cmd.set(7, false);
+                break;
             case global.KEY_MAX_STAT:
                 global.statMaxing = false;
                 break;
@@ -249,7 +341,7 @@ class Canvas {
                     global.clearUpgrades();
                 } else {
                     let upgradeIndex = global.clickables.upgrade.check(mpos);
-                    if (upgradeIndex !== -1) this.socket.talk('U', upgradeIndex);
+                    if (upgradeIndex !== -1 && upgradeIndex < gui.upgrades.length) this.socket.talk('U', upgradeIndex, parseInt(gui.upgrades[upgradeIndex][0]));
                     else this.socket.cmd.set(primaryFire, true);
                 }
                 break;

@@ -1,5 +1,5 @@
 let dominatorTypes = ["destroyerDominator", "gunnerDominator", "trapperDominator"],
-    neededToWin = 4,
+    neededToWin = Config.GOVERNMENTAL ? 63 : 4,
 
     teamcounts = {},
     gameWon = false,
@@ -12,8 +12,8 @@ spawn = (tile, team, color, type = false) => {
     o.color.base = color;
     o.skill.score = 111069;
     o.name = "Dominator";
-    o.SIZE = room.tileWidth / 10;
-    o.isDominator = true;
+    o.SIZE = Config.GOVERNMENTAL ? room.tileWidth / 20 : room.tileWidth / 10;
+    if (!Config.GOVERNMENTAL) o.isDominator = true;
     o.controllers = [new ioTypes.nearestDifferentMaster(o), new ioTypes.spin(o, { onlyWhenIdle: true })];
 
     tile.color.base = color;
@@ -33,7 +33,7 @@ spawn = (tile, team, color, type = false) => {
         let newTeam = TEAM_ENEMIES,
             newColor = getTeamColor(newTeam);
 
-        if (team === TEAM_ENEMIES) {
+        if (team === TEAM_ENEMIES || Config.GOVERNMENTAL) {
             let killers = [];
             for (let instance of o.collisionArray) {
                 if (isPlayerTeam(instance.team) && team !== instance.team) {
@@ -42,19 +42,21 @@ spawn = (tile, team, color, type = false) => {
             }
 
             let killer = ran.choose(killers);
-            killer = killer ? killer.master.master : { team: TEAM_ROOM, color: c.MODE === "tdm" ? 3 : 12 };
+            killer = killer ? killer.master.master : { team: TEAM_ROOM, color: Config.MODE === "tdm" ? 3 : 12 };
 
             newTeam = killer.team;
             newColor = getTeamColor(newTeam);
 
-            for (let player of sockets.players) {
+          if (type !== "territoryCapturePoint") {  
+          for (let player of sockets.players) {
                 if (player.body && player.body.team === newTeam) {
                     player.body.sendMessage("Press F to take control of the dominator.");
                 }
             }
+          }
 
             let teamName = newTeam > 0 ? killer.name : getTeamName(newTeam);
-            sockets.broadcast(`A dominator is now controlled by ${teamName}!`);
+            Config.GOVERNMENTAL ? sockets.broadcast(`${teamName} has Gained +1 Territory`) : sockets.broadcast(`A dominator is now controlled by ${teamName}!`);
             if (newTeam !== TEAM_ENEMIES && teamcounts[newTeam] >= neededToWin && !gameWon) {
                 gameWon = true;
                 setTimeout(sockets.broadcast, 1500, teamName + " has won the game!");
@@ -62,7 +64,11 @@ spawn = (tile, team, color, type = false) => {
             }
 
         } else {
-            sockets.broadcast("A dominator is being contested!");
+          for (let player of sockets.players) {
+            if (player.body && player.body.team === team) {
+                Config.GOVERNMENTAL ? player.body.sendMessage("Your Territory is being invaded!") : sockets.broadcast("A dominator is being contested!");
+            }
+          }
         }
 
         spawn(tile, newTeam, newColor, type);
@@ -113,7 +119,37 @@ let dominatorBlue = new Tile({ init: tile => makeDefenderDominator(tile, TEAM_BL
     dominatorContested = new Tile({ init: tile => spawn(tile, TEAM_ENEMIES, getTeamColor(TEAM_ENEMIES)) }),
     sanctuaryBlue = new Tile({ init: tile => makeDefenderDominator(tile, TEAM_BLUE, TEAM_BLUE, 'sanctuaryTier1') }),
     sanctuaryGreen = new Tile({ init: tile => makeDefenderDominator(tile, TEAM_GREEN, TEAM_GREEN, 'sanctuaryTier1') }),
-    sanctuaryContested = new Tile({ init: tile => spawn(tile, TEAM_ENEMIES, getTeamColor(TEAM_ENEMIES), 'sanctuaryTier1') });
+    sanctuaryContested = new Tile({ init: tile => spawn(tile, TEAM_ENEMIES, getTeamColor(TEAM_ENEMIES), 'sanctuaryTier1') }),
+
+    dominatorContestedBlank = new Tile({
+      init: tile => spawn(tile, TEAM_ENEMIES, "white", "territoryCapturePoint"), 
+      tick: tile => {
+        for (let i = 0; i < tile.entities.length; i++) {
+            let entity = tile.entities[i];
+            if (entity.isPlayer) {
+            if (entity.pushability && entity.isPlayer && entity.color.base !== tile.color.base) {
+                let dirToCenter = Math.atan2(entity.y - tile.y, entity.x - tile.x);
+                entity.velocity.x = Math.cos(dirToCenter) * 25 * entity.pushability;
+                entity.velocity.y = Math.sin(dirToCenter) * 25 * entity.pushability;
+            }
+            }
+        }
+    } }),
+    trapDominatorContestedBlank = new Tile({
+      init: tile => spawn(tile, TEAM_ENEMIES, "white", "trapTerritoryCapturePoint"), 
+      tick: tile => {
+        for (let i = 0; i < tile.entities.length; i++) {
+            let entity = tile.entities[i];
+            if (entity.isPlayer) {
+            if (entity.pushability && entity.color.base !== tile.color.base) {
+                let dirToCenter = Math.atan2(entity.y - tile.y, entity.x - tile.x);
+                entity.velocity.x = Math.cos(dirToCenter) * 25 * entity.pushability;
+                entity.velocity.y = Math.sin(dirToCenter) * 25 * entity.pushability;
+                }
+            }
+        }
+    } });
+
 
 
 module.exports = {
@@ -121,6 +157,8 @@ module.exports = {
     dominatorBlue,
     dominatorGreen,
     dominatorContested,
+    dominatorContestedBlank, // risk
+    trapDominatorContestedBlank, // frisky risky
     sanctuaryBlue, // siege
     sanctuaryGreen, // assault
     sanctuaryContested // idk i thought it was funny

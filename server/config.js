@@ -3,11 +3,18 @@ module.exports = {
 
     // Game server domain.
     // If 'localhost:NUMBER', the port must equal the port setting.
-    host: "localhost:26301",
+    host: "neroio2.glitch.me",
 
     // Which port to run the web server on.
-    port: 26301,
-
+    port: 3000,
+  
+    // Region/Location the server is in
+    // For glitch its US West
+    region: "US West",
+  
+    // name of the server ex. main server, beta server, etc
+    serverName: "Beta",
+  
     // How often to update the list of the entities that players can see.
     // Has effects of when entities are activated.
     visibleListInterval: 250,
@@ -17,25 +24,28 @@ module.exports = {
 
     // Flatten entity definition, which gets rid of PARENT attributes and applies the parents' attributes to the entity definition, if they're not set in the entity already.
     flattenDefintions: false,
-
+  
     // Log speed loop warnings
-    LOGS: true,
+    LOGS: false,
+  
+      // If there's only one server
+    COMBINED: true,
 
     // The \modules\setup\gamemodeconfigs\ files to load.
     // To change specific things about specific gamemodes (such as team count for tdm), edit their config file in \modules\setup\gamemodeconfigs\.
-    GAME_MODES: ['tdm', 'domination'],
+    GAME_MODES: ['ffa'],
 
     // The room files to load in the setup/rooms folder.
     // NOTE: If a /gamemodeconfig/ file "replaces" the value of ROOM_SETUP, it just adds its own ROOM_SETUP's content to this array.
     // NOTE: Files starting with `map_` are maps. files starting with `overlay_` are overlays that get added on.
     // NOTE: These prefixes are only for categorisation, a room file would work the same regardless of its prefix. APS++ does nothing based on file name prefixes.
-    ROOM_SETUP: ['map_apspp_default'],
+    ROOM_SETUP: ['map_neroio_mazearena'],
 
     // The dimensions of a single tile on the map.
-    TILE_WIDTH: 400,
-    TILE_HEIGHT: 400,
-
-
+    TILE_WIDTH: 200, //400
+    TILE_HEIGHT: 200, //400
+  
+  
 
     // Miscellaneous
 
@@ -45,43 +55,40 @@ module.exports = {
 
     // If you don't want your players to color their messages.
     // They get sanitized after addons interpret them, but before they're added to the chat message dictionary.
-    SANITIZE_CHAT_MESSAGE_COLORS: true,
-
-    // If someone tries to get a file that does not exist, send them this instead.
-    DEFAULT_FILE: 'index.html',
+    SANITIZE_CHAT_MESSAGE_COLORS: false,
 
     // Window name of the server terminal.
-    WINDOW_NAME: 'OSA Game Server Instance',
+    WINDOW_NAME: 'Nero Game Server Instance',
 
     // Allows you to type and run javascript code in the terminal.
     REPL_WINDOW: false,
 
     // Welcome message once a player spawns.
-    WELCOME_MESSAGE: "You have spawned! Welcome to the game.\n"
-                    +"You will be invulnerable until you move or shoot.\n"
-                    +"Please report any bugs you encounter!",
+    WELCOME_MESSAGE: "You have spawned! Welcome to the game, Hold N To Level Up.\n"
+                    +"You will be invulnerable until you move or shoot OR ACCIDENTALLY PRESS THE FUCKING SPACE BAR.\n"
+                    +"Please report any bugs you encounter on our discord! :)",
+
     
     // How long a popup message lasts before fading out in milliseconds.
     MESSAGE_DISPLAY_TIME: 10_000,
     
 
-
     // Physics
 
     // General multiplier for acceleration and max speeds.
-    runSpeed: 1.5,
+    runSpeed: 1.5, //1.5
 
     // General damage multiplier everytime damage is dealt.
-    DAMAGE_CONSTANT: 0.5,
+    DAMAGE_CONSTANT: 0.5, // 0.5
 
     // General knockback multiplier everytime knockback is applied.
-    KNOCKBACK_CONSTANT: 1.5,
+    KNOCKBACK_CONSTANT: 1.5, //1.5
 
     // TODO: Figure out how the math behind this works.
     GLASS_HEALTH_FACTOR: 2,
 
     // How strong the force is that confines entities to the map and portals apply to entities.
-    ROOM_BOUND_FORCE: 0.01,
+    ROOM_BOUND_FORCE: 0.01, //0.01
 
 
 
@@ -115,16 +122,16 @@ module.exports = {
 
     // How much XP player-bots get per second until they reach LEVEL_CAP.
     BOT_XP: 125,
-
+  
     // How much XP player-bots will receive when first created.
-    BOT_START_XP: 0,
+    BOT_START_XP: 26302,
 
     // The chances of a player-bot upgrading a specific skill when skill upgrades are available.
     BOT_SKILL_UPGRADE_CHANCES: [ 1, 1, 3, 4, 4, 4, 4, 2, 1, 1],
 
     // The chances of a player-bot upgrading a specific amount of times before it stops upgrading.
     BOT_CLASS_UPGRADE_CHANCES: [ 1, 5, 20, 37, 37],
-
+  
     // The prefix of the bot's name.
     BOT_NAME_PREFIX: "[AI] ",
 
@@ -133,22 +140,22 @@ module.exports = {
 
 
 
-    // Natural Spawns
+  // Natural Spawns
 
-    FOOD_CAP: 3, // Max normal food per normal tile.
-    FOOD_SPAWN_CHANCE: 0.875, // Likeliness of normal food spawn attempts succeeding.
-    FOOD_SPAWN_COOLDOWN: 30, // Cooldown (in game ticks) of food spawn attempts being made.
+    FOOD_CAP: 1, // Max normal food per normal tile. 3
+    FOOD_SPAWN_CHANCE: 0.05, // Likeliness of normal food spawn attempts succeedingg. 0.875
+    FOOD_SPAWN_COOLDOWN: 100, // Cooldown (in game ticks) of food spawn attempts being made. 30
 
-    FOOD_CAP_NEST: 3, // Max nest food per nest tile.
-    FOOD_SPAWN_CHANCE_NEST: 0.25, // Likeliness of nest food spawn attempts succeeding.
-    FOOD_SPAWN_COOLDOWN_NEST: 45, // Cooldown (in game ticks) of nest food spawn attempts being made.
+    FOOD_CAP_NEST: 1, // Max nest food per nest tile. 3
+    FOOD_SPAWN_CHANCE_NEST: 0.05, // Likeliness of nest food spawn attempts succeeding. 0.25
+    FOOD_SPAWN_COOLDOWN_NEST: 150, // Cooldown (in game ticks) of nest food spawn attempts being made. 45
 
-    ENEMY_CAP_NEST: 1, // Max nest enemies per nest tile.
-    ENEMY_SPAWN_CHANCE_NEST: 0.9, // Likeliness of nest enemies spawn attempts succeeding.
+    ENEMY_CAP_NEST: 0, // Max nest enemies per nest tile. 1
+    ENEMY_SPAWN_CHANCE_NEST: 0.9, // Likeliness of nest enemies spawn attempts succeeding. 0.9
     ENEMY_SPAWN_COOLDOWN_NEST: 60, // Cooldown (in game ticks) of nest enemies spawn attempts being made.
 
     // Cooldown (in seconds) of boss spawns being announced.
-    BOSS_SPAWN_COOLDOWN: 60,
+    BOSS_SPAWN_COOLDOWN: 360, //120
     // The delay (in seconds) between the boss spawns being announced and the bosses actually spawning.
     // NOTE: The spawn message (ex. "A strange trembling...") takes half as long to appear than the boss.
     BOSS_SPAWN_DURATION: 5,
@@ -234,5 +241,6 @@ module.exports = {
     MAZE: false,
     HUNT: false,
     MODE: "ffa",
-    TAG: false
+    TAG: false,
+    GOVERNMENTAL: false
 }
