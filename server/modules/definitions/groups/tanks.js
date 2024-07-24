@@ -4335,17 +4335,19 @@ Class.hivemind = {
     {
       POSITION: [0, 20, 1, 0, 0, 90, 3],
       PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.basic, g.slow]),
+        SHOOT_SETTINGS: combineStats([g.basic, g.slow, { reload: 2 }]),
         TYPE: "hiveprobe",
-        MAX_CHILDREN: 1
+        MAX_CHILDREN: 1,
+        WAIT_TO_CYCLE: true
       }
     },
     {
       POSITION: [0, 20, 1, 0, 0, 270, 3.5],
       PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.basic, g.slow]),
+        SHOOT_SETTINGS: combineStats([g.basic, g.slow, { reload: 2 }]),
         TYPE: "hiveprobe",
-        MAX_CHILDREN: 1
+        MAX_CHILDREN: 1,
+        WAIT_TO_CYCLE: true
       }
     }
   ],
@@ -4366,16 +4368,17 @@ Class.cloner = {
       /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
       POSITION: [18, 8, 1, 0, 0, 0, 0],
       PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.basic, g.cloner]),
+        SHOOT_SETTINGS: combineStats([g.basic, g.cloner, { reload: 2 }]),
         TYPE: "bullet"
       }
     },
     {
       POSITION: [0, 20, 1, 0, 0, 180, 3],
       PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.basic, g.slow]),
+        SHOOT_SETTINGS: combineStats([g.basic, g.slow, { reload: 2 }]),
         TYPE: "clonerprobe",
-        MAX_CHILDREN: 1
+        MAX_CHILDREN: 1,
+        WAIT_TO_CYCLE: true
       }
     }
   ],
@@ -4452,6 +4455,31 @@ Class.subway = makeBird({
         }
     }]
 }, "Subway")
+Class.cockatiel = makeBird({
+    PARENT: "genericTank",
+    DANGER: 5,
+    BODY: {
+        ACCELERATION: base.ACCEL * 0.9,
+        FOV: 1.05
+    },
+    GUNS: [{
+        POSITION: [21, 7, 1, 0, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.littleHunter, g.flankGuard, g.triAngle, g.triAngleFront, g.hunter, g.hunterSecondary]),
+            TYPE: "bullet"
+        }
+    },         {
+            POSITION: [14, 8, 1, 0, 0, 0, 0],
+        },
+        {
+            POSITION: [4, 8, 1.5, 14, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.trap, g.flankGuard, g.triAngle, g.triAngleFront]),
+                TYPE: "trap",
+                STAT_CALCULATOR: "trap",
+            }
+        }]
+}, "Cockatiel")
 Class.binary = {
     PARENT: "genericTank",
     LABEL: "Binary",
@@ -6404,7 +6432,7 @@ Class.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "di
     Class.flankGuard.UPGRADES_TIER_2 = ["hexaTank", "triAngle", "auto3", "trapGuard", "triTrapper", "autoFlank", "flankbrid", "flankdue", "flankinception", "trilancer", "backShield", "auraFlankGuard"]
         Class.flankGuard.UPGRADES_TIER_3 = ["tripleTwin", "quadruplex"]
         Class.hexaTank.UPGRADES_TIER_3 = ["octoTank", "cyclone", "hexaTrapper", "autoHexaTank", "hexatankbrid", "hexalancer", "auraHexaTank", "auraHexaTank", "hexaWhirl"]
-        Class.triAngle.UPGRADES_TIER_3 = ["fighter", "booster", "falcon", "bomber", "autoTriAngle", "trianglebrid", "surfer", "eagle", "phoenix", "vulture", "subway", "helecopter", "trailblazer", "rocker"]
+        Class.triAngle.UPGRADES_TIER_3 = ["fighter", "booster", "falcon", "bomber", "autoTriAngle", "trianglebrid", "surfer", "eagle", "phoenix", "vulture", "subway", "helecopter", "trailblazer", "rocker", "cockatiel"]
         Class.backShield.UPGRADES_TIER_3 = ["mirrorBackShield", "brella", "autoBackShield", "auraBackShield"]
 
     Class.director.UPGRADES_TIER_2 = ["overseer", "cruiser", "underseer", "gundirector", "spawner", "directdrive", "autoDirector", "auraDirector"]
@@ -6465,7 +6493,7 @@ Class.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "di
     Class.littleHunter.UPGRADES_TIER_2 = ["minigun", "binary", "hunter", "sprayer", "contagion", "gundirector", "bigSubduer", "flankdue", "autolittleHunter", "littleHunterbrid", "auraLittleHunter"]
         Class.littleHunter.UPGRADES_TIER_3 = ["bayonet"]
         Class.binary.UPGRADES_TIER_3 = ["trinary", "dual", "autoBinary", "binarybrid", "auraBinary"]
-        Class.contagion.UPGRADES_TIER_3 = ["fort", "triContagion", "autoContagion", "droneTrapper", "contagionbrid", "auraContagion"]
+        Class.contagion.UPGRADES_TIER_3 = ["fort", "triContagion", "autoContagion", "droneTrapper", "cockatiel", "contagionbrid", "auraContagion"]
         Class.gundirector.UPGRADES_TIER_3 = ["trojan", "protist", "droneTrapper", "autoGundirector"]
         Class.bigSubduer.UPGRADES_TIER_3 = ["predator", "redistributor", "biggerSubduer", "clubbin", "autoBigSubduer", "bigsubduerbrid", "auraBigSubduer"]
         Class.flankdue.UPGRADES_TIER_3 = ["subway", "triContagion", "clubbin", "autoFlankdue", "flankduebrid", "auraFlankdue"]
