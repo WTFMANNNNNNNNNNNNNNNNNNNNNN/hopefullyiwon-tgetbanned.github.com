@@ -149,22 +149,26 @@ class io_moveInCircles extends IO {
     constructor(body) {
         super(body)
         this.acceptsFromTop = false
-        this.timer = ran.irandom(10) + 3
+        this.timer = ran.irandom(5) + 3
+        this.pathAngle = ran.random(2 * Math.PI);
         this.goal = {
-            x: this.body.x + 10 * Math.cos(-this.body.facing),
-            y: this.body.y + 10 * Math.sin(-this.body.facing)
+            x: this.body.x + 10 * Math.cos(this.pathAngle),
+            y: this.body.y + 10 * Math.sin(this.pathAngle)
         }
     }
     think() {
-        if (!(this.timer--)) {
-            this.timer = 10
+        if (!this.timer--) {
+            this.timer = 5
             this.goal = {
-                x: this.body.x + 10 * Math.cos(-this.body.facing),
-                y: this.body.y + 10 * Math.sin(-this.body.facing)
+                x: this.body.x + 10 * Math.cos(this.pathAngle),
+                y: this.body.y + 10 * Math.sin(this.pathAngle)
             }
+            // turnWithSpeed turn speed (but condensed over 5 ticks)
+            this.pathAngle -= ((this.body.velocity.length / 90) * Math.PI) / Config.runSpeed * 5;
         }
         return {
-            goal: this.goal
+            goal: this.goal,
+            power: this.body.ACCELERATION > 0.1 ? 0.2 : 1
         }
     }
 }
@@ -177,6 +181,7 @@ class io_listenToPlayer extends IO {
         this.acceptsFromTop = false;
 
         this.normalFacingType = null;
+        this.normalFacingTypeArgs = null;
         this.wasAutospinning = false;
         this.isAutospinning = false;
     }
@@ -198,19 +203,21 @@ class io_listenToPlayer extends IO {
         this.isAutospinning = this.player.command.autospin;
         if (this.isAutospinning && !this.wasAutospinning) {
             // Save facing type for later
-            this.normalFacingType = [...this.body.facingType];
+            this.normalFacingType = this.body.facingType;
+            this.normalFacingTypeArgs = this.body.facingTypeArgs;
+            this.body.facingType = "spin";
             this.wasAutospinning = true;
         } else if (!this.isAutospinning && this.wasAutospinning) {
             // Restore facing type from earlier
-            this.body.facingType = [...this.normalFacingType];
+            this.body.facingType = this.normalFacingType;
+            this.body.facingTypeArgs = this.normalFacingTypeArgs;
             this.wasAutospinning = false;
         }
         // Define autospin facingType
         if (this.isAutospinning) {
             let speed = 0.05 * (alt ? -1 : 1) * this.body.autospinBoost;
-            this.body.facingType = ["spin", {speed}];
+            this.body.facingTypeArgs = {speed};
         }
-
         this.body.autoOverride = this.player.command.override;
         if (this.body.invuln && (fire || alt)) this.body.invuln = false;
         return {
@@ -218,8 +225,8 @@ class io_listenToPlayer extends IO {
             fire,
             alt,
             goal: this.static ? null : {
-                x: this.body.x + this.player.command.right - this.player.command.left,
-                y: this.body.y + this.player.command.down - this.player.command.up,
+                x: this.body.x + this.player.command.movement.x,
+                y: this.body.y + this.player.command.movement.y,
             },
             main: fire,
         };
@@ -269,48 +276,6 @@ class io_boomerang extends IO {
                 power: t,
             }
         } else {
-            return {
-                goal: {
-                    x: this.m.x,
-                    y: this.m.y,
-                },
-                power: t,
-            }
-        }
-    }
-}
-class io_kiva extends IO {
-    constructor(b) {
-        super(b)
-        this.r = 0
-        this.b = b
-        this.m = b.master
-        this.turnover = false
-        let len = 10 * util.getDistance({
-            x: 0,
-            y: 0
-        }, b.master.control.target)
-        this.myGoal = {
-            x: b.master.control.target.x + b.master.x,
-            y: b.master.control.target.y + b.master.y,
-        }
-    }
-    think(input) {
-        if (this.b.range > this.r) this.r = this.b.range
-        let t = 1; //1 - Math.sin(2 * Math.PI * this.b.range / this.r) || 1
-        if (!this.turnover) {
-            if (this.r && this.b.range < this.r * 0.5) {
-                setTimeout(() => this.turnover = true, 500);
-            }
-            return {
-                goal: this.myGoal,
-                power: t,
-            }
-        } else {
-            let tomaster = util.getDistance(this.b, this.m);
-            if (tomaster < this.m.size) {
-              this.b.kill()
-            }
             return {
                 goal: {
                     x: this.m.x,
@@ -442,8 +407,8 @@ class io_stackGuns extends IO {
         for (let i = 0; i < this.body.guns.length; i++) {
             let gun = this.body.guns[i];
             if (!gun.canShoot || !gun.stack) continue;
-            let reloadStat = (gun.calculator == "necro" || gun.calculator == "fixed reload") ? 1 : (gun.bulletStats === "master" ? this.body.skill : gun.bulletStats).rld,
-                readiness = (1 - gun.cycle) / (gun.settings.reload * reloadStat);
+            let reloadStat = (gun.calculator == "necro" || gun.calculator == "fixed reload") ? 1 : gun.bulletSkills.rld,
+                readiness = (1 - gun.cycle) / (gun.shootSettings.reload * reloadStat);
             if (lowestReadiness > readiness) {
                 lowestReadiness = readiness;
                 readiestGun = gun;
@@ -489,7 +454,9 @@ class io_nearestDifferentMaster extends IO {
         (this.body.aiSettings.BLIND || ((e.x - m.x) * (e.x - m.x) < sqrRange && (e.y - m.y) * (e.y - m.y) < sqrRange)) &&
         (this.body.aiSettings.SKYNET || ((e.x - mm.x) * (e.x - mm.x) < sqrRangeMaster && (e.y - mm.y) * (e.y - mm.y) < sqrRangeMaster));
     }
-    wouldHitWall = (me, enemy) => wouldHitWall(me, enemy); // Override
+    wouldHitWall (me, enemy) {
+        wouldHitWall(me, enemy); // Override
+    }
     buildList(range) {
         // Establish whom we judge in reference to
         let mostDangerous = 0,
@@ -777,20 +744,22 @@ class io_spin2 extends IO {
         this.reverseOnAlt = opts.reverseOnAlt ?? true;
         this.lastAlt = -1;
         this.reverseOnTheFly = opts.reverseOnTheFly ?? false;
-      
+
         // On spawn logic
         let alt = this.body.master.control.alt;
         let reverse = (this.reverseOnAlt && alt) ? -1 : 1;
-        this.body.facingType = ["spin", {speed: this.speed * reverse}];
+        this.body.facingType = "spin";
+        this.body.facingTypeArgs = {speed: this.speed * reverse};
     }
     think(input) {
-        if (!this.reverseOnTheFly) return;
-      
+        if (!this.reverseOnTheFly || !this.reverseOnAlt) return;
+
         // Live logic
         let alt = this.body.master.control.alt;
         if (this.lastAlt != alt) {
-            let reverse = (this.reverseOnAlt && alt) ? -1 : 1;
-            this.body.facingType = ["spin", {speed: this.speed * reverse}];
+            let reverse = alt ? -1 : 1;
+            this.body.facingType = "spin";
+            this.body.facingTypeArgs = {speed: this.speed * reverse};
             this.lastAlt = alt;
         }
     }
@@ -919,6 +888,161 @@ class io_whirlwind extends IO {
         this.body.inverseDist = Math.min(trueMaxDistance, Math.max(trueMinDistance, this.body.inverseDist));
     }
 }
+class io_orbit extends IO {
+    constructor(body, opts = {}) {
+        super(body);
+        this.realDist = 0;
+        this.invert = opts.invert ?? false;
+    }
+  
+    think(input) {
+        let invertFactor = this.invert ? -1 : 1,
+            master = this.body.master.master,
+            dist = this.invert ? master.inverseDist : master.dist,
+            angle = (this.body.angle * Math.PI / 180 + master.angle) * invertFactor;
+        
+        if(this.realDist > dist){
+            this.realDist -= Math.min(10, Math.abs(this.realDist - dist));
+        }
+        else if(this.realDist < dist){
+            this.realDist += Math.min(10, Math.abs(dist - this.realDist));
+        }
+        this.body.x = master.x + Math.cos(angle) * this.realDist;
+        this.body.y = master.y + Math.sin(angle) * this.realDist;
+        
+        this.body.facing = angle;
+    }
+}
+class io_snake extends IO {
+    constructor(body, opts = {}) {
+        super(body);
+        this.waveInvert = opts.invert ? -1 : 1;
+        this.wavePeriod = opts.period ?? 5;
+        this.waveAmplitude = opts.amplitude ?? 150;
+        this.yOffset = opts.yOffset ?? 0;
+
+        this.reverseWave = this.body.master.control.alt ? -1 : 1;
+        this.velocityMagnitude = 0;
+        this.body.damp = 0;
+        this.waveAngle = this.body.master.facing + (opts.angle ?? 0);
+        this.startX = this.body.x;
+        this.startY = this.body.y;
+        this.body.x += Math.cos(this.body.velocity.direction) * this.body.size * 20;
+        this.body.y += Math.sin(this.body.velocity.direction) * this.body.size * 20;
+        // Clamp scale to [45, 75]
+        // Attempts to get the bullets to intersect with the cursor
+        this.waveHorizontalScale = util.clamp(util.getDistance(this.body.master.master.control.target, {x: 0, y: 0}) / Math.PI, 45, 75);
+    }
+    think(input) {
+        // Define a sin wave for the bullet to follow
+        let waveX = this.waveHorizontalScale * (this.body.RANGE - this.body.range) / this.wavePeriod;
+        let waveY = this.waveAmplitude * Math.sin(waveX / this.waveHorizontalScale) * this.waveInvert * this.reverseWave + this.yOffset;
+        // Rotate the sin wave
+        let trueWaveX = Math.cos(this.waveAngle) * waveX - Math.sin(this.waveAngle) * waveY;
+        let trueWaveY = Math.sin(this.waveAngle) * waveX + Math.cos(this.waveAngle) * waveY;
+        // Follow the sin wave
+        this.body.x = util.lerp(this.body.x, this.startX + trueWaveX, this.velocityMagnitude);
+        this.body.y = util.lerp(this.body.y, this.startY + trueWaveY, this.velocityMagnitude);
+        // Accelerate after spawning
+        this.velocityMagnitude = Math.min(0.1, this.velocityMagnitude + 0.01 / Config.runSpeed)
+    }
+}
+
+class io_disableOnOverride extends IO {
+    constructor(body) {
+        super(body);
+        this.pacify = false;
+        this.lastPacify = false;
+        this.savedDamage = 0;
+    }
+
+    think(input) {
+        if (!this.initialAlpha) {
+            this.initialAlpha = this.body.alpha;
+            this.targetAlpha = this.initialAlpha;
+        }
+        
+        this.pacify = (this.body.parent.master.autoOverride || this.body.parent.master.master.autoOverride);
+        if (this.pacify && !this.lastPacify) {
+            this.targetAlpha = 0;
+            this.savedDamage = this.body.DAMAGE;
+            this.body.DAMAGE = 0;
+            this.body.refreshBodyAttributes();
+        } else if (!this.pacify && this.lastPacify) {
+            this.targetAlpha = this.initialAlpha;
+            this.body.DAMAGE = this.savedDamage;
+            this.body.refreshBodyAttributes();
+        }
+        this.lastPacify = this.pacify;
+
+        if (this.body.alpha != this.targetAlpha) {
+            this.body.alpha += util.clamp(this.targetAlpha - this.body.alpha, -0.05, 0.05);
+            if (this.body.flattenedPhoto) this.body.flattenedPhoto.alpha = this.body.alpha;
+        }
+    }
+}
+
+class io_scaleWithMaster extends IO {
+    constructor(body) {
+        super(body);
+        let handler = ({body: b}) => {
+            this.sizeFactor = b.size / b.master.size;
+        };
+        this.body.definitionEvents.push({ event: 'define', handler, once: false });
+        this.body.on('define', handler, false);
+        
+        this.storedSize = 0;
+    }
+    think(input) {
+        let masterSize = this.body.master.size;
+        if (masterSize != this.storedSize) {
+            this.storedSize = masterSize;
+            this.body.SIZE = masterSize * this.sizeFactor;
+        }
+    }
+}
+class io_kiva extends IO {
+    constructor(b) {
+        super(b)
+        this.r = 0
+        this.b = b
+        this.m = b.master
+        this.turnover = false
+        let len = 10 * util.getDistance({
+            x: 0,
+            y: 0
+        }, b.master.control.target)
+        this.myGoal = {
+            x: b.master.control.target.x + b.master.x,
+            y: b.master.control.target.y + b.master.y,
+        }
+    }
+    think(input) {
+        if (this.b.range > this.r) this.r = this.b.range
+        let t = 1; //1 - Math.sin(2 * Math.PI * this.b.range / this.r) || 1
+        if (!this.turnover) {
+            if (this.r && this.b.range < this.r * 0.5) {
+                setTimeout(() => this.turnover = true, 500);
+            }
+            return {
+                goal: this.myGoal,
+                power: t,
+            }
+        } else {
+            let tomaster = util.getDistance(this.b, this.m);
+            if (tomaster < this.m.size) {
+              this.b.kill()
+            }
+            return {
+                goal: {
+                    x: this.m.x,
+                    y: this.m.y,
+                },
+                power: t,
+            }
+        }
+    }
+}
 class io_hadron extends IO {
     constructor(b, opts = {}) {
         super(b)
@@ -976,116 +1100,6 @@ class io_AimAssist extends IO {
     }
   }
 }
-class io_orbit extends IO {
-    constructor(body, opts = {}) {
-        super(body);
-        this.realDist = 0;
-        this.invert = opts.invert ?? false;
-    }
-  
-    think(input) {
-        let invertFactor = this.invert ? -1 : 1,
-            master = this.body.master.master,
-            dist = this.invert ? master.inverseDist : master.dist,
-            angle = (this.body.angle * Math.PI / 180 + master.angle) * invertFactor;
-        
-        if(this.realDist > dist){
-            this.realDist -= Math.min(10, Math.abs(this.realDist - dist));
-        }
-        else if(this.realDist < dist){
-            this.realDist += Math.min(10, Math.abs(dist - this.realDist));
-        }
-        this.body.x = master.x + Math.cos(angle) * this.realDist;
-        this.body.y = master.y + Math.sin(angle) * this.realDist;
-        
-        this.body.facing = angle;
-    }
-}
-class io_snake extends IO {
-    constructor(body, opts = {}) {
-        super(body);
-        this.waveInvert = opts.invert ? -1 : 1;
-        this.wavePeriod = opts.period ?? 7.5;
-        this.waveAmplitude = opts.amplitude ?? 100;
-        this.reverseWave = this.body.master.control.alt ? -1 : 1;;
-        this.velocityMagnitude = 0;
-        this.velocityAngle = 0;
-        this.body.damp = 0;
-        this.waveAngle = this.body.master.facing + (opts.angle ?? 0);
-        this.startX = this.body.x;
-        this.startY = this.body.y;
-        this.body.x += Math.cos(this.body.velocity.direction) * this.body.size * 20;
-        this.body.y += Math.sin(this.body.velocity.direction) * this.body.size * 20;
-    }
-    think(input) {
-        // Define a sin wave for the bullet to follow
-        let waveX = 50 * (this.body.RANGE - this.body.range) / this.wavePeriod;
-        let waveY = this.waveAmplitude * Math.sin(waveX / 50) * this.waveInvert * this.reverseWave;
-        // Rotate the sin wave
-        let trueWaveX = Math.cos(this.waveAngle) * waveX - Math.sin(this.waveAngle) * waveY;
-        let trueWaveY = Math.sin(this.waveAngle) * waveX + Math.cos(this.waveAngle) * waveY;
-        // Follow the sin wave
-        this.body.x = util.lerp(this.body.x, this.startX + trueWaveX, this.velocityMagnitude);
-        this.body.y = util.lerp(this.body.y, this.startY + trueWaveY, this.velocityMagnitude);
-        // Accelerate after spawning
-        this.velocityMagnitude = Math.min(this.body.velocity.length, this.velocityMagnitude + (this.body.velocity.length / 55) / Config.runSpeed)
-        //sockets.broadcast(this.velocityBasically.toString())
-    }
-}
-
-class io_disableOnOverride extends IO {
-    constructor(body) {
-        super(body);
-        this.pacify = false;
-        this.lastPacify = false;
-        this.savedDamage = 0;
-    }
-
-    think(input) {
-        if (!this.initialAlpha) {
-            this.initialAlpha = this.body.alpha;
-            this.targetAlpha = this.initialAlpha;
-        }
-        
-        this.pacify = (this.body.parent.master.autoOverride || this.body.parent.master.master.autoOverride);
-        if (this.pacify && !this.lastPacify) {
-            this.targetAlpha = 0;
-            this.savedDamage = this.body.DAMAGE;
-            this.body.DAMAGE = 0;
-            this.body.refreshBodyAttributes();
-        } else if (!this.pacify && this.lastPacify) {
-            this.targetAlpha = this.initialAlpha;
-            this.body.DAMAGE = this.savedDamage;
-            this.body.refreshBodyAttributes();
-        }
-        this.lastPacify = this.pacify;
-
-        if (this.body.alpha != this.targetAlpha) {
-            this.body.alpha += util.clamp(this.targetAlpha - this.body.alpha, -0.05, 0.05);
-            if (this.body.flattenedPhoto) this.body.flattenedPhoto.alpha = this.body.alpha;
-        }
-    }
-}
-
-class io_scaleWithMaster extends IO {
-    constructor(body) {
-        super(body);
-        let handler = ({body: b}) => {
-            this.sizeFactor = b.size / b.master.size;
-        };
-        this.body.definitionEvents.push({ event: 'define', handler, once: false });
-        this.body.on('define', handler, false);
-        
-        this.storedSize = 0;
-    }
-    think(input) {
-        let masterSize = this.body.master.size;
-        if (masterSize != this.storedSize) {
-            this.storedSize = masterSize;
-            this.body.SIZE = masterSize * this.sizeFactor;
-        }
-    }
-}
 
 let ioTypes = {
     //misc
@@ -1118,8 +1132,9 @@ let ioTypes = {
     formulaTarget: io_formulaTarget,
     orbit: io_orbit,
     goToMasterTarget: io_goToMasterTarget,
-    snake: io_snake,
     avoid: io_avoid,
+    snake: io_snake,
+
     minion: io_minion,
     hangOutNearMaster: io_hangOutNearMaster,
     fleeAtLowHealth: io_fleeAtLowHealth,

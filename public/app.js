@@ -509,76 +509,6 @@ if (localStorage.getItem("jitt3rs" + 'Checked')) pmusic.push("https://cdn.glitch
         tankupfr = "unfinished",
         tankorgn = "???",
         tankupad = "???";
-  let tabappearance = document.querySelector(".tabappearance");
-  let taboptions = document.querySelector(".taboptions");
-  let tabcontrols = document.querySelector(".tabcontrols");
-  let tablinks = document.querySelector(".tablinks");
-  let tabappearancebutton = document.querySelector(".tabappearancebutton");
-  let taboptionsbutton = document.querySelector(".taboptionsbutton");
-  let tabcontrolsbutton = document.querySelector(".tabcontrolsbutton");
-  let tablinksbutton = document.querySelector(".tablinksbutton");
-  
-  function changetab(vroomvroomimaracecarreeeroweaweerrrm) {
-    switch(vroomvroomimaracecarreeeroweaweerrrm) {
-      case 0:
-        tabappearance.style.display = 'block';
-        taboptions.style.display = 'none';
-        tabcontrols.style.display = 'none';
-        tablinks.style.display = 'none';
-        tabappearancebutton.classList.add("active");
-        taboptionsbutton.classList.remove("active");
-        tabcontrolsbutton.classList.remove("active");
-        tablinksbutton.classList.remove("active");
-        break;
-      case 1:
-        tabappearance.style.display = 'none';
-        taboptions.style.display = 'block';
-        tabcontrols.style.display = 'none';
-        tablinks.style.display = 'none';
-        tabappearancebutton.classList.remove("active");
-        taboptionsbutton.classList.add("active");
-        tabcontrolsbutton.classList.remove("active");
-        tablinksbutton.classList.remove("active");
-        break;      
-      case 2:
-        tabappearance.style.display = 'none';
-        taboptions.style.display = 'none';
-        tabcontrols.style.display = 'block';
-        tablinks.style.display = 'none';
-        tabappearancebutton.classList.remove("active");
-        taboptionsbutton.classList.remove("active");
-        tabcontrolsbutton.classList.add("active");
-        tablinksbutton.classList.remove("active");
-        break;      
-      case 3:
-        tabappearance.style.display = 'none';
-        taboptions.style.display = 'none';
-        tabcontrols.style.display = 'none';
-        tablinks.style.display = 'block';
-        tabappearancebutton.classList.remove("active");
-        taboptionsbutton.classList.remove("active");
-        tabcontrolsbutton.classList.remove("active");
-        tablinksbutton.classList.add("active");
-        break;
-    }
-  }
-  
-  if (global.ISTHEGODAMNFUCKINGGAMEON !== "yeah") {
-
-  $(".tabappearancebutton").on("click", function() {
-      changetab(0);
-  });
-  $(".taboptionsbutton").on("click", function() {
-      changetab(1);
-  });  
-  $(".tabcontrolsbutton").on("click", function() {
-      changetab(2);
-  });  
-  $(".tablinksbutton").on("click", function() {
-      changetab(3);
-  });
-  
-}
   
 let trollface = null;
 
@@ -879,12 +809,20 @@ class Animation {
         return Math.abs(this.to - this.value) < val;
     }
 }
-let animations = window.animations = {
-    connecting: new Animation(1, 0),
-    disconnected: new Animation(1, 0),
-    deathScreen: new Animation(1, 0),
-    error: new Animation(1, 0),
-};
+let controls = document.getElementById("controlSettings"),
+    resetButton = document.getElementById("resetControls"),
+    moreControls = document.getElementById("moreControls"),
+    moreControlsLength = null,
+    selectedElement = null,
+    controlsArray = [],
+    defaultKeybinds = {},
+    keybinds = {},
+    animations = window.animations = {
+        connecting: new Animation(1, 0),
+        disconnected: new Animation(1, 0),
+        deathScreen: new Animation(1, 0),
+        error: new Animation(1, 0),
+    };
 
 // Mockup functions
 // Prepare stuff
@@ -920,8 +858,15 @@ global.canUpgrade = false;
 global.canSkill = false;
 global.message = "";
 global.time = 0;
+global.enableSlideAnimation = false;
+global.mspt = "?";
+global.serverName = "neroio2.glitch.me";
+// Tips setup :D
+let tips = global.tips[Math.floor(Math.random() * global.tips.length)];
+global.tips = tips[Math.floor(Math.random() * tips.length)];
 // Window setup <3
 global.mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent);
+global.mobile && document.body.classList.add("mobile");
 var serverName = "Connected";
 var provider = "Unknown";
 function getMockups() {
@@ -933,6 +878,73 @@ function getMockups() {
             Resolve();
         });
     });
+}
+function getKeybinds() {
+    let kb = localStorage.getItem("keybinds");
+    keybinds = typeof kb === "string" && kb.startsWith("{") ? JSON.parse(kb) : {};
+}
+function setKeybinds() {
+    localStorage.setItem("keybinds", JSON.stringify(keybinds));
+}
+function unselectElement() {
+    if (window.getSelection) {
+        window.getSelection().removeAllRanges();
+    }
+    selectedElement.element.parentNode.parentNode.classList.remove("editing");
+    selectedElement = null;
+}
+function selectElement(element) {
+    selectedElement = element;
+    selectedElement.element.parentNode.parentNode.classList.add("editing");
+    if (selectedElement.keyCode !== -1 && window.getSelection) {
+        let selection = window.getSelection();
+        selection.removeAllRanges();
+        let range = document.createRange();
+        range.selectNodeContents(selectedElement.element);
+        selection.addRange(range);
+    }
+}
+function setKeybind(key, keyCode) {
+    selectedElement.element.parentNode.parentNode.classList.remove("editing");
+    resetButton.classList.add("active");
+    if (keyCode !== selectedElement.keyCode) {
+        let otherElement = controlsArray.find(c => c.keyCode === keyCode);
+        if (keyCode !== -1 && otherElement) {
+            otherElement.keyName = selectedElement.keyName;
+            otherElement.element.innerText = selectedElement.keyName;
+            otherElement.keyCode = selectedElement.keyCode;
+            global[otherElement.keyId] = selectedElement.keyCode;
+            keybinds[otherElement.keyId] = [selectedElement.keyName, selectedElement.keyCode];
+        }
+    }
+    selectedElement.keyName = key;
+    selectedElement.element.innerText = key;
+    selectedElement.keyCode = keyCode;
+    global[selectedElement.keyId] = keyCode;
+    keybinds[selectedElement.keyId] = [key, keyCode];
+    setKeybinds();
+}
+function getElements(kb, storeInDefault) {
+    for (let row of controls.rows) {
+        for (let cell of row.cells) {
+            let element = cell.firstChild.firstChild;
+            if (!element) continue;
+            let key = element.dataset.key;
+            if (storeInDefault) defaultKeybinds[key] = [element.innerText, global[key]];
+            if (kb[key]) {
+                element.innerText = kb[key][0];
+                global[key] = kb[key][1];
+                resetButton.classList.add("active");
+            }
+            let obj = {
+                element,
+                keyId: key,
+                keyName: element.innerText,
+                keyCode: global[key]
+            };
+            controlsArray.push(obj);
+        }
+    }
 }
 window.onload = async () => {
     let serverSelector = document.getElementById("serverSelector"),
@@ -1036,13 +1048,28 @@ window.onload = async () => {
     util.retrieveFromLocalStorage("optScreenshotMode");
     util.retrieveFromLocalStorage("optPredictive");
     util.retrieveFromLocalStorage("optFancy");
+    util.retrieveFromLocalStorage("optLowResolution");
     util.retrieveFromLocalStorage("coloredHealthbars");
     util.retrieveFromLocalStorage("centerTank");
     util.retrieveFromLocalStorage("optColors");
     util.retrieveFromLocalStorage("optCustom");
     util.retrieveFromLocalStorage("optNoPointy");
     util.retrieveFromLocalStorage("optBorders");
+	  util.retrieveFromLocalStorage("optNoGrid");
+    util.retrieveFromLocalStorage("seperatedHealthbars");
+    util.retrieveFromLocalStorage("autoLevelUp");
     util.retrieveFromLocalStorage("optResolution");
+    util.retrieveFromLocalStorage("optMobile");
+    // GUI
+    util.retrieveFromLocalStorage("optRenderGui");
+    util.retrieveFromLocalStorage("optRenderLeaderboard");
+    util.retrieveFromLocalStorage("optRenderNames");
+    util.retrieveFromLocalStorage("optRenderHealth");
+    util.retrieveFromLocalStorage("optRenderScores");
+    util.retrieveFromLocalStorage("optReducedInfo");
+    util.retrieveFromLocalStorage("showCrosshair");
+    util.retrieveFromLocalStorage("showJoystick");
+
     util.retrieveFromLocalStorage("seperatedHealthbars");
     util.retrieveFromLocalStorage("optOgIcon");
     util.retrieveFromLocalStorage("disableDeathSounds");
@@ -1069,6 +1096,15 @@ window.onload = async () => {
     // Set default theme
     if (document.getElementById("optColors").value === "") {
         document.getElementById("optColors").value = "nero";
+	
+        // Also do auto check for GUI stuff.
+        document.getElementById("optRenderGui").checked = true;
+        document.getElementById("optRenderLeaderboard").checked = true;
+        document.getElementById("optRenderNames").checked = true;
+        document.getElementById("optRenderHealth").checked = true;
+        document.getElementById("optRenderScores").checked = true;
+        document.getElementById("optFancy").checked = true;
+        if (global.mobile) document.getElementById("showCrosshair").checked = true, document.getElementById("showJoystick").checked = true;
     }
     if (document.getElementById("optBorders").value === "") {
         document.getElementById("optBorders").value = "nero";
@@ -1076,26 +1112,123 @@ window.onload = async () => {
     if (document.getElementById("optResolution").value === "") {
         document.getElementById("optResolution").value = "normal";
     }
+  
+      // Mobile Selection stuff.
+    if (document.getElementById("optMobile").value === "") {
+        document.getElementById("optMobile").value = "mobile";
+    }
+
     // Achievement Shit
     document.getElementById("resetachievementsbutton").onclick = () => resetAllAchievements();
+    // Keybinds stuff
+    getKeybinds();
+    getElements(keybinds, true);
+    document.addEventListener("click", event => {
+        if (!global.gameStart) {
+            if (selectedElement) {
+                unselectElement();
+            } else {
+                let element = controlsArray.find(({ element }) => element === event.target);
+                if (element) selectElement(element);
+            }
+        }
+    });
+    resetButton.addEventListener("click", () => {
+        keybinds = {};
+        setKeybinds();
+        controlsArray = [];
+        getElements(defaultKeybinds);
+        resetButton.classList.add("spin");
+        setTimeout(() => {
+            resetButton.classList.remove("active"); 
+            resetButton.classList.remove("spin");
+        }, 400);
+    });
+    moreControls.addEventListener("click", () => {
+      if (moreControlsLength) {
+        for (var b = 0; b < moreControlsLength.length; b++) moreControlsLength[b].classList.add("hidden");
+        moreControlsLength = null;
+        moreControls.classList.remove("x");
+      } else {
+        moreControlsLength = document.querySelectorAll("#controlSettings tr.hidden");
+        for (b = 0; b < moreControlsLength.length; b++) moreControlsLength[b].classList.remove("hidden");
+        moreControls.classList.add("x");
+      }
+    });
     // Game start stuff
     document.getElementById("startButton").onclick = () => startGame();
     document.onkeydown = (e) => {
-        var key = e.which || e.keyCode;
-        if (key === global.KEY_ENTER && (global.dead || !global.gameLoading)) {
-            startGame();
+        if (!(global.gameStart || e.shiftKey || e.ctrlKey || e.altKey)) {
+            let key = e.which || e.keyCode;
+            if (selectedElement) {
+                if (1 !== e.key.length || /[0-9]/.test(e.key) || 3 === e.location) {
+                    if (!("Backspace" !== e.key && "Delete" !== e.key)) {
+                        setKeybind("", -1);
+                    }
+                } else {
+                    setKeybind(e.key.toUpperCase(), e.keyCode);
+                }
+            } else if (key === global.KEY_ENTER) {
+                startGame();
+            }
         }
     };
     window.addEventListener("resize", resizeEvent);
     resizeEvent();
 };
 var callofduty = "";
+// Sliding between options menu.
+function toggleOptionsMenu() {
+    let clicked = false,
+        a = document.getElementById("startMenuSlidingTrigger"), // Trigger ID
+        c = document.getElementById("optionArrow"), // Arrow
+        h = document.getElementById("viewOptionText"), // Text (view options)
+        u = document.getElementsByClassName("sliderHolder")[0], // Sliding.
+        y = document.getElementsByClassName("slider"), // For animations things.
+        toggle = () => {
+            c.style.transform = c.style.webkitTransform = clicked // Rotate the arrow.
+            ? "translate(2px, -2px) rotate(45deg)"
+            : "rotate(-45deg)";
+            h.innerText = clicked ? "close options" : "view options"; // Change the text.
+            clicked ? u.classList.add("slided") : u.classList.remove("slided"); // Slide it up.
+            y[0].style.opacity = clicked ? 0 : 1; // Fade it away.
+            y[2].style.opacity = clicked ? 1 : 0; // same for this.
+        };
+    a.onclick = () => { // When the button is triggered, This code runs.
+        clicked = !clicked;
+        toggle();
+    };
+    return () => {
+        clicked || ((clicked = !0), toggle());
+    };
+};
+// Tab options
+function tabOptionsMenuSwitcher() {
+    let buttonTabs = document.getElementById("optionMenuTabs"),
+    tabOptions = [
+      document.getElementById("tabAppearance"),
+      document.getElementById("tabOptions"),
+      document.getElementById("tabControls"),
+      document.getElementById("tabAbout"),
+    ];
+    for (let g = 1; g < tabOptions.length; g++) tabOptions[g].style.display = "none";
+    let e = 0;
+    for (let g = 0; g < buttonTabs.children.length; g++)
+        buttonTabs.children[g].addEventListener("click", () => {
+            e !== g &&
+            (buttonTabs.children[e].classList.remove("active"), // Remove the active class
+            buttonTabs.children[g].classList.add("active"), // Add the clicked active class
+            (tabOptions[e].style.display = "none"), // Dont display the old menu.
+            (tabOptions[g].style.display = "block"), // Display the menu.
+            (e = g))
+      });
+}
 function resizeEvent() {
     if (settings.graphical.quality === undefined) {
       settings.graphical.quality = 1;
     };
     let scale = window.devicePixelRatio;
-    if (!settings.graphical.fancyAnimations) {
+    if (settings.graphical.lowResolution) {
         scale *= 0.5;
     }
     if (typeof settings.graphical.quality === 'string' || settings.graphical.quality instanceof String) {
@@ -1130,6 +1263,9 @@ var ctx = c.getContext("2d");
 var c2 = document.createElement("canvas");
 var ctx2 = c2.getContext("2d");
 ctx2.imageSmoothingEnabled = true;
+// important functions
+tabOptionsMenuSwitcher();
+toggleOptionsMenu();
 // Animation things
 function Smoothbar(value, speed, sharpness = 3, lerpValue = 0.025) {
     let time = Date.now();
@@ -1166,7 +1302,7 @@ global.player = {
     cy: 0,
     screenx: 0,
     screeny: 0,
-    target: calculateTarget(),
+    target: !global.mobile ? calculateTarget() : window.canvas.target,
     name: "",
     lastUpdate: 0,
     time: 0,
@@ -1286,6 +1422,7 @@ function parseTheme(string){
 }
 // This starts the game and sets up the websocket
 function startGame() {
+    if (!global.gameStart) {
     PlaySound69();
     clearInterval(nIntervId);
     // release our intervalID from the variable
@@ -1295,8 +1432,20 @@ function startGame() {
     console.log('Started connecting.')
     //set start achievement
     util.submitAchievementToLocalStorage("startachievement");
+    }
+
+    if (global.mobile) {
+    document.getElementById("optMobile").display = "block"
+    util.submitAchievementToLocalStorage("startachievement");
+        var d = document.body;
+        d.requestFullscreen ? d.requestFullscreen()
+            : d.msRequestFullscreen ? d.msRequestFullscreen()
+                : d.mozRequestFullScreen ? d.mozRequestFullScreen()
+                    : d.webkitRequestFullscreen && d.webkitRequestFullscreen();
+    }
     // Get options
     util.submitToLocalStorage("optFancy");
+    util.submitToLocalStorage("optLowResolution");
     util.submitToLocalStorage("centerTank");
     util.submitToLocalStorage("optBorders");
     util.submitToLocalStorage("optResolution");
@@ -1305,6 +1454,7 @@ function startGame() {
     util.submitToLocalStorage("disableDeathSounds");
     util.submitToLocalStorage("optNoEmojis");
     util.submitToLocalStorage("autoLevelUp");
+    util.submitToLocalStorage("optMobile");
     util.submitToLocalStorage("optPredictive");
     util.submitToLocalStorage("optScreenshotMode");
     util.submitToLocalStorage("coloredHealthbars");
@@ -1327,18 +1477,39 @@ function startGame() {
     util.submitToLocalStorage("routine2");
     util.submitToLocalStorage("routin3s");
     util.submitToLocalStorage("jitt3rs");
+    util.submitToLocalStorage("optNoGrid");
+    // GUI
+    util.submitToLocalStorage("optRenderGui");
+    util.submitToLocalStorage("optRenderLeaderboard");
+    util.submitToLocalStorage("optRenderNames");
+    util.submitToLocalStorage("optRenderHealth");
+    util.submitToLocalStorage("optRenderScores");
+    util.submitToLocalStorage("optReducedInfo");
+    util.submitToLocalStorage("showCrosshair");
+    util.submitToLocalStorage("showJoystick");
     global.ISTHEGODAMNFUCKINGGAMEON = "yeah";
     settings.graphical.fancyAnimations = !document.getElementById("optFancy").checked;
     settings.graphical.centerTank = document.getElementById("centerTank").checked;
     settings.graphical.pointy = !document.getElementById("optNoPointy").checked;
     settings.game.optOgIcon = !document.getElementById("optOgIcon").checked;
-    settings.game.disableDeathSounds = !document.getElementById("disableDeathSounds").checked;
+    settings.game.disableDeathSounds = document.getElementById("disableDeathSounds").checked;
     settings.game.optNoEmojis = !document.getElementById("optNoEmojis").checked;
     settings.game.autoLevelUp = !document.getElementById("autoLevelUp").checked;
     settings.lag.unresponsive = document.getElementById("optPredictive").checked;
     settings.graphical.screenshotMode = document.getElementById("optScreenshotMode").checked;
     settings.graphical.coloredHealthbars = document.getElementById("coloredHealthbars").checked;
     settings.graphical.seperatedHealthbars = document.getElementById("seperatedHealthbars").checked;
+    settings.graphical.lowResolution = document.getElementById("optLowResolution").checked;
+    settings.graphical.showGrid = !document.getElementById("optNoGrid").checked;
+    // GUI
+    global.GUIStatus.renderGUI = !document.getElementById("optRenderGui").checked;
+    global.GUIStatus.renderLeaderboard = !document.getElementById("optRenderLeaderboard").checked;
+    global.GUIStatus.renderPlayerNames = !document.getElementById("optRenderNames").checked;
+    global.GUIStatus.renderPlayerScores = !document.getElementById("optRenderScores").checked;
+    global.GUIStatus.renderhealth = !document.getElementById("optRenderHealth").checked;
+    global.GUIStatus.minimapReducedInfo = document.getElementById("optReducedInfo").checked;
+    global.mobileStatus.enableCrosshair = !document.getElementById("showCrosshair").checked;
+    global.mobileStatus.showJoysticks = !document.getElementById("showJoystick").checked;
     const pmusic = [];
     if (document.getElementById("oioioi").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/oioioi.mp3?v=1705286830033");
     if (document.getElementById("dejected").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Dejected.mp3?v=1705287022417");
@@ -1416,7 +1587,16 @@ function startGame() {
             settings.graphical.quality = "trippy";
             break;
     }
+    switch (document.getElementById("optMobile").value) {
+        case "desktop":
+            global.mobile = false;
+            break;
+        case "mobileWithBigJoysticks":
+            global.mobileStatus.useBigJoysticks = true;
+            break;
+    }
     util.submitToLocalStorage("optColors");
+  if (!global.gameStart) {
     let a = document.getElementById("optColors").value;
     color = color[a === "" ? "nero" : a];
     if (a == "custom") {
@@ -1424,21 +1604,29 @@ function startGame() {
         color = parseTheme(customTheme).content;
         util.submitToLocalStorage("optCustom");
     }
+    }
     gameDraw.color = color;
     // Other more important stuff
     let playerNameInput = document.getElementById("playerNameInput");
     let playerKeyInput = document.getElementById("playerKeyInput");
+    let autolevelUpInput = !document.getElementById("autoLevelUp").checked;
+    global.autolvlUp = autolevelUpInput;
     // Name and keys
     util.submitToLocalStorage("playerNameInput");
     util.submitToLocalStorage("playerKeyInput");
+    util.submitToLocalStorage("optMobile");
     global.playerName = global.player.name = playerNameInput.value;
     global.playerKey = playerKeyInput.value.replace(/(<([^>]+)>)/gi, "").substring(0, 64);
     // Change the screen
     global.screenWidth = window.innerWidth;
     global.screenHeight = window.innerHeight;
-    document.getElementById("startMenuWrapper").style.maxHeight = "0px";
+    document.getElementById("startMenuWrapper").style = "display: block; pointer-events: none; inset: 0; animation: fadezoomout 300ms forwards;";
     document.getElementById("gameAreaWrapper").style.opacity = 1;
+      setTimeout(() => {
+        document.getElementById("startMenuWrapper").style = "display: none;";
+    }, 1e3);
 
+    if (!global.gameStart) {
     document.getElementById("hideongamestart").style.zIndex = "-3";
     document.getElementById("canvas").style.width = "120px";
     document.getElementById("canvas").style.height = "72px";
@@ -1447,15 +1635,18 @@ function startGame() {
     document.getElementById("canvas").style.position = "relative";
     // Set up the socket
     if (!global.socket) {
-        global.socket = socketInit(26301);
+        global.socket = socketInit(3000);
     }
     if (!global.animLoopHandle) {
         animloop();
     }
+    // initialize canvas.
     window.canvas.socket = global.socket;
-    setInterval(() => moveCompensation.iterate(global.socket.cmd.getMotion()), 1000 / 30);
+    setInterval(() => moveCompensation.iterate(global.motion), 1000 / 30);
+    canvas.init();
+    }
     document.getElementById("gameCanvas").focus();
-    window.onbeforeunload = () => true;
+    if (!global.gameStart) window.onbeforeunload = () => true;
     if (settings.game.optNoEmojis) {
       trollface = new Image(); // Create new img element
     }
@@ -1491,12 +1682,13 @@ function arrayifyText(rawText) {
     }
     return textArray;
 }
-const measureText = (text, fontSize, withHeight = false) => {
+function measureText(text, fontSize, withHeight = false) {
     fontSize += settings.graphical.fontSizeBoost;
     ctx.font = "bold " + fontSize + "px Ubuntu";
     let measurement = ctx.measureText(arrayifyText(text).reduce((a, b, i) => (i & 1) ? a : a + b, ''));
     return withHeight ? { width: measurement.width, height: fontSize } : measurement.width;
-};
+}
+
 function drawText(rawText, x, y, size, defaultFillStyle, align = "left", center = false, fade = 1, stroke = true, context = ctx) {
     size += settings.graphical.fontSizeBoost;
     // Get text dimensions and resize/reset the canvas
@@ -1804,78 +1996,32 @@ function drawBar(x1, x2, y, width, color) {
     ctx.stroke();
 }
 
-//checking for images in the shape so we can draw them
-function isImageURL(url) {
-    try {
-        const parsedUrl = new URL(url);
-        const path = parsedUrl.pathname;
-        const ext = path.split('.').pop().toLowerCase(); // Get the lowercase file extension
-
-        // List of common image file extensions
-        const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg'];
-
-        return imageExtensions.includes(ext) || parsedUrl.protocol == 'data:';
-    } catch (error) {
-        return false; // URL parsing failed, or it's not an image URL.
-    }
-}
 // Sub-drawing functions
 const drawPolyImgs = [];
 function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderless, fill, imageInterpolation) {
-    // Start drawing
-    context.beginPath();
-    if (sides instanceof Array) {
-        let dx = Math.cos(angle);
-        let dy = Math.sin(angle);
-        for (let [x, y] of sides)
-            context.lineTo(
-                centerX + radius * (x * dx - y * dy),
-                centerY + radius * (y * dx + x * dy)
-            );
-    } else {
-        if ("string" === typeof sides) {
-            if (isImageURL(sides)) {
+    try {
+        // Start drawing
+        context.beginPath();
+        if (sides instanceof Array) {
+            let dx = Math.cos(angle);
+            let dy = Math.sin(angle);
+            for (let [x, y] of sides)
+                context.lineTo(
+                    centerX + radius * (x * dx - y * dy),
+                    centerY + radius * (y * dx + x * dy)
+                );
+        } else {
+            if ("string" === typeof sides) {
                 //ideally we'd preload images when mockups are loaded but im too lazy for that atm
-                if (!drawPolyImgs[sides]) {
+                if (sides.startsWith('/') | sides.startsWith('./') | sides.startsWith('http')) {
                     drawPolyImgs[sides] = new Image();
                     drawPolyImgs[sides].src = sides;
                     drawPolyImgs[sides].isBroken = false;
                     drawPolyImgs[sides].onerror = function() {
-                        console.log('Failed to load image!\nURL:', sides);
-                        this.isBroken = true;
-                    };
+                    this.isBroken = true;
                 }
+
                 let img = drawPolyImgs[sides];
-                if (img.isBroken || !img.complete) { // check if img is broken and draw placeholder if so
-                    //this is probably the worst way to draw a missing texture checkerboard but im too lazy to do a better one
-                    context.translate(centerX, centerY);
-                    context.rotate(angle);
-                    context.beginPath();
-                    context.fillStyle = '#ff00ff';
-                    context.lineTo(-radius,-radius);
-                    context.lineTo(radius,-radius);
-                    context.lineTo(radius,radius);
-                    context.lineTo(-radius,radius);
-                    context.lineTo(-radius,-radius);
-                    context.fill();
-                    context.closePath();
-                    context.beginPath();
-                    context.fillStyle = '#000000';
-                    context.lineTo(-radius,-radius);
-                    context.lineTo(0,-radius);
-                    context.lineTo(0,0);
-                    context.lineTo(0, radius);
-                    context.lineTo(radius, radius);
-                    context.lineTo(radius, 0);
-                    context.lineTo(0, 0);
-                    context.lineTo(-radius, 0);
-                    context.lineTo(-radius,-radius);
-                    context.fill();
-                    context.closePath();
-                    context.rotate(-angle);
-                    context.translate(-centerX, -centerY);
-                    return;
-                }
                 context.translate(centerX, centerY);
                 context.rotate(angle);
                 context.imageSmoothingEnabled = imageInterpolation;
@@ -1884,75 +2030,78 @@ function drawPoly(context, centerX, centerY, radius, sides, angle = 0, borderles
                 context.rotate(-angle);
                 context.translate(-centerX, -centerY);
                 return;
-            } else {
-                let path = new Path2D(sides);
-                context.save();
-                context.translate(centerX, centerY);
-                context.scale(radius, radius);
-                context.lineWidth /= radius;
-                context.rotate(angle);
-                context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
-                if (!borderless) context.stroke(path);
-                if (fill) context.fill(path);
-                context.restore();
-                return;
             }
+            let path = new Path2D(sides);
+            context.save();
+            context.translate(centerX, centerY);
+            context.scale(radius, radius);
+            context.lineWidth /= radius;
+            context.rotate(angle);
+            context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
+            if (!borderless) context.stroke(path);
+            if (fill) context.fill(path);
+            context.restore();
+            return;
         }
         angle += sides % 2 ? 0 : Math.PI / sides;
-    }
-    if (!sides) {
-        // Circle
-        let fillcolor = context.fillStyle;
-        let strokecolor = context.strokeStyle;
-        context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-        context.fillStyle = strokecolor;
-        context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
-        if (!borderless) context.stroke();
-        context.closePath();
-        context.beginPath();
-        context.fillStyle = fillcolor;
-        context.arc(centerX, centerY, radius * fill, 0, 2 * Math.PI);
-        if (fill) context.fill();
-        context.closePath();
-        return;
-    } else if (sides < 0) {
-        // Star
-        if (settings.graphical.pointy) context.lineJoin = "miter";
-        sides = -sides;
-        angle += (sides % 1) * Math.PI * 2;
-        sides = Math.floor(sides);
-        let dip = 1 - 6 / (sides ** 2);
-        context.moveTo(centerX + radius * Math.cos(angle), centerY + radius * Math.sin(angle));
-        context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
-        for (let i = 0; i < sides; i++) {
-            let htheta = ((i + 0.5) / sides) * 2 * Math.PI + angle,
-                theta = ((i + 1) / sides) * 2 * Math.PI + angle,
-                cx = centerX + radius * dip * Math.cos(htheta),
-                cy = centerY + radius * dip * Math.sin(htheta),
-                px = centerX + radius * Math.cos(theta),
-                py = centerY + radius * Math.sin(theta);
-            /*if (curvyTraps) {
+        }
+        if (!sides) {
+            // Circle
+            let fillcolor = context.fillStyle;
+            let strokecolor = context.strokeStyle;
+            context.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+            context.fillStyle = strokecolor;
+            context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
+            if (!borderless) context.stroke();
+            context.closePath();
+            context.beginPath();
+            context.fillStyle = fillcolor;
+            context.arc(centerX, centerY, radius * fill, 0, 2 * Math.PI);
+            if (fill) context.fill();
+            context.closePath();
+            return;
+        } else if (sides < 0) {
+            // Star
+            if (settings.graphical.pointy) context.lineJoin = "miter";
+            sides = -sides;
+            angle += (sides % 1) * Math.PI * 2;
+            sides = Math.floor(sides);
+            let dip = 1 - 6 / (sides ** 2);
+            context.moveTo(centerX + radius * Math.cos(angle), centerY + radius * Math.sin(angle));
+            context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
+            for (let i = 0; i < sides; i++) {
+                let htheta = ((i + 0.5) / sides) * 2 * Math.PI + angle,
+                    theta = ((i + 1) / sides) * 2 * Math.PI + angle,
+                    cx = centerX + radius * dip * Math.cos(htheta),
+                    cy = centerY + radius * dip * Math.sin(htheta),
+                    px = centerX + radius * Math.cos(theta),
+                    py = centerY + radius * Math.sin(theta);
+                /*if (curvyTraps) {
+                    context.quadraticCurveTo(cx, cy, px, py);
+                } else {
+                    context.lineTo(cx, cy);
+                    context.lineTo(px, py);
+                }*/
                 context.quadraticCurveTo(cx, cy, px, py);
-            } else {
-                context.lineTo(cx, cy);
-                context.lineTo(px, py);
-            }*/
-            context.quadraticCurveTo(cx, cy, px, py);
+            }
+        } else if (sides > 0) {
+            // Polygon
+            angle += (sides % 1) * Math.PI * 2;
+            sides = Math.floor(sides);
+            context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
+            for (let i = 0; i < sides; i++) {
+                let theta = (i / sides) * 2 * Math.PI + angle;
+                context.lineTo(centerX + radius * Math.cos(theta), centerY + radius * Math.sin(theta));
+            }
         }
-    } else if (sides > 0) {
-        // Polygon
-        angle += (sides % 1) * Math.PI * 2;
-        sides = Math.floor(sides);
-        context.lineWidth *= fill ? 1 : 0.5; // Maintain constant border width
-        for (let i = 0; i < sides; i++) {
-            let theta = (i / sides) * 2 * Math.PI + angle;
-            context.lineTo(centerX + radius * Math.cos(theta), centerY + radius * Math.sin(theta));
-        }
+        context.closePath();
+        if (!borderless) context.stroke();
+        if (fill) context.fill();
+        context.lineJoin = "round";
+    } catch (e) { // this actually prevents to panic the client. so we will just call "resizeEvent()".
+        resizeEvent();
+        console.error("Uh oh, 'CanvasRenderingContext2D' has gotton an error! Error: " + e);
     }
-    context.closePath();
-    if (!borderless) context.stroke();
-    if (fill) context.fill();
-    context.lineJoin = "round";
 }
 function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless, fill, alpha, strokeWidth, position) {
     let h = [];
@@ -1983,6 +2132,7 @@ function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless,
     if (fill) context.fill();
     context.globalAlpha = 1;
 }
+
 const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, lineWidthMult = 1, rot = 0, turretsObeyRot = false, assignedContext = false, turretInfo = false, render = instance.render) => {
     let context = assignedContext ? assignedContext : ctx;
     let fade = turretInfo ? 1 : render.status.getFade(),
@@ -1996,7 +2146,8 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
         initStrokeWidth = lineWidthMult * Math.max(settings.graphical.mininumBorderChunk, ratio * settings.graphical.borderChunk);
     source.guns.update();
     if (fade === 0 || alpha === 0) return;
-    if (render.expandsWithDeath) drawSize *= 1 + 0.5 * (1 - fade);
+    if (render.expandsWithDeath && settings.graphical.fancyAnimations) drawSize *= 1 + 0.5 * (1 - fade);
+    if (!settings.graphical.fancyAnimations) drawSize *= 1 + -2 * (1 - fade);
     if (settings.graphical.fancyAnimations && assignedContext != ctx2 && (fade !== 1 || alpha !== 1)) {
         context = ctx2;
         context.canvas.width = context.canvas.height = drawSize * m.position.axis / ratio * 2 + initStrokeWidth;
@@ -2133,11 +2284,10 @@ function drawHealth(x, y, instance, ratio, alpha) {
     if (instance.drawsHealth) {
         let health = instance.render.health.get(),
             shield = instance.render.shield.get();
-        if (health < 0.99 || shield < 0.99) {
+        if (health < 0.99 || shield < 0.99 && global.GUIStatus.renderhealth) {
             let col = settings.graphical.coloredHealthbars ? gameDraw.mixColors(gameDraw.modifyColor(instance.color), color.guiwhite, 0.5) : color.blue;
             let yy = y + realSize + 15 * ratio;
             let barWidth = 3 * ratio;
-            ctx.globalAlpha = fade * (alpha ** 2);
             //TODO: seperate option for hp bars
             // function drawBar(x1, x2, y, width, color) {
 
@@ -2153,15 +2303,16 @@ function drawHealth(x, y, instance, ratio, alpha) {
                 drawBar(x - size, x - size + 2 * size * shield, yy, barWidth, settings.graphical.coloredHealthbars ? gameDraw.mixColors(col, color.guiblack, 0.25) : color.teal);
                 ctx.globalAlpha = 1;
             }
+            if (gui.showhealthtext) drawText(Math.round(instance.healthN) + "/" + Math.round(instance.maxHealthN), x, yy + barWidth * 2 + barWidth * settings.graphical.seperatedHealthbars * 2 + 10, 12 * ratio, color.guiwhite, "center");
+            ctx.globalAlpha = fade * (alpha ** 2);
         }
     }
     if (instance.id !== gui.playerid && instance.nameplate) {
         var name = instance.name.substring(7, instance.name.length + 1);
         var namecolor = instance.name.substring(0, 7);
-        ctx.globalAlpha = alpha;
-        drawText(name, x, y - realSize - 22 * ratio, 12 * ratio, namecolor, "center");
-        drawText(util.handleLargeNumber(instance.score, 1), x, y - realSize - 12 * ratio, 6 * ratio, namecolor, "center");
-        ctx.globalAlpha = 1;
+        ctx.globalAlpha = fade * (alpha ** 2);
+        if (global.GUIStatus.renderPlayerNames) drawText(name, x, y - realSize - 22 * ratio, 12 * ratio, namecolor == "#ffffff" ? color.guiwhite : namecolor, "center");
+        if (global.GUIStatus.renderPlayerScores) drawText(util.handleLargeNumber(instance.score, 1), x, y - realSize - 12 * ratio, 6 * ratio, namecolor == "#ffffff" ? color.guiwhite : namecolor, "center");
     }
 }
   
@@ -2268,6 +2419,7 @@ window.cancelAnimFrame = window.cancelAnimationFrame || window.mozCancelAnimatio
 // Drawing states
 const statMenu = Smoothbar(0, 0.7, 1.5, 0.1);
 const upgradeMenu = Smoothbar(0, 2, 3, 0.1);
+const mobileUpgradeGlide = Smoothbar(0, 2, 3, 0.1);
 // Define the graph constructor
 function graph() {
     var data = [];
@@ -2476,6 +2628,9 @@ function drawFloor(px, py, ratio) {
 
             //draw it
             let tile = row[j];
+
+            if (tile.includes('none')) continue;
+
             ctx.globalAlpha = 1;
             ctx.fillStyle = settings.graphical.screenshotMode ? color.guiwhite : color.white;
             ctx.fillRect(left, top, right - left, bottom - top);
@@ -2488,24 +2643,33 @@ function drawFloor(px, py, ratio) {
             ctx.fillRect(left, top, right - left, bottom - top);
             if (settings.graphical.quality == "cod") {
               ctx.drawImage(callofduty, left, top, right - left, bottom  - top);
+
+            if (settings.graphical.screenshotMode) continue;
+            
+            ctx.globalAlpha = 0.3;
+            ctx.fillStyle = gameDraw.modifyColor(tile);
+            ctx.fillRect(left, top, right - left + 1, bottom - top + 1);
             }
         }
     }
-    ctx.lineWidth = 1.25;
-    ctx.strokeStyle = settings.graphical.screenshotMode ? color.guiwhite : color.guiblack;
-    ctx.globalAlpha = 0.04;
-    ctx.beginPath();
-    let gridsize = 30 * ratio;
-    for (let x = (global.screenWidth / 2 - px) % gridsize; x < global.screenWidth; x += gridsize) {
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, global.screenHeight);
+    if (settings.graphical.showGrid) {
+        let gridsize = 30 * ratio;
+        if (gridsize < 7) return;
+        ctx.lineWidth = ratio;
+        ctx.strokeStyle = settings.graphical.screenshotMode ? color.guiwhite : color.guiblack;
+        ctx.globalAlpha = 0.04;
+        ctx.beginPath();
+        for (let x = (global.screenWidth / 2 - px) % gridsize; x < global.screenWidth; x += gridsize) {
+            ctx.moveTo(x, 0);
+            ctx.lineTo(x, global.screenHeight);
+        }
+        for (let y = (global.screenHeight / 2 - py) % gridsize; y < global.screenHeight; y += gridsize) {
+            ctx.moveTo(0, y);
+            ctx.lineTo(global.screenWidth, y);
+        }
+        ctx.stroke();
+        ctx.globalAlpha = 1;
     }
-    for (let y = (global.screenHeight / 2 - py) % gridsize; y < global.screenHeight; y += gridsize) {
-        ctx.moveTo(0, y);
-        ctx.lineTo(global.screenWidth, y);
-    }
-    ctx.stroke();
-    ctx.globalAlpha = 1;
 }
 
 function drawEntities(px, py, ratio) {
@@ -2522,7 +2686,7 @@ function drawEntities(px, py, ratio) {
         }
         instance.render.x = util.lerp(instance.render.x, Math.round(instance.x + instance.vx), 0.1, true);
         instance.render.y = util.lerp(instance.render.y, Math.round(instance.y + instance.vy), 0.1, true);
-        instance.render.f = instance.id === gui.playerid && !global.autoSpin && !instance.twiggle && !global.died ? Math.atan2(global.target.y * global.reverseTank, global.target.x * global.reverseTank) : util.lerpAngle(instance.render.f, instance.facing, 0.15, true);
+        instance.render.f = instance.id === gui.playerid && !global.autoSpin && !global.syncingWithTank && !instance.twiggle && !global.died ? Math.atan2(global.target.y * global.reverseTank, global.target.x * global.reverseTank) : util.lerpAngle(instance.render.f, instance.facing, 0.15, true);
         let x = ratio * instance.render.x - px,
             y = ratio * instance.render.y - py,
             baseColor = instance.color;
@@ -2558,8 +2722,8 @@ function drawEntities(px, py, ratio) {
             indexes = instance.index.split("-"),
             m = global.mockups[parseInt(indexes[0])],
             realSize = (size / m.size) * m.realSize,
-            x = instance.id === gui.playerid ? 0 : ratio * instance.render.x - px,
-            y = instance.id === gui.playerid ? 0 : ratio * instance.render.y - py;
+            x = instance.id === gui.playerid ? global.player.screenx : ratio * instance.render.x - px,
+            y = instance.id === gui.playerid ? global.player.screeny : ratio * instance.render.y - py;
         x += global.screenWidth / 2;
         y += global.screenHeight / 2 - realSize - 46 * ratio;
         if (instance.id !== gui.playerid && instance.nameplate) y -= 8 * ratio;
@@ -2569,7 +2733,7 @@ function drawEntities(px, py, ratio) {
             let chat = global.chats[instance.id][i],
                 text = chat.text,
                 msgLengthHalf = measureText(text, 15 * ratioForChat) / 2,
-                alpha = Math.max(0, Math.min(1000, chat.expires - now) / 1000);
+                alpha = Math.max(!global.mobile ? 0 : 1, Math.min(1000, chat.expires - now) / 1000);
             ctx.globalAlpha = 0.5 * alpha;
             if (settings.game.optNoEmojis) {
               if (text.includes("--troll")) {
@@ -2688,13 +2852,20 @@ function drawUpgradeTree(spacing, alcoveSize) {
     ctx.strokeText(text, global.screenWidth / 2 - w / 2, innerHeight * 0.04);
 }
 
-function drawMessages(spacing) {
+function drawMessages(spacing, alcoveSize) {
     // Draw messages
     let vspacing = 4;
     let len = 0;
     let height = 18;
     let x = global.screenWidth / 2;
     let y = spacing;
+    if (global.mobile) {
+        if (global.canUpgrade) {
+            mobileUpgradeGlide.set(0 + (global.canUpgrade || global.upgradeHover));
+            y += (alcoveSize / 1.4 /*+ spacing * 2*/) * mobileUpgradeGlide.get();
+        }
+        y += global.canSkill || global.showSkill ? (alcoveSize / 2.2 /*+ spacing * 2*/) * statMenu.get() : 0;
+    }
     // Draw each message
     for (let i = global.messages.length - 1; i >= 0; i--) {
         let msg = global.messages[i],
@@ -2733,6 +2904,7 @@ function drawMessages(spacing) {
 
 function drawSkillBars(spacing, alcoveSize) {
     // Draw skill bars
+    if (global.mobile) return drawMobileSkillUpgrades(spacing, alcoveSize);
     statMenu.set(0 + (global.died || global.statHover || (global.canSkill && !gui.skills.every(skill => skill.cap === skill.amount))));
     global.clickables.stat.hide();
     let vspacing = 4;
@@ -2810,6 +2982,67 @@ function drawSkillBars(spacing, alcoveSize) {
         drawText("x" + gui.points, Math.round(x + len - 2) + 0.5, Math.round(y + height - 4) + 0.5, 20, color.guiwhite, "right");
     }
 }
+  function drawMobileSkillUpgrades(spacing, alcoveSize) {
+    global.canSkill = gui.points > 0 && gui.skills.some(s => s.amount < s.cap) && !global.canUpgrade;
+    global.showSkill = !global.canUpgrade && !global.canSkill && global.died;
+    statMenu.set(global.canSkill || global.showSkill || global.disconnected ? 1 : 0);
+    let n = statMenu.get();
+    global.clickables.stat.hide();
+    let t = alcoveSize / 2,
+        q = alcoveSize / 3,
+        x = 2 * n * spacing - spacing,
+        statNames = gui.getStatNames(global.mockups[parseInt(gui.type.split("-")[0])].statnames),
+        clickableRatio = canvas.height / global.screenHeight / global.ratio;
+    if (global.canSkill || global.showSkill) {
+        for (let i = 0; i < gui.skills.length; i++) {
+            let skill = gui.skills[i],
+                softcap = skill.softcap;
+            if (softcap <= 0) continue;
+            let amount = skill.amount,
+                skillColor = color[skill.color],
+                cap = skill.cap,
+                name = statNames[9 - i].split(/\s+/),
+                halfNameLength = Math.floor(name.length / 2),
+                [name1, name2] = name.length === 1 ? [name[0], null] : [name.slice(0, halfNameLength).join(" "), name.slice(halfNameLength).join(" ")];
+            ctx.globalAlpha = 0.5;
+            ctx.fillStyle = skillColor;
+            drawGuiRect(x, spacing, t, 2 * q / 3);
+            ctx.globalAlpha = 0.1;
+            ctx.fillStyle = color.black;
+            drawGuiRect(x, spacing + q * 2 / 3 * 2 / 3, t, q * 2 / 3 / 3);
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = color.guiwhite;
+            drawGuiRect(x, spacing + q * 2 / 3, t, q / 3);
+            ctx.fillStyle = skillColor;
+            drawGuiRect(x, spacing + q * 2 / 3, t * amount / softcap, q / 3);
+            ctx.strokeStyle = color.black;
+            ctx.lineWidth = 1;
+            for (let j = 1; j < cap; j++) {
+                let width = x + j / softcap * t;
+                drawGuiLine(width, spacing + q * 2 / 3, width, spacing + q);
+            }
+            cap === 0 || !gui.points || softcap !== cap && amount === softcap || global.clickables.stat.place(9 - i, x * clickableRatio, spacing * clickableRatio, t * clickableRatio, q * clickableRatio);
+            if (name2) {
+                drawText(name2, x + t / 2, spacing + q * 0.55, q / 5, color.guiwhite, "center");
+                drawText(name1, x + t / 2, spacing + q * 0.3, q / 5, color.guiwhite, "center");
+            } else {
+                drawText(name1, x + t / 2, spacing + q * 0.425, q / 5, color.guiwhite, "center");
+            }
+            if (amount > 0) {
+                drawText(amount < softcap ? `+${amount}` : "MAX", x + t / 2, spacing + q * 1.3, q / 4, skillColor, "center");
+            }
+            ctx.strokeStyle = color.black;
+            ctx.globalAlpha = 1;
+            ctx.lineWidth = 3;
+            drawGuiLine(x, spacing + q * 2 / 3, x + t, spacing + q * 2 / 3);
+            drawGuiRect(x, spacing, t, q, true);
+            x += n * (t + 14);
+        }
+        if (gui.points > 1) {
+            drawText(`x${gui.points}`, x, spacing + 20, 20, color.guiwhite, "left");
+        }
+    }
+}
 
 function drawSelfInfo(spacing, alcoveSize, max) {
     //rendering information
@@ -2881,17 +3114,18 @@ function drawSelfInfo(spacing, alcoveSize, max) {
     // Draw the %-of-leader bar
     drawBar(x + len * 0.1, x + len * 0.9, y + height / 2, height - 3 + settings.graphical.barChunk, color.black);
     drawBar(x + len * 0.1, x + len * 0.9, y + height / 2, height - 3 - settings.graphical.barChunk / 4, color.grey);
-    drawBar(x + len * 0.1, x + len * (0.1 + 0.8 * (max ? Math.min(1, gui.__s.getScore() / max) : 1)), y + height / 2, height - 3 - settings.graphical.barChunk / 4, color.teal);
+    drawBar(x + len * 0.1, x + len * (0.1 + 0.8 * (max ? Math.min(1, gui.__s.getScore() / max) : 1)), y + height / 2, height - 3 - settings.graphical.barChunk / 4, color.green);
 
     //write the score and name
-    drawText("Score: " + util.formatLargeNumber(Math.floor(gui.__s.getScore())), x + len / 2, y + height / 2 + 1, height - 3.5, color.guiwhite, "center", true);
+    drawText("Score: " + util.formatLargeNumber(Math.round(gui.__s.getScore())), x + len / 2, y + height / 2 + 1, height - 3.5, color.guiwhite, "center", true);
     ctx.lineWidth = 4;
-    drawText(global.player.name, Math.round(x + len / 2) + 0.5, Math.round(y - 10 - vspacing) + 0.5, 32, global.nameColor, "center");
+    drawText(global.player.name, Math.round(x + len / 2) + 0.5, Math.round(y - 10 - vspacing) + 0.5, 32, global.nameColor = "#ffffff" ? color.guiwhite : global.nameColor, "center");
 }
 
-function drawMinimapAndDebug(spacing, alcoveSize) {
+function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
     // Draw minimap and FPS monitors
     //minimap stuff starts here
+    let orangeColor = false;
     let len = alcoveSize; // * global.screenWidth;
     let height = (len / global.gameWidth) * global.gameHeight;
     if (global.gameHeight > global.gameWidth || global.gameHeight < global.gameWidth) {
@@ -2911,8 +3145,13 @@ function drawMinimapAndDebug(spacing, alcoveSize) {
         len /= ratio;
         height /= ratio;
     }
-    let x = global.screenWidth - spacing - len;
-    let y = global.screenHeight - height - spacing;
+    let upgradeColumns = Math.ceil(gui.upgrades.length / 9);
+    let x = global.mobile ? spacing : global.screenWidth - spacing - len;
+    let y = global.mobile ? spacing : global.screenHeight - height - spacing;
+    if (global.mobile) {
+      y += global.canUpgrade ? (alcoveSize / 1.5) * mobileUpgradeGlide.get() * upgradeColumns / 1.5 + spacing * (upgradeColumns + 1.55) + 9 : 0;
+      y += global.canSkill || global.showSkill ? statMenu.get() * alcoveSize / 2.6 + spacing / 0.75 : 0;
+    }
     ctx.globalAlpha = 0.4;
     let W = global.roomSetup[0].length,
         H = global.roomSetup.length,
@@ -2922,6 +3161,14 @@ function drawMinimapAndDebug(spacing, alcoveSize) {
         let j = 0;
         for (let xcell = 0; xcell < W; xcell++) {
             let cell = global.roomSetup[ycell][xcell];
+
+            if (cell.includes('none')) {
+                cell = cell.split(' ');
+                cell.shift();
+                cell.unshift('pureBlack');
+                cell = cell.join(' ');
+            }
+
             ctx.fillStyle = gameDraw.modifyColor(cell);
             if (gameDraw.modifyColor(cell) !== color.white) {
                 drawGuiRect(x + (j * len) / W, y + (i * height) / H, len / W, height / H);
@@ -2947,7 +3194,7 @@ function drawMinimapAndDebug(spacing, alcoveSize) {
                 drawGuiCircle(x + (entity.x / global.gameWidth) * len, y + (entity.y / global.gameHeight) * height, (entity.size / global.gameWidth) * len + 0.2);
                 break;
             case 0:
-                if (entity.id !== gui.playerid) drawGuiCircle(x + (entity.x / global.gameWidth) * len, y + (entity.y / global.gameHeight) * height, 2);
+                if (entity.id !== gui.playerid) drawGuiCircle(x + (entity.x / global.gameWidth) * len, y + (entity.y / global.gameHeight) * height, !global.mobile ? 2 : 3.5);
                 break;
         }
     }
@@ -2962,36 +3209,43 @@ function drawMinimapAndDebug(spacing, alcoveSize) {
     ctx.lineWidth = 1;
     ctx.strokeStyle = color.guiblack;
     ctx.fillStyle = color.guiblack;
-    drawGuiCircle(x + (global.player.cx / global.gameWidth) * len - 1, y + (global.player.cy / global.gameHeight) * height - 1, 2, false);
+    drawGuiCircle(x + (global.player.cx / global.gameWidth) * len - 0, y + (global.player.cy / global.gameHeight) * height - 1, !global.mobile ? 2 : 3.5, false);
+    if (global.mobile) {
+        x = global.screenWidth - spacing - len;
+        y = global.screenHeight - spacing;
+    }
     if (global.showDebug) {
         drawGuiRect(x, y - 40, len, 30);
         lagGraph(lag.get(), x, y - 40, len, 30, color.teal);
         gapGraph(global.metrics.rendergap, x, y - 40, len, 30, color.pink);
-        //timingGraph(GRAPHDATA, x, y - 40, len, 30, color.yellow);
+        timingGraph(GRAPHDATA, x, y - 40, len, 30, color.yellow);
     }
     //minimap stuff ends here
     //debug stuff
     if (!global.showDebug) y += 14 * 3;
+    if ((100 * gui.fps).toFixed(2) < 100) orangeColor = true;
+    if (global.metrics.rendertime < 10) orangeColor = true;
     // Text
     if (global.showDebug) {
-        drawText("Nero Engine v3.1", x + len, y - 50 - 7 * 14 - 2, 15, "#6a36e3", "right");
-        //drawText("Prediction: " + Math.round(GRAPHDATA) + "ms", x + len, y - 50 - 4 * 14, 10, color.guiwhite, "right");
-        drawText("Update Version: " + "v3.112", x + len, y - 50 - 6 * 14, 10, color.guiwhite, "right");
+        drawText("Nero Engine v3.2", x + len, y - 50 - 8 * 14 - 2, 15, "#6a36e3", "right");
+        drawText("Prediction: " + Math.round(GRAPHDATA) + "ms : " + global.mspt + " mspt", x + len, y - 50 - 7 * 14, 10, color.guiwhite, "right");
+        // drawText(`Bandwidth: ${gui.bandwidth.in} in, ${gui.bandwidth.out} out`, x + len, y - 50 - 3 * 14, 10, color.guiwhite, "right");     
+        drawText("Memory: " + global.metrics.rendergap.toFixed(1) + " Mib : " + "Class: " + gui.class, x + len, y - 50 - 3 * 14, 10, color.guiwhite, "right");   
+        drawText("Update Version: " + "v3.206", x + len, y - 50 - 6 * 14, 10, color.guiwhite, "right");
         drawText("Update Rate: " + global.metrics.updatetime + "Hz", x + len, y - 50 - 5 * 14, 10, color.guiwhite, "right");
         drawText("Client Speed: " + global.metrics.rendertime + " FPS", x + len, y - 50 - 4 * 14, 10, global.metrics.rendertime > 10 ? color.guiwhite : color.orange, "right");
-        drawText("Server Speed: " + ((global.metrics.updatetime * global.metrics.rendergap-global.metrics.lag) / 10).toFixed(2) + "%", x + len, y - 50 - 3 * 14, 10, color.guiwhite, "right");
+        drawText("Server Speed: " + (100 * gui.fps).toFixed(2) + "% : Client Speed: " + global.metrics.rendertime + " FPS", x + len, y - 50 - 1 * 14, 10, orangeColor ? color.orange : color.guiwhite, "right");
         drawText("Kills: " + global.metrics.killcount + "  Shapes: " + global.metrics.shapecount, x + len, y - 50 - 2 * 14, 10, color.guiwhite, "right");
         drawText("Song: " + global.music2.songname, x + len, y - 50 - 1 * 14, 10, color.guiwhite, "right");
-        drawText(global.metrics.latency + " ms - neroio2 :FFA:", x + len, y - 50, 10, color.guiwhite, "right");
+        drawText(global.metrics.latency + " ms - " + global.serverName, x + len, y - 50, 10, color.guiwhite, "right");
         document.getElementById("content").style.opacity = 1;
-    } else {
-        drawText("Nero.io v3.1", x + len, y - 50 - 2 * 14 - 2, 15, "#2eabe6", "right");
-        drawText((100 * gui.fps).toFixed(2) + "% : " + global.metrics.rendertime + " FPS", x + len, y - 50 - 1 * 14, 10, global.metrics.rendertime > 10 ? color.guiwhite : color.orange, "right");
+    } else if (!global.GUIStatus.minimapReducedInfo) {
+        drawText("Nero.io v3.2", x + len, y - 50 - 2 * 14 - 2, 15, "#2eabe6", "right");
+        drawText((100 * gui.fps).toFixed(2) + "% : " + global.metrics.rendertime + " FPS", x + len, y - 50 - 1 * 14, 10, orangeColor ? color.orange : color.guiwhite, "right");
         drawText(global.metrics.latency + " ms : " + global.metrics.updatetime + "Hz", x + len, y - 50, 10, color.guiwhite, "right");
         document.getElementById("content").style.opacity = 0;
         document.getElementById("content").style.left = x - spacing - 120
-    }
-    global.fps = global.metrics.rendertime;
+    } else drawText("Open Source Arras", x + len, y - 22 - 2 * 14 - 2, 15, "#1081E5", "right");
 }
 
 function drawLeaderboard(spacing, alcoveSize, max) {
@@ -3002,6 +3256,16 @@ function drawLeaderboard(spacing, alcoveSize, max) {
     let height = 14;
     let x = global.screenWidth - len - spacing;
     let y = spacing + height + 7;
+    if (!lb.data.length) return;
+    // Animation things
+    let mobileGlide = mobileUpgradeGlide.get();
+    if (global.mobile) {
+        if (global.canUpgrade) {
+            y += (alcoveSize / 1.4) * mobileGlide;
+        }
+        y += global.canSkill || global.showSkill ? (alcoveSize / 2.2 /*+ spacing * 2*/) * statMenu.get() : 0;
+    }
+  
     drawText("Leaderboard", Math.round(x + len / 2) + 0.5, Math.round(y - 6) + 0.5, height + 3.5, color.guiwhite, "center");
     y += 7;
     for (let i = 0; i < lb.data.length; i++) {
@@ -3012,7 +3276,7 @@ function drawLeaderboard(spacing, alcoveSize, max) {
         drawBar(x, x + len * shift, y + height / 2, height - 3.5, gameDraw.modifyColor(entry.barColor));
         // Leadboard name + score
         let nameColor = entry.nameColor || "#FFFFFF";
-        drawText(entry.label + (": " + util.handleLargeNumber(Math.round(entry.score))), x + len / 2, y + height / 2, height - 5, nameColor, "center", true);
+        drawText(entry.label + (": " + util.handleLargeNumber(Math.round(entry.score))), x + len / 2, y + height / 2, height - 5, nameColor == "#ffffff" ? color.guiwhite : nameColor, "center", true);
         // Mini-image
         let scale = height / entry.position.axis,
             xx = x - 1.5 * height - scale * entry.position.middle.x * Math.SQRT1_2,
@@ -3032,10 +3296,10 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
       
         // Animation processing
 //      let columnCount = Math.max(Math.ceil(gui.upgrades.length / 5), 3);
-        let columnCount = Math.max(3, Math.ceil(gui.upgrades.length / 3));
+        global.columnCount = Math.max(global.mobile ? 9 : 3, Math.ceil(gui.upgrades.length / 3));
         upgradeMenu.set(0);
         if (!global.canUpgrade) {
-            upgradeMenu.force(-columnCount * 3)
+            upgradeMenu.force(-global.columnCount * 3)
             global.canUpgrade = true;
         }
         let glide = upgradeMenu.get();
@@ -3061,7 +3325,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
             let model = upgrade[2];
 
             // Draw either in the next row or next column
-            if (ticker === columnCount || upgradeBranch != lastBranch) {
+            if (ticker === global.columnCount || upgradeBranch != lastBranch) {
                 x = xStart;
                 y += height + internalSpacing;
                 if (upgradeBranch != lastBranch) {
@@ -3086,7 +3350,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
           let upgradeKey = getClassUpgradeKey(upgradeNum);
           
 //          drawEntityIcon(model, y, x, len, height, 1, upgradeSpin, 0.5, colorIndex++, upgradeKey);
-            drawEntityIcon(model, x, y, len, height, 1, upgradeSpin, 0.6, colorIndex++, upgradeKey, upgradeNum == upgradeHoverIndex);
+            drawEntityIcon(model, x, y, len, height, 1, upgradeSpin, 0.6, colorIndex++, !global.mobile ? upgradeKey : false, !global.mobile ? upgradeNum == upgradeHoverIndex : false);
 
             ticker++;
             upgradeNum++;
@@ -3105,7 +3369,7 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         global.clickables.skipUpgrades.place(0, (buttonX - m / 2) * clickableRatio, buttonY * clickableRatio, m * clickableRatio, h * clickableRatio);
 
         // Upgrade tooltip
-        if (upgradeHoverIndex > -1 && upgradeHoverIndex < gui.upgrades.length) {
+        if (upgradeHoverIndex > -1 && upgradeHoverIndex < gui.upgrades.length && !global.mobile) {
             let picture = gui.upgrades[upgradeHoverIndex][2];
             if (picture.upgradeTooltip.length > 0) {
                 let boxWidth = measureText(picture.name, alcoveSize / 10),
@@ -3138,7 +3402,161 @@ function drawAvailableUpgrades(spacing, alcoveSize) {
         global.clickables.skipUpgrades.hide();
     }
 }
+// MOBILE UI FUNCTIONS
+function drawMobileJoysticks() {
+    // Draw the joysticks.
+    let radius = Math.min(
+        global.mobileStatus.useBigJoysticks ? global.screenWidth * 0.8 : global.screenWidth * 0.6,
+        global.mobileStatus.useBigJoysticks ? global.screenHeight * 0.16 : global.screenHeight * 0.12
+    );
+    ctx.globalAlpha = 0.3;
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.arc(
+        (global.screenWidth * 1) / 6,
+        (global.screenHeight * 2) / 3,
+        radius,
+        0,
+        2 * Math.PI
+    );
+    ctx.arc(
+        (global.screenWidth * 5) / 6,
+        (global.screenHeight * 2) / 3,
+        radius,
+        0,
+        2 * Math.PI
+    );
+    ctx.fill();
+    ctx.globalAlpha = 0.5;
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    if (global.mobileStatus.showJoysticks) {
+        ctx.arc(
+            canvas.movementTouchPos.x + (global.screenWidth * 1) / 6,
+            canvas.movementTouchPos.y + (global.screenHeight * 2) / 3,
+            radius / 2.5,
+            0,
+            2 * Math.PI
+        );
+        ctx.arc(
+            canvas.controlTouchPos.x + (global.screenWidth * 5) / 6,
+            canvas.controlTouchPos.y + (global.screenHeight * 2) / 3,
+            radius / 2.5,
+            0,
+            2 * Math.PI
+        );
+    }
+    ctx.fill();
+    // crosshair
+    if (global.mobileStatus.showCrosshair && global.mobileStatus.enableCrosshair) {
+        const crosshairpos = {
+            x: global.screenWidth / 2 + global.player.target.x,
+            y: global.screenHeight / 2 + global.player.target.y
+        };
+        ctx.lineWidth = 1;
+        ctx.globalAlpha = 1;
+        ctx.strokeStyle = "#202020"
+        ctx.beginPath();
+        ctx.moveTo(crosshairpos.x, crosshairpos.y - 20);
+        ctx.lineTo(crosshairpos.x, crosshairpos.y + 20);
+        ctx.moveTo(crosshairpos.x - 20, crosshairpos.y);
+        ctx.lineTo(crosshairpos.x + 20, crosshairpos.y);
+        ctx.closePath();
+        ctx.stroke();
+    }
+}
 
+function makeButton(index, x, y, width, height, text, clickableRatio) {
+    // Set the clickable's position
+    global.clickables.mobileButtons.place(index, x * clickableRatio, y * clickableRatio, width * clickableRatio, height * clickableRatio);
+
+    // Draw boxes
+    ctx.globalAlpha = 0.5;
+    ctx.fillStyle = color.grey;
+    drawGuiRect(x, y, width, height);
+    ctx.globalAlpha = 0.1;
+    ctx.fillStyle = color.black;
+    drawGuiRect(x, y + height * 0.6, width, height * 0.4);
+    ctx.globalAlpha = 1;
+
+    // Draw text
+    drawText(text, x + width / 2, y + height * 0.5, height * 0.6, color.guiwhite, "center", true);
+
+    // Draw the borders
+    ctx.strokeStyle = color.black;
+    ctx.lineWidth = 3;
+    drawGuiRect(x, y, width, height, true);
+}
+
+function makeButtons(buttons, startX, startY, baseSize, clickableRatio, spacing) {
+    let x = startX, y = startY, index = 0;
+
+    for (let row = 0; row < buttons.length; row++) {
+        for (let col = 0; col < buttons[row].length; col++) {
+            makeButton(buttons[row][col][3] ?? index, x, y, baseSize * (buttons[row][col][1] ?? 1), baseSize * (buttons[row][col][2] ?? 1), buttons[row][col][0], clickableRatio);
+            x += baseSize * (buttons[row][col][1] ?? 1) + spacing;
+            index++;
+        }
+
+        x = startX;
+        y += Math.max(...buttons[row].map(b => baseSize * (b[2] ?? 1))) + spacing;
+    }
+}
+
+function drawMobileButtons(spacing, alcoveSize) {
+    if (global.clickables.mobileButtons.active == null) global.clickables.mobileButtons.active = false;
+    if (global.clickables.mobileButtons.altFire == null) global.clickables.mobileButtons.altFire = false;
+
+    // Hide the buttons
+    global.clickables.mobileButtons.hide();
+
+    // Some animations.
+    mobileUpgradeGlide.set(0 + (global.canUpgrade || global.upgradeHover));
+
+    // Some sizing variables
+    let clickableRatio = global.canvas.height / global.screenHeight / global.ratio;
+    let upgradeColumns = Math.ceil(gui.upgrades.length / 9);
+    let yOffset = 0;
+    if (global.mobile) {
+      yOffset += global.canUpgrade ? (alcoveSize / 1.5 /*+ spacing * 2*/) * mobileUpgradeGlide.get() * upgradeColumns / 1.5 + spacing * (upgradeColumns + 1.55) + -17.5 : 0;
+      yOffset += global.canSkill || global.showSkill ? statMenu.get() * alcoveSize / 2.6 + spacing / 0.75 : 0;
+    }
+    let buttons;
+    let baseSize = (alcoveSize - spacing * 2) / 3;
+
+    if (global.mobile) {
+        buttons = global.clickables.mobileButtons.active ? [
+            [[global.clickables.mobileButtons.active ? "-" : "+"], [`Alt ${global.clickables.mobileButtons.altFire ? "Manual" : "Disabled"}`, 6], [`${!document.fullscreenElement ? "Full" : "Exit Full"} Screen`, 5]],
+            [["Autofire", 3.5], ["Reverse", 3.5], ["Self-Destruct", 5]],
+            [["Autospin", 3.5], ["Override", 3.5], ["Level Up", 5]],
+            [["Action", 3.5], ["Special", 3.5], ["Chat", 5]],
+        ] : [
+            [[global.clickables.mobileButtons.active ? "-" : "+"]],
+        ];
+    }
+    if (global.clickables.mobileButtons.altFire) buttons.push([["\u2756", 2, 2]]);
+
+    let len = alcoveSize;
+    let height = (len / global.gameWidth) * global.gameHeight;
+    if (global.gameHeight > global.gameWidth || global.gameHeight < global.gameWidth) {
+        let ratio = [
+            global.gameWidth / global.gameHeight,
+            global.gameHeight / global.gameWidth,
+        ];
+        len /= ratio[1] * 1.5;
+        height /= ratio[1] * 1.5;
+        if (len > alcoveSize * 2) {
+            ratio = len / (alcoveSize * 2);
+       } else if (height > alcoveSize * 2) {
+            ratio = height / (alcoveSize * 2);
+        } else {
+            ratio = 1;
+        }
+        len /= ratio;
+        height /= ratio;
+   }
+    makeButtons(buttons, len + spacing * 2, yOffset + spacing, baseSize, clickableRatio, spacing);
+}
 const gameDrawAlive = (ratio, drawRatio) => {
     let GRAPHDATA = 0;
     // Prep stuff
@@ -3155,7 +3573,7 @@ const gameDrawAlive = (ratio, drawRatio) => {
         py = ratio * global.player.rendery;
 
     // Get the player's target
-    calculateTarget();
+    if (!global.mobile) calculateTarget();
 
     //draw the in game stuff
     drawFloor(px, py, ratio);
@@ -3170,15 +3588,22 @@ const gameDrawAlive = (ratio, drawRatio) => {
     let lb = leaderboard.get();
     let max = lb.max;
     global.canSkill = !!gui.points && !global.showTree;
+    global.fps = global.metrics.rendertime;
     if (global.showTree) {
         drawUpgradeTree(spacing, alcoveSize);
     } else {
-        drawMessages(spacing);
-        drawSkillBars(spacing, alcoveSize);
-        drawSelfInfo(spacing, alcoveSize, max);
-        drawMinimapAndDebug(spacing, alcoveSize);
-        drawLeaderboard(spacing, alcoveSize, max, lb);
-        drawAvailableUpgrades(spacing, alcoveSize);
+        if (global.mobile) { // MOBILE UI
+            drawMobileJoysticks();
+            drawMobileButtons(spacing, alcoveSize);
+        }
+        if (global.GUIStatus.renderGUI) {
+            drawMessages(spacing, alcoveSize);
+            drawSkillBars(spacing, alcoveSize);
+            drawSelfInfo(spacing, alcoveSize, max);
+            drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA);
+            if (global.GUIStatus.renderLeaderboard) drawLeaderboard(spacing, alcoveSize, max, lb);
+            drawAvailableUpgrades(spacing, alcoveSize);
+        } else drawAvailableUpgrades(spacing, alcoveSize);
     }
     global.metrics.lastrender = getNow();
 };
@@ -3206,8 +3631,8 @@ let getKills = () => {
         : destruction < 75 ? "👺"
         : destruction < 100 ? "🌶️" : "💯"
         ) + " " + (!killCountTexts.length ? "A true pacifist" :
-                    killCountTexts.length == 1 ? killCountTexts.join(" and ") :
-                    killCountTexts.slice(0, -1).join(", ") + " and " + killCountTexts[killCountTexts.length - 1])
+            killCountTexts.length == 1 ? killCountTexts.join(" and ") :
+                killCountTexts.slice(0, -1).join(", ") + " and " + killCountTexts[killCountTexts.length - 1])
     );
 };
 let getDeath = () => {
@@ -3223,11 +3648,56 @@ let getDeath = () => {
     }
     return txt;
 };
+let getTips = () => {
+    let txt = "❓ ";
+    if (global.finalKillers.length) {
+        txt += "lol you died";
+    } else if (!global.autolvlUp) {
+        txt += "Enable auto-level up in the options menu to get level 45";
+    } else {
+        txt += "Kill players and polygons to get more score";
+    }
+    return txt;
+};
 const gameDrawDead = () => {
     clearScreen(color.black, 0.25);
     let ratio = util.getScreenRatio();
     scaleScreenRatio(ratio, true);
     let shift = animations.deathScreen.get();
+    ctx.translate(0, -shift * global.screenHeight);
+    let x = global.screenWidth / 2,
+        y = global.screenHeight / 2 - 50,
+        len = 140,
+        position = global.mockups[parseInt(gui.type.split("-")[0])].position,
+        scale = len / position.axis,
+        xx = global.screenWidth / 2 - scale * position.middle.x * 0.707,
+        yy = global.screenHeight / 2 - 35 + scale * position.middle.y * 0.707,
+        picture = util.getEntityImageFromMockup(gui.type, gui.color),
+        baseColor = picture.color,
+        timestamp = Math.floor(Date.now() /1000);
+    drawEntity(baseColor, (xx - 190 - len / 2 + 0.5) | 0, (yy - 10 + 0.5) | 0, picture, 1.5, 1, (0.5 * scale) / picture.realSize, 1, -Math.PI / 4, true);
+    drawText("Level " + gui.__s.getLevel(), x - 275, y - -80, 14, color.guiwhite, "center");
+    drawText(picture.name, x - 275, y - -110, 24, color.guiwhite, "center");
+    drawText(timestamp + '', x, y - 80, 10, color.guiwhite, "center");
+    if (global.player.name == "") {
+        drawText("Your Score: ", x - 170, y - 30, 24, color.guiwhite);
+    } else {
+        drawText(global.player.name + "'s Score: ", x - 170, y - 30, 24, color.guiwhite);
+    }
+    drawText(util.formatLargeNumber(Math.round(global.finalScore.get())), x - 170, y + 25, 50, color.guiwhite);
+    drawText("⌚ Survived for " + util.timeForHumans(Math.round(global.finalLifetime.get())), x - 170, y + 55, 16, color.guiwhite);
+    drawText(getKills(), x - 170, y + 77, 16, color.guiwhite);
+    drawText(getDeath(), x - 170, y + 99, 16, color.guiwhite);
+    drawText(getTips(), x - 170, y + 122, 16, color.guiwhite);
+    drawText("🦆 The server was " + +(100 * gui.fps).toFixed(0) + "%" + " active", x - 170, y + 144, 16, color.guiwhite);
+    drawText(global.cannotRespawn ? global.respawnTimeout ? "(" + global.respawnTimeout + " Secon" + `${global.respawnTimeout <= 1 ? 'd' : 'ds'} ` + "left to respawn)" : "(You cannot respawn)" : global.mobile ? "(Tap to respawn)" : "(Press enter to respawn)", x, y + 189, 16, color.guiwhite, "center");
+    ctx.translate(0, shift * global.screenHeight);
+};
+const gameDrawOldDead = () => {
+    clearScreen(color.black, 0.25);
+    let ratio = util.getScreenRatio();
+    scaleScreenRatio(ratio, true);
+    let shift = global.enableSlideAnimation ? animations.deathScreen.get() : animations.deathScreen.getNoLerp();
     ctx.translate(0, -shift * global.screenHeight);
     let x = global.screenWidth / 2,
         y = global.screenHeight / 2 - 50;
@@ -3314,10 +3784,11 @@ const gameDrawBeforeStart = () => {
     let ratio = util.getScreenRatio();
     scaleScreenRatio(ratio, true);
     clearScreen(color.white, 1);
-    let shift = animations.connecting.get();
+    let shift = global.enableSlideAnimation ? animations.connecting.get() : animations.connecting.getNoLerp();
     ctx.translate(0, -shift * global.screenHeight);
     drawText("Connecting...", global.screenWidth / 2, global.screenHeight / 2, 30, color.guiwhite, "center");
-    drawText(global.message, global.screenWidth / 2, global.screenHeight / 2 + 30, 15, color.blue, "center");
+    drawText(global.message, global.screenWidth / 2, global.screenHeight / 2 + 30, 15, color.lgreen, "center");
+    drawText(global.tips, global.screenWidth / 2, global.screenHeight / 2 + 90, 15, color.guiwhite, "center");
     ctx.translate(0, shift * global.screenHeight);
 };
 const gameDrawDisconnected = () => {
@@ -3325,7 +3796,7 @@ const gameDrawDisconnected = () => {
     let ratio = util.getScreenRatio();
     scaleScreenRatio(ratio, true);
     clearScreen(gameDraw.mixColors(color.red, color.guiblack, 0.3), 0.25);
-    let shift = animations.disconnected.get();
+    let shift = global.enableSlideAnimation ? animations.disconnected.get() : animations.disconnected.getNoLerp();
     ctx.translate(0, -shift * global.screenHeight);
     drawText("Disconnected", global.screenWidth / 2, global.screenHeight / 2, 30, color.guiwhite, "center");
     drawText(global.message, global.screenWidth / 2, global.screenHeight / 2 + 30, 15, color.orange, "center");
@@ -3336,7 +3807,7 @@ const gameDrawError = () => {
     let ratio = util.getScreenRatio();
     scaleScreenRatio(ratio, true);
     clearScreen(gameDraw.mixColors(color.red, color.guiblack, 0.2), 0.35);
-    let shift = animations.error.get();
+    let shift = global.enableSlideAnimation ? animations.error.get() : animations.error.getNoLerp();
     ctx.translate(0, -shift * global.screenHeight);
     drawText("There has been an error!", global.screenWidth / 2, global.screenHeight / 2 - 50, 50, color.guiwhite, "center");
     drawText("(This means The Dev is A Moron and The Game is Bugged)", global.screenWidth / 2, global.screenHeight / 1.8, 20, color.blue, "center");
@@ -3347,7 +3818,7 @@ const gameDrawError = () => {
 function animloop() {
     global.animLoopHandle = window.requestAnimFrame(animloop);
     gameDraw.reanimateColors();
-    global.player.renderv += (global.player.view - global.player.renderv) / 30;
+    global.player.renderv += (global.player.view - global.player.renderv) / 10;
     var ratio = settings.graphical.screenshotMode ? 2 : util.getRatio();
     // Set the drawing style
     ctx.lineCap = "round";
@@ -3377,7 +3848,7 @@ function animloop() {
         } else if (!global.disconnected) {
             gameDrawBeforeStart();
         }
-        if (global.died) {
+        if (global.died) { // Womp Womp you died
             gameDrawDead();
             if (settings.game.disableDeathSounds) {
               PlaySound420();
@@ -3390,7 +3861,7 @@ function animloop() {
             global.stopthefuckingkillsoundyouprick = false;
       }
         }
-        if (global.disconnected) {
+        if (global.disconnected) { // Draw disconnection screen if the client lost connection to the server.
             gameDrawDisconnected();
         }
         if (global.wiki) {
@@ -3401,7 +3872,7 @@ function animloop() {
     } catch (e) {
       
         //hold on....
-        gameDrawError();
+        gameDrawError(); // Draw the error screen.
         ctx.translate(-0.5, -0.5);
       
         //okay, NOW throw the error!

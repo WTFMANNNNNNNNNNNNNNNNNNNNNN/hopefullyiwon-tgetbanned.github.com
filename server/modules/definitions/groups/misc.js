@@ -1,5 +1,5 @@
 const { combineStats, skillSet, makeAuto, weaponArray } = require('../facilitators.js')
-const { base, statnames, gunCalcNames, dfltskl, smshskl } = require('../constants.js')
+const { base, statnames, dfltskl, smshskl } = require('../constants.js')
 require('./generics.js')
 require('./tanks.js')
 const g = require('../gunvals.js')
@@ -46,6 +46,20 @@ Class.wall = {
     SHAPE: 4,
     VARIES_IN_SIZE: false
 }
+Class.fovwall = {
+    PARENT: "rock",
+    LABEL: "Wall",
+    COLOR: "yellow",
+    SIZE: 25,
+    SHAPE: 4,
+    VARIES_IN_SIZE: false,
+    ON: [{
+        event: "collide",
+        handler: ({ body, other }) => {
+        body.addStatusEffect(20 * 30, { fov: 2 })
+    }}]
+}
+
 Class.dfxwall = {
     PARENT: "rock",
     LABEL: "Wall",
@@ -81,7 +95,8 @@ Class.moon = {
     PARENT: "rock",
     LABEL: "Moon",
     SIZE: 60,
-    SHAPE: 0
+    SHAPE: 0,
+    VARIES_IN_SIZE: false
 }
 
 // DOMINATORS
@@ -98,7 +113,10 @@ Class.dominator = {
         str: 1,
         spd: 1,
     }),
-    LEVEL: -1,
+    LEVEL: 45,
+    LEVEL_CAP: 45,
+    SIZE: 50,
+    SYNC_WITH_TANK: true,
     BODY: {
         RESIST: 100,
         SPEED: 1.32,
@@ -201,7 +219,7 @@ Class.trapperDominator = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.trapperDominator]),
                 TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
+                STAT_CALCULATOR: "trap",
                 AUTOFIRE: true
             }
         }
@@ -214,22 +232,18 @@ let sancHealerTiers = [2, 3, 4]
 for (let tier of sancHealerTiers) {
     Class['sanctuaryHealerTier' + (sancHealerTiers.indexOf(tier) + 1)] = {
         PARENT: "sanctuaryHealer",
-        GUNS: (() => {
-            let output = []
-            for (let i = 0; i < tier; i++) {
-                output.push({
-                    POSITION: { LENGTH: 8, WIDTH: 9, ASPECT: -0.5, X: 12.5, ANGLE: (360 / tier) * i },
-                }, {
-                    POSITION: { LENGTH: 8, WIDTH: 10, X: 10, ANGLE: (360 / tier) * i },
-                    PROPERTIES: {
-                        SHOOT_SETTINGS: combineStats([g.basic, g.healer]),
-                        TYPE: "healerBullet",
-                        AUTOFIRE: true,
-                    }
-                })
+        GUNS: weaponArray([
+            {
+                POSITION: { LENGTH: 8, WIDTH: 9, ASPECT: -0.5, X: 12.5 },
+            }, {
+                POSITION: { LENGTH: 8, WIDTH: 10, X: 10 },
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, { range: 0.5 }, g.healer]),
+                    TYPE: "healerBullet",
+                    AUTOFIRE: true,
+                }
             }
-            return output
-        })()
+        ], tier)
     }
 }
 
@@ -261,23 +275,19 @@ for (let tier of sancTiers) {
         PARENT: "sanctuary",
         TURRETS: [],
         UPGRADE_LABEL: 'Tier ' + (sancIndex + 1),
-        GUNS: (() => {
-            let output = []
-            for (let i = 0; i < tier; i++) {
-                output.push({
-                    POSITION: {LENGTH: 12, WIDTH: 4, ANGLE: (360/tier)*i}
-                }, {
-                    POSITION: {LENGTH: 1.5, WIDTH: 4, ASPECT: 1.7, X: 12, ANGLE: (360/tier)*i},
-                    PROPERTIES: {
-                        SHOOT_SETTINGS: combineStats([g.trap, {shudder: 0.15, speed: 0.8, health: 3, reload: 1.5}]),
-                        TYPE: "trap",
-                        STAT_CALCULATOR: gunCalcNames.trap,
-                        AUTOFIRE: true,
-                    },
-                })
+        GUNS: weaponArray([
+            {
+                POSITION: {LENGTH: 12, WIDTH: 4}
+            }, {
+                POSITION: {LENGTH: 1.5, WIDTH: 4, ASPECT: 1.7, X: 12},
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.trap, {shudder: 0.15, speed: 0.8, health: 3, reload: 1.5}]),
+                    TYPE: "trap",
+                    STAT_CALCULATOR: "trap",
+                    AUTOFIRE: true,
+                },
             }
-            return output
-        })()
+        ], tier)
     }
     Class['sanctuaryTier' + (sancIndex + 1)].TURRETS.push({
         POSITION: { SIZE: 22 },
@@ -342,7 +352,7 @@ Class.crasherSpawner = {
                 ],
                 SYNCS_SKILLS: true,
                 AUTOFIRE: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
+                STAT_CALCULATOR: "drone",
             },
         },
     ],
@@ -398,9 +408,9 @@ Class.sentrySwarm = {
         {
             POSITION: [7, 14, 0.6, 7, 0, 180, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.swarm, { recoil: 1.15 }]),
+                SHOOT_SETTINGS: combineStats([g.swarm, { recoil: 1.15, range: 0.9 }]),
                 TYPE: "swarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
+                STAT_CALCULATOR: "swarm",
             },
         },
     ],
@@ -437,7 +447,7 @@ Class.shinySentrySwarm = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, { recoil: 1.15 }, g.machineGun, { reload: 0.25 }]),
                 TYPE: "swarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
+                STAT_CALCULATOR: "swarm",
             },
         },
     ],
@@ -684,7 +694,7 @@ Class.mothership = {
                 TYPE: "drone",
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
+                STAT_CALCULATOR: "drone",
                 WAIT_TO_CYCLE: true,
             }
         }, {
@@ -699,7 +709,7 @@ Class.mothership = {
                     }],
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
+                STAT_CALCULATOR: "drone",
                 WAIT_TO_CYCLE: true,
             }
         }
@@ -726,6 +736,7 @@ Class.arenaCloser = {
     DRAW_HEALTH: false,
     HITS_OWN_TYPE: "never",
     ARENA_CLOSER: true,
+    IS_IMMUNE_TO_TILES: true,
     GUNS: [{
         POSITION: [14, 10, 1, 0, 0, 0, 0],
         PROPERTIES: {
@@ -741,6 +752,7 @@ Class.antiTankMachineGun = {
     UPGRADE_LABEL: "A.T.M.G.",
     CONTROLLERS: [['spin', {onlyWhenIdle: true}], 'nearestDifferentMaster'],
     LEVEL: 45,
+    SIZE: 12,
     BODY: {
         RESIST: 100,
         SPEED: 1.32,

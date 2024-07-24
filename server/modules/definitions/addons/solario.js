@@ -1,13 +1,6 @@
 const { combineStats, makeDeco } = require('../facilitators.js');
-const { base, gunCalcNames, dfltskl, statnames } = require('../constants.js');
+const { base, dfltskl, statnames } = require('../constants.js');
 const g = require('../gunvals.js');
-const fireGun = (gun) => {
-    gun.fire(
-        gun.offset * Math.cos(gun.direction + gun.angle + gun.body.facing) + (1.35 * gun.length - gun.width * gun.settings.size / 2) * Math.cos(gun.angle + gun.body.facing),
-        gun.offset * Math.sin(gun.direction + gun.angle + gun.body.facing) + (1.35 * gun.length - gun.width * gun.settings.size / 2) * Math.sin(gun.angle + gun.body.facing),
-        gun.body.skill
-    );
-};
 
 Class.solarioTurret1 = {
     PARENT: "genericTank",
@@ -318,12 +311,12 @@ Class.solario = {
                     let attack = ~~(Math.random() * 2);
                     switch(attack) {
                         case 0:
-                            fireGun(body.guns[4]);
-                            setTimeout(() => { if (body != null) fireGun(body.guns[4]) }, 6000);
-                            setTimeout(() => { if (body != null) fireGun(body.guns[4]) }, 12000);
+                            body.guns[4].fire();
+                            setTimeout(() => { if (body != null) body.guns[4].fire(); }, 6000);
+                            setTimeout(() => { if (body != null) body.guns[4].fire(); }, 12000);
                         break;
                         case 1:
-                            fireGun(body.guns[5]);
+                            body.guns[5].fire();
                         break;
                     }
                 }

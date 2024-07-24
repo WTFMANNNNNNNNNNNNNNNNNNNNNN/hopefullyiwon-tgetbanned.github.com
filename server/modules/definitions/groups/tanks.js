@@ -1,23 +1,15 @@
 const { combineStats, makeAuto, makeOver, makeDeco, makeGuard, makeBird, makeRadialAuto, weaponArray, makeCeption, makeAura } = require('../facilitators.js');
-const { base, statnames, gunCalcNames, dfltskl, smshskl } = require('../constants.js');
+const { base, statnames, dfltskl, smshskl } = require('../constants.js');
 require('./generics.js');
 const g = require('../gunvals.js');
-
-const fireGun = (gun) => {
-    gun.fire(
-        gun.offset * Math.cos(gun.direction + gun.angle + gun.body.facing) + (1.35 * gun.length - gun.width * gun.settings.size / 2) * Math.cos(gun.angle + gun.body.facing),
-        gun.offset * Math.sin(gun.direction + gun.angle + gun.body.facing) + (1.35 * gun.length - gun.width * gun.settings.size / 2) * Math.sin(gun.angle + gun.body.facing),
-        gun.body.skill
-    );
-};
 
 // Basic & starting upgrades
 Class.basic = {
     PARENT: "genericTank",
     LABEL: "Basic",
     DANGER: 4,
-    SKILL_CAP: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
-    SKILL: Array(10).fill(12),
+    SKILL_CAP: Array(10).fill(10),
+    SKILL: Array(10).fill(10),
     /*BODY: {
         ACCELERATION: base.ACCEL * 1,
         SPEED: base.SPEED * 1,
@@ -33,7 +25,15 @@ Class.basic = {
     },*/
     GUNS: [
         {
-            POSITION: [18, 8, 1, 0, 0, 0, 0],
+            POSITION: {
+                LENGTH: 18,
+                WIDTH: 8,
+                ASPECT: 1,
+                X: 0,
+                Y: 0,
+                ANGLE: 0,
+                DELAY: 0
+            },
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic]),
                 TYPE: "bullet",
@@ -55,14 +55,23 @@ Class.twin = {
     LABEL: "Twin",
     GUNS: [
         {
-            POSITION: [20, 8, 1, 0, 5.5, 0, 0],
+            POSITION: {
+                LENGTH: 20,
+                WIDTH: 8,
+                Y: 5.5
+            },
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin]),
                 TYPE: "bullet"
             }
         },
         {
-            POSITION: [20, 8, 1, 0, -5.5, 0, 0.5],
+            POSITION: {
+                LENGTH: 20,
+                WIDTH: 8,
+                Y: -5.5,
+                DELAY: 0.5
+            },
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin]),
                 TYPE: "bullet"
@@ -78,7 +87,10 @@ Class.sniper = {
     },
     GUNS: [
         {
-            POSITION: [24, 8.5, 1, 0, 0, 0, 0],
+            POSITION: {
+                LENGTH: 24,
+                WIDTH: 8.5
+            },
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper]),
                 TYPE: "bullet"
@@ -91,7 +103,12 @@ Class.machineGun = {
     LABEL: "Machine Gun",
     GUNS: [
         {
-            POSITION: [12, 10, 1.4, 8, 0, 0, 0],
+            POSITION: {
+                LENGTH: 12,
+                WIDTH: 10,
+                ASPECT: 1.4,
+                X: 8
+            },
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.machineGun]),
                 TYPE: "bullet"
@@ -106,7 +123,10 @@ Class.flankGuard = {
         SPEED: 1.1 * base.SPEED
     },
     GUNS: weaponArray({
-        POSITION: [18, 8, 1, 0, 0, 0, 0],
+        POSITION: {
+            LENGTH: 18,
+            WIDTH: 8
+        },
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard]),
             TYPE: "bullet"
@@ -122,13 +142,19 @@ Class.director = {
     },
     GUNS: [
         {
+            POSITION: {
+                LENGTH: 6,
+                WIDTH: 11,
+                ASPECT: 1.3,
+                X: 7
+            },
             POSITION: [6, 11, 1.3, 7, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.drone]),
                 TYPE: "drone",
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
+                STAT_CALCULATOR: "drone",
                 MAX_CHILDREN: 6,
                 WAIT_TO_CYCLE: true
             }
@@ -140,7 +166,10 @@ Class.pounder = {
     LABEL: "Pounder",
     GUNS: [
         {
-            POSITION: [20.5, 12, 1, 0, 0, 0, 0],
+            POSITION: {
+                LENGTH: 20.5,
+                WIDTH: 12
+            },
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pounder]),
                 TYPE: "bullet"
@@ -154,14 +183,22 @@ Class.trapper = {
     STAT_NAMES: statnames.trap,
     GUNS: [
         {
-            POSITION: [15, 7, 1, 0, 0, 0, 0]
+            POSITION: {
+                LENGTH: 15,
+                WIDTH: 7
+            }
         },
         {
-            POSITION: [3, 7, 1.7, 15, 0, 0, 0],
+            POSITION: {
+                LENGTH: 3,
+                WIDTH: 7,
+                ASPECT: 1.7,
+                X: 15
+            },
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap]),
                 TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap
+                STAT_CALCULATOR: "trap"
             }
         }
     ]
@@ -172,17 +209,17 @@ Class.desmos = {
     STAT_NAMES: statnames.desmos,
     GUNS: [
         {
-            POSITION: [20, 10, 0.8, 0, 0, 0, 0],
+            POSITION: [20, 8, -4/3, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.desmos]),
                 TYPE: ["bullet", {MOTION_TYPE: "desmos"}]
             }
         },
         {
-            POSITION: [3.75, 10, 2.125, 1.25, -6.25, 90, 0]
+            POSITION: [3.75, 10, 2.125, 1.5, -6.25, 90, 0]
         },
         {
-            POSITION: [3.75, 10, 2.125, 1.25, 6.25, -90, 0]
+            POSITION: [3.75, 10, 2.125, 1.5, 6.25, -90, 0]
         }
     ]
 }
@@ -209,10 +246,18 @@ Class.healer = {
     ],
     GUNS: [
         {
-            POSITION: [8, 9, -0.5, 12.5, 0, 0, 0]
+            POSITION: {
+                LENGTH: 8,
+                WIDTH: 9,
+                ASPECT: -0.5,
+                X: 12.5
+            }
         },
         {
-            POSITION: [18, 10, 1, 0, 0, 0, 0],
+            POSITION: {
+                LENGTH: 18,
+                WIDTH: 10
+            },
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.healer]),
                 TYPE: "healerBullet"
@@ -252,21 +297,36 @@ Class.tripleShot = {
     },
     GUNS: [
         {
-            POSITION: [19, 8, 1, 0, -2, -17.5, 0.5],
+            POSITION: {
+                LENGTH: 19,
+                WIDTH: 8,
+                Y: -2,
+                ANGLE: -17.5,
+                DELAY: 0.5
+            },
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.tripleShot]),
                 TYPE: "bullet"
             }
         },
         {
-            POSITION: [19, 8, 1, 0, 2, 17.5, 0.5],
+            POSITION: {
+                LENGTH: 19,
+                WIDTH: 8,
+                Y: 2,
+                ANGLE: 17.5,
+                DELAY: 0.5
+            },
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.tripleShot]),
                 TYPE: "bullet"
             }
         },
         {
-            POSITION: [22, 8, 1, 0, 0, 0, 0],
+            POSITION: {
+                LENGTH: 22,
+                WIDTH: 8
+            },
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.tripleShot]),
                 TYPE: "bullet"
@@ -357,28 +417,28 @@ Class.pentaShot = {
     },
     GUNS: [
         {
-            POSITION: [16, 8, 1, 0, -3, -30, 0.667],
+            POSITION: [16, 8, 1, 0, -3, -30, 2/3],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.tripleShot]),
                 TYPE: "bullet"
             }
         },
         {
-            POSITION: [16, 8, 1, 0, 3, 30, 0.667],
+            POSITION: [16, 8, 1, 0, 3, 30, 2/3],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.tripleShot]),
                 TYPE: "bullet"
             }
         },
         {
-            POSITION: [19, 8, 1, 0, -2, -15, 0.333],
+            POSITION: [19, 8, 1, 0, -2, -15, 1/3],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.tripleShot]),
                 TYPE: "bullet"
             }
         },
         {
-            POSITION: [19, 8, 1, 0, 2, 15, 0.333],
+            POSITION: [19, 8, 1, 0, 2, 15, 1/3],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.tripleShot]),
                 TYPE: "bullet"
@@ -611,6 +671,51 @@ Class.rifle = {
             POSITION: [24, 7, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle]),
+                TYPE: "bullet"
+            }
+        }
+    ]
+}
+Class.marksman = {
+    PARENT: "genericTank",
+    LABEL: "Marksman",
+    DANGER: 6,
+    BODY: {
+        FOV: 1.2 * base.FOV
+    },
+    UPGRADE_TOOLTIP: "[DEV NOTE] This tank does not function as intended yet!",
+    GUNS: [
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8.5,
+                ASPECT: 1.3,
+                X: 8
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8.5,
+                ASPECT: 1.3,
+                X: 13
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8.5,
+                ASPECT: 1.3,
+                X: 18
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 24,
+                WIDTH: 8.5
+            },
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper]),
                 TYPE: "bullet"
             }
         }
@@ -872,6 +977,192 @@ Class.crossbow = {
         }
     ]
 }
+// Marksman upgrades
+Class.deadeye = {
+    PARENT: "genericTank",
+    LABEL: "Deadeye",
+    DANGER: 7,
+    BODY: {
+        SPEED: 0.85 * base.SPEED,
+        FOV: 1.4 * base.FOV
+    },
+    GUNS: [
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8,
+                ASPECT: 1.3,
+                X: 10
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8,
+                ASPECT: 1.3,
+                X: 15
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 23,
+                WIDTH: 8,
+            },
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.assassin, { pen: 2 }]),
+                TYPE: "bullet"
+            }
+        },
+        {
+            POSITION: [5, 8, -1.4, 8, 0, 0, 0]
+        }
+    ]
+}
+Class.nimrod = {
+    PARENT: "genericTank",
+    LABEL: "Nimrod",
+    DANGER: 7,
+    BODY: {
+        SPEED: base.SPEED * 0.9,
+        FOV: base.FOV * 1.25
+    },
+    CONTROLLERS: ["zoom"],
+    TOOLTIP: "Hold right click to zoom.",
+    GUNS: [
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 12,
+                ASPECT: 1.25,
+                X: 8
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 12,
+                ASPECT: 1.25,
+                X: 13
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 24,
+                WIDTH: 8
+            },
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, g.hunterSecondary, { pen: 2 }]),
+                TYPE: "bullet"
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 21,
+                WIDTH: 12,
+                DELAY: 0.25
+            },
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.hunter, { pen: 2 }]),
+                TYPE: "bullet"
+            }
+        }
+    ]
+}
+Class.revolver = {
+    PARENT: "genericTank",
+    LABEL: "Revolver",
+    DANGER: 7,
+    BODY: {
+        FOV: base.FOV * 1.225
+    },
+    GUNS: [
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 12,
+                ASPECT: 1.25,
+                X: 8
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 12,
+                ASPECT: 1.25,
+                X: 13
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 20,
+                WIDTH: 12
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 24,
+                WIDTH: 7
+            },
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, g.rifle, { pen: 2 }]),
+                TYPE: "bullet"
+            }
+        }
+    ]
+}
+Class.fork = {
+    PARENT: "genericTank",
+    LABEL: "Fork",
+    DANGER: 7,
+    BODY: {
+        FOV: 1.2 * base.FOV
+    },
+    UPGRADE_TOOLTIP: "[DEV NOTE] This tank does not function as intended yet!",
+    GUNS: [
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8.5,
+                ASPECT: 1.3,
+                X: 8
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8.5,
+                ASPECT: 1.3,
+                X: 13
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8.5,
+                ASPECT: 1.3,
+                X: 18
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 5,
+                WIDTH: 8.5,
+                ASPECT: 1.3,
+                X: 23
+            }
+        },
+        {
+            POSITION: {
+                LENGTH: 29,
+                WIDTH: 8.5
+            },
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.sniper, { pen: 2 }]),
+                TYPE: "bullet"
+            }
+        }
+    ]
+}
 
 // Machine Gun upgrades
 Class.minigun = {
@@ -1025,7 +1316,7 @@ Class.barricade = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }]),
                 TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
+                STAT_CALCULATOR: "trap",
             },
         },
         {
@@ -1033,7 +1324,7 @@ Class.barricade = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }]),
                 TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
+                STAT_CALCULATOR: "trap",
             },
         },
         {
@@ -1041,7 +1332,7 @@ Class.barricade = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.minigun, { range: 0.5 }]),
                 TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
+                STAT_CALCULATOR: "trap",
             },
         },
     ],
@@ -1237,7 +1528,7 @@ Class.triAngle = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster]),
                 TYPE: "bullet",
-                LABEL: gunCalcNames.thruster,
+                LABEL: "thruster",
             },
         },
         {
@@ -1245,7 +1536,7 @@ Class.triAngle = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster]),
                 TYPE: "bullet",
-                LABEL: gunCalcNames.thruster,
+                LABEL: "thruster",
             },
         },
     ],
@@ -1349,7 +1640,7 @@ Class.fighter = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster]),
                 TYPE: "bullet",
-                LABEL: gunCalcNames.thruster,
+                LABEL: "thruster",
             },
         },
         {
@@ -1357,7 +1648,7 @@ Class.fighter = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster]),
                 TYPE: "bullet",
-                LABEL: gunCalcNames.thruster,
+                LABEL: "thruster",
             },
         },
     ],
@@ -1385,7 +1676,7 @@ Class.booster = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster]),
                 TYPE: "bullet",
-                LABEL: gunCalcNames.thruster
+                LABEL: "thruster"
             }
         },
         {
@@ -1393,7 +1684,7 @@ Class.booster = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster]),
                 TYPE: "bullet",
-                LABEL: gunCalcNames.thruster
+                LABEL: "thruster"
             }
         },
         {
@@ -1401,7 +1692,7 @@ Class.booster = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster]),
                 TYPE: "bullet",
-                LABEL: gunCalcNames.thruster
+                LABEL: "thruster"
             }
         },
         {
@@ -1409,7 +1700,7 @@ Class.booster = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster]),
                 TYPE: "bullet",
-                LABEL: gunCalcNames.thruster
+                LABEL: "thruster"
             }
         }
     ]
@@ -1435,7 +1726,7 @@ Class.surfer = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm]),
                 TYPE: "autoswarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
+                STAT_CALCULATOR: "swarm",
             },
         },
         {
@@ -1443,7 +1734,7 @@ Class.surfer = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm]),
                 TYPE: "autoswarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
+                STAT_CALCULATOR: "swarm",
             },
         },
         {
@@ -1451,7 +1742,7 @@ Class.surfer = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster]),
                 TYPE: "bullet",
-                LABEL: gunCalcNames.thruster,
+                LABEL: "thruster",
             },
         },
         {
@@ -1459,7 +1750,7 @@ Class.surfer = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster]),
                 TYPE: "bullet",
-                LABEL: gunCalcNames.thruster,
+                LABEL: "thruster",
             },
         },
     ],
@@ -1477,7 +1768,7 @@ Class.banshee.GUNS = weaponArray({
         TYPE: "drone",
         AUTOFIRE: true,
         SYNCS_SKILLS: true,
-        STAT_CALCULATOR: gunCalcNames.drone,
+        STAT_CALCULATOR: "drone",
         WAIT_TO_CYCLE: true,
         MAX_CHILDREN: 2,
     },
@@ -1501,7 +1792,7 @@ Class.overseer = {
             TYPE: "drone",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
-            STAT_CALCULATOR: gunCalcNames.drone,
+            STAT_CALCULATOR: "drone",
             WAIT_TO_CYCLE: true
         }
     }, 2)
@@ -1521,7 +1812,7 @@ Class.cruiser = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm]),
                 TYPE: "swarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
+                STAT_CALCULATOR: "swarm",
             },
         },
         {
@@ -1529,7 +1820,7 @@ Class.cruiser = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm]),
                 TYPE: "swarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
+                STAT_CALCULATOR: "swarm",
             },
         },
     ],
@@ -1538,20 +1829,24 @@ Class.underseer = {
     PARENT: "genericTank",
     LABEL: "Underseer",
     DANGER: 6,
+    NECRO: true,
     STAT_NAMES: statnames.drone,
     BODY: {
-        SPEED: 0.9 * base.SPEED,
+        SPEED: base.SPEED * 0.9,
+        FOV: base.FOV * 1.1,
     },
     SHAPE: 4,
     MAX_CHILDREN: 14,
     GUNS: weaponArray({
         POSITION: [5.25, 12, 1.2, 8, 0, 90, 0],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.drone, g.sunchip]),
+            SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, {reload: 0.8}]),
             TYPE: "sunchip",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
-            STAT_CALCULATOR: gunCalcNames.necro,
+            STAT_CALCULATOR: "necro",
+            WAIT_TO_CYCLE: true,
+            DELAY_SPAWN: false,
         }
     }, 2)
 }
@@ -1574,7 +1869,7 @@ Class.spawner = {
                 MAX_CHILDREN: 4,
                 SHOOT_SETTINGS: combineStats([g.factory, g.babyfactory]),
                 TYPE: "minion",
-                STAT_CALCULATOR: gunCalcNames.drone,
+                STAT_CALCULATOR: "drone",
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
             },
@@ -1604,7 +1899,7 @@ Class.manager = {
                 TYPE: "drone",
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
+                STAT_CALCULATOR: "drone",
             },
         },
     ],
@@ -1625,7 +1920,7 @@ Class.bigCheese = {
                 TYPE: "drone",
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
+                STAT_CALCULATOR: "drone",
                 MAX_CHILDREN: 1,
             },
         },
@@ -1650,7 +1945,7 @@ Class.overlord = {
             TYPE: "drone",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
-            STAT_CALCULATOR: gunCalcNames.drone,
+            STAT_CALCULATOR: "drone",
             WAIT_TO_CYCLE: true
         }
     }, 4)
@@ -1677,7 +1972,7 @@ Class.overdrive = {
             TYPE: "turretedDrone",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
-            STAT_CALCULATOR: gunCalcNames.drone,
+            STAT_CALCULATOR: "drone",
             WAIT_TO_CYCLE: true,
             MAX_CHILDREN: 4
         }
@@ -1700,7 +1995,7 @@ Class.commander = {
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
                 MAX_CHILDREN: 2,
-                STAT_CALCULATOR: gunCalcNames.drone,
+                STAT_CALCULATOR: "drone",
             },
         }, 3),
         ...weaponArray({
@@ -1708,7 +2003,7 @@ Class.commander = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.commander]),
                 TYPE: "swarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
+                STAT_CALCULATOR: "swarm",
             },
         }, 3, 1/3),
     ]
@@ -1730,7 +2025,7 @@ Class.carrier = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.battleship, g.carrier]),
                 TYPE: "swarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
+                STAT_CALCULATOR: "swarm",
             },
         },
         {
@@ -1738,7 +2033,7 @@ Class.carrier = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.battleship, g.carrier]),
                 TYPE: "swarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
+                STAT_CALCULATOR: "swarm",
             },
         },
         {
@@ -1746,7 +2041,7 @@ Class.carrier = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.battleship, g.carrier]),
                 TYPE: "swarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
+                STAT_CALCULATOR: "swarm",
             },
         },
     ],
@@ -1766,7 +2061,7 @@ Class.battleship = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.battleship]),
                 TYPE: "swarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
+                STAT_CALCULATOR: "swarm",
                 LABEL: "Guided"
             }
         },
@@ -1775,7 +2070,7 @@ Class.battleship = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm]),
                 TYPE: "autoswarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
+                STAT_CALCULATOR: "swarm",
                 LABEL: "Autonomous"
             }
         },
@@ -1784,7 +2079,7 @@ Class.battleship = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm]),
                 TYPE: "autoswarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
+                STAT_CALCULATOR: "swarm",
                 LABEL: "Autonomous"
             }
         },
@@ -1793,7 +2088,7 @@ Class.battleship = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.battleship]),
                 TYPE: "swarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
+                STAT_CALCULATOR: "swarm",
                 LABEL: "Guided"
             }
         }
@@ -1815,7 +2110,7 @@ Class.fortress = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm]),
                 TYPE: "swarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
+                STAT_CALCULATOR: "swarm",
             },
         }, 3, 1/3),
         ...weaponArray([
@@ -1827,7 +2122,7 @@ Class.fortress = {
                 PROPERTIES: {
                     SHOOT_SETTINGS: combineStats([g.trap, { range: 0.5, speed: 0.7, maxSpeed: 0.7 }]),
                     TYPE: "trap",
-                    STAT_CALCULATOR: gunCalcNames.trap,
+                    STAT_CALCULATOR: "trap",
                 },
             }
         ], 3)
@@ -1839,9 +2134,11 @@ Class.necromancer = {
     PARENT: "genericTank",
     LABEL: "Necromancer",
     DANGER: 7,
+    NECRO: true,
     STAT_NAMES: statnames.necro,
     BODY: {
         SPEED: 0.8 * base.SPEED,
+        FOV: base.FOV * 1.1,
     },
     SHAPE: 4,
     MAX_CHILDREN: 14,
@@ -1852,7 +2149,9 @@ Class.necromancer = {
             TYPE: "sunchip",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
-            STAT_CALCULATOR: gunCalcNames.necro,
+            STAT_CALCULATOR: "necro",
+            WAIT_TO_CYCLE: true,
+            DELAY_SPAWN: false,
         },
     }, 4, 0.75),
 }
@@ -1860,10 +2159,12 @@ Class.maleficitor = {
     PARENT: "genericTank",
     LABEL: "Maleficitor",
     DANGER: 7,
+    NECRO: true,
     TOOLTIP: "Press R and wait to turn your drones invisible.",
     STAT_NAMES: statnames.necro,
     BODY: {
         SPEED: base.SPEED * 0.85,
+        FOV: base.FOV * 1.1,
     },
     SHAPE: 4,
     MAX_CHILDREN: 20,
@@ -1880,7 +2181,9 @@ Class.maleficitor = {
                 ],
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.necro,
+                STAT_CALCULATOR: "necro",
+                WAIT_TO_CYCLE: true,
+                DELAY_SPAWN: false,
             },
         },
     ],
@@ -1889,30 +2192,36 @@ Class.infestor = {
     PARENT: "genericTank",
     LABEL: "Infestor",
     DANGER: 7,
+    NECRO: true,
     STAT_NAMES: statnames.drone,
     BODY: {
         SPEED: base.SPEED * 0.9,
+        FOV: base.FOV * 1.1,
     },
     MAX_CHILDREN: 20,
     GUNS: weaponArray([
         {
             POSITION: [7.25, 6, 1.2, 6, -5, 90, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, {reload: 0.5}]),
                 TYPE: "eggchip",
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.necro
+                STAT_CALCULATOR: "necro",
+                WAIT_TO_CYCLE: true,
+                DELAY_SPAWN: false,
             }
         },
         {
             POSITION: [7.25, 6, 1.2, 6, 5, 90, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip]),
+                SHOOT_SETTINGS: combineStats([g.drone, g.sunchip, {reload: 0.5}]),
                 TYPE: "eggchip",
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.necro
+                STAT_CALCULATOR: "necro",
+                WAIT_TO_CYCLE: true,
+                DELAY_SPAWN: false,
             }
         }
     ], 2)
@@ -1928,7 +2237,6 @@ Class.factory = {
         SPEED: base.SPEED * 0.8,
         FOV: 1.1,
     },
-    MAX_CHILDREN: 6,
     GUNS: [
         {
             POSITION: [5, 11, 1, 10.5, 0, 0, 0],
@@ -1938,7 +2246,8 @@ Class.factory = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.factory]),
                 TYPE: "minion",
-                STAT_CALCULATOR: gunCalcNames.drone,
+                MAX_CHILDREN: 6,
+                STAT_CALCULATOR: "drone",
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
             },
@@ -2011,7 +2320,7 @@ Class.launcher = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.launcher]),
                 TYPE: "minimissile",
-                STAT_CALCULATOR: gunCalcNames.sustained,
+                STAT_CALCULATOR: "sustained",
             },
         },
     ],
@@ -2215,7 +2524,7 @@ Class.beekeeper = {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.bee]),
                 TYPE: ["bee", { INDEPENDENT: true }],
                 SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
+                STAT_CALCULATOR: "drone",
                 WAIT_TO_CYCLE: true,
                 LABEL: "Secondary",
             },
@@ -2226,7 +2535,7 @@ Class.beekeeper = {
                 SHOOT_SETTINGS: combineStats([g.swarm, g.bee]),
                 TYPE: ["bee", { INDEPENDENT: true }],
                 SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
+                STAT_CALCULATOR: "drone",
                 WAIT_TO_CYCLE: true,
                 LABEL: "Secondary",
             },
@@ -2273,7 +2582,7 @@ Class.fieldGun = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, g.artillery]),
                 TYPE: "minimissile",
-                STAT_CALCULATOR: gunCalcNames.sustained,
+                STAT_CALCULATOR: "sustained",
             },
         },
     ],
@@ -2296,7 +2605,7 @@ Class.skimmer = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, g.artillery, g.skimmer]),
                 TYPE: "missile",
-                STAT_CALCULATOR: gunCalcNames.sustained,
+                STAT_CALCULATOR: "sustained",
             },
         },
     ],
@@ -2318,7 +2627,7 @@ Class.twister = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery, g.artillery, g.skimmer, { reload: 4/3 }]),
                 TYPE: "spinmissile",
-                STAT_CALCULATOR: gunCalcNames.sustained,
+                STAT_CALCULATOR: "sustained",
             },
         },
     ],
@@ -2353,7 +2662,7 @@ Class.rocketeer = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.launcher, g.rocketeer]),
                 TYPE: "rocketeerMissile",
-                STAT_CALCULATOR: gunCalcNames.sustained,
+                STAT_CALCULATOR: "sustained",
             },
         },
         {
@@ -2381,7 +2690,7 @@ Class.builder = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.setTrap]),
                 TYPE: "setTrap",
-                STAT_CALCULATOR: gunCalcNames.block
+                STAT_CALCULATOR: "block"
             }
         }
     ]
@@ -2400,7 +2709,7 @@ Class.triTrapper = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.flankGuard]),
                 TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap
+                STAT_CALCULATOR: "trap"
             }
         }
     ], 3)
@@ -2439,7 +2748,7 @@ Class.construct = { // it's "construct" and not "constructor" because "construct
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.construct]),
                 TYPE: "setTrap",
-                STAT_CALCULATOR: gunCalcNames.block
+                STAT_CALCULATOR: "block"
             }
         }
     ]
@@ -2468,7 +2777,7 @@ Class.engineer = {
                 TYPE: "pillbox",
                 SYNCS_SKILLS: true,
                 DESTROY_OLDEST_CHILD: true,
-                STAT_CALCULATOR: gunCalcNames.block
+                STAT_CALCULATOR: "block"
             },
         },
         {
@@ -2488,7 +2797,7 @@ Class.boomer = {
     },
     GUNS: [
         {
-            POSITION: [5, 10, 1, 14, 0, 0, 0],
+            POSITION: [5, 10, 1, 13, 0, 0, 0],
         },
         {
             POSITION: [6, 10, -1.5, 7, 0, 0, 0],
@@ -2498,7 +2807,7 @@ Class.boomer = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.boomerang]),
                 TYPE: "boomerang",
-                STAT_CALCULATOR: gunCalcNames.block
+                STAT_CALCULATOR: "block"
             },
         },
     ],
@@ -2522,7 +2831,7 @@ Class.assembler = {
                 SHOOT_SETTINGS: combineStats([g.trap, g.setTrap]),
                 TYPE: 'assemblerTrap',
                 MAX_CHILDREN: 8,
-                STAT_CALCULATOR: gunCalcNames.block,
+                STAT_CALCULATOR: "block",
             }
         }
     ],
@@ -2552,7 +2861,7 @@ Class.hexaTrapper = makeAuto({
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper]),
                 TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
+                STAT_CALCULATOR: "trap",
             },
         },
     ], 6, 0.5),
@@ -2575,7 +2884,7 @@ Class.septaTrapper = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.hexaTrapper]),
                 TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
+                STAT_CALCULATOR: "trap",
             },
         },
     ], 7, 4/7),
@@ -2618,7 +2927,7 @@ Class.gunnerTrapper = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, { speed: 1.2 }, { recoil: 0.5 }]),
                 TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
+                STAT_CALCULATOR: "trap",
             },
         },
     ],
@@ -2663,7 +2972,7 @@ Class.bomber = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap]),
                 TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
+                STAT_CALCULATOR: "trap",
             },
         },
     ],
@@ -2693,7 +3002,7 @@ Class.conqueror = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.setTrap]),
                 TYPE: "setTrap",
-                STAT_CALCULATOR: gunCalcNames.block
+                STAT_CALCULATOR: "block"
             },
         },
     ],
@@ -2726,7 +3035,7 @@ Class.bulwark = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.twin]),
                 TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
+                STAT_CALCULATOR: "trap",
             },
         },
         {
@@ -2737,7 +3046,7 @@ Class.bulwark = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.twin]),
                 TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap,
+                STAT_CALCULATOR: "trap",
             },
         },
     ],
@@ -2751,14 +3060,14 @@ Class.helix = {
     STAT_NAMES: statnames.desmos,
     GUNS: [
         {
-            POSITION: [20, 8, 0.75, 0, -5, 0, 0],
+            POSITION: [20, 6, -4/3, 0, -5, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.desmos, {shudder: 0, spray: 0, size: 0.8}]),
                 TYPE: ["bullet", {MOTION_TYPE: ["desmos", {invert: false}]}]
             },
         },
         {
-            POSITION: [20, 8, 0.75, 0, 5, 0, 0],
+            POSITION: [20, 6, -4/3, 0, 5, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.desmos]),
                 TYPE: ["bullet", {MOTION_TYPE: ["desmos", {invert: true}]}]
@@ -2786,11 +3095,11 @@ Class.sidewinder = {
             POSITION: [10, 8.5, 1.4, 7, 0, 0, 0]
         },
         {
-            POSITION: [20, 10, 0.8, 0, 0, 0, 0],
+            POSITION: [20, 8, -4/3, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.desmos]),
-                TYPE: ["bullet", {MOTION_TYPE: "desmos"}]
-            }
+                SHOOT_SETTINGS: combineStats([g.basic, g.sidewinder]),
+                TYPE: ["bullet", {CONTROLLERS: ['snake']}]
+            },
         },
         {
             POSITION: [4.25, 11, 2, 2.25, -4.25, 92.5, 0]
@@ -2809,8 +3118,9 @@ Class.undertow = {
         {
             POSITION: [14, 12, 0.8, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.desmos, { health: 1.2, damage: 0.05 }]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.desmos, { health: 1.5, damage: 0.05 }]),
                 TYPE: "undertowbullet",
+                MAX_CHILDREN: 2,
             }
         },
         {
@@ -2961,15 +3271,15 @@ Class.coil = {
         {
             POSITION: [20, 8, 0.75, 0, -5, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.desmos]),
-                TYPE: ["bullet", {MOTION_TYPE: ["desmos", {invert: false}]}]
+                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.sidewinder]),
+                TYPE: ["bullet", {CONTROLLERS: ['snake']}]
             },
         },
         {
             POSITION: [20, 8, 0.75, 0, 5, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.desmos]),
-                TYPE: ["bullet", {MOTION_TYPE: ["desmos", {invert: true}]}]
+                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.sidewinder]),
+                TYPE: ["bullet", {CONTROLLERS: [['snake', {invert: true}]]}]
             },
         },
         {
@@ -2990,11 +3300,8 @@ Class.coil = {
     ]
 }
 Class.python = {
-    PARENT: "genericTank",
+    PARENT: "sidewinderOld",
     LABEL: "Python",
-    DANGER: 7,
-    STAT_NAMES: statnames.desmos,
-    UPGRADE_TOOLTIP: "[DEV NOTE] This tank is a placeholder!"
 }
 Class.ranch = {
     PARENT: "genericTank",
@@ -3014,9 +3321,9 @@ Class.ranch = {
             POSITION: [1, 12, 1, 15, 0, 0, 0],
             PROPERTIES: {
                 MAX_CHILDREN: 3,
-                SHOOT_SETTINGS: combineStats([g.factory, g.babyfactory]),
-                TYPE: "minion",
-                STAT_CALCULATOR: gunCalcNames.drone,
+                SHOOT_SETTINGS: combineStats([g.factory, g.babyfactory, g.sidewinder]),
+                TYPE: ["minion", {CONTROLLERS: ['snake']}],
+                STAT_CALCULATOR: "drone",
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
             },
@@ -3037,11 +3344,33 @@ Class.oroboros = {
     LABEL: "Oroboros",
     DANGER: 7,
     STAT_NAMES: statnames.desmos,
-    UPGRADE_TOOLTIP: "[DEV NOTE] This tank is a placeholder!"
+    UPGRADE_TOOLTIP: "[DEV NOTE] This tank is a placeholder!",
+    GUNS: [
+        {
+            POSITION: [10, 8.5, 1.4, 7, 0, 0, 0]
+        },
+        {
+            POSITION: [20, 10, 0.8, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.sidewinder, { speed: 3 }]),
+                TYPE: ["bullet", {CONTROLLERS: ['snake']}]
+            },
+        },
+        {
+            POSITION: [4.25, 11, 2, 2.25, -4.25, 92.5, 0]
+        },
+        {
+            POSITION: [4.25, 11, 2, 2.25, 4.25, -92.5, 0]
+        }
+    ]
 }
 Class.cocciPart1 = {
     PARENT: "genericSmasher",
     LABEL: "",
+    BODY: {
+      REGEN: 999999,
+      PENETRATION: 999
+    },
     TURRETS: [
         {
             POSITION: [21.5, 0, 0, 0, 360, 0],
@@ -3057,6 +3386,10 @@ Class.cocciPart1 = {
 Class.cocciPart2 = {
     PARENT: "genericSmasher",
     LABEL: "",
+    BODY: {
+      REGEN: 999999,
+      PENETRATION: 999
+    },
     TURRETS: [
         {
             POSITION: [21.5, 0, 0, 0, 360, 0],
@@ -3072,6 +3405,10 @@ Class.cocciPart2 = {
 Class.cocciPart3 = {
     PARENT: "genericSmasher",
     LABEL: "",
+    BODY: {
+      REGEN: 999999,
+      PENETRATION: 999,
+    },
     TURRETS: [
         {
             POSITION: [21.5, 0, 0, 0, 360, 0],
@@ -3114,8 +3451,9 @@ Class.riptide = {
         {
             POSITION: [18, 16, 0.75, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.desmos, { size: 0.9, speed: 0.75, reload: 1.45, health: 1.5, damage: 0.1, maxSpeed: 0.8 }]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.desmos, { size: 0.9, speed: 0.75, reload: 1.5, health: 2, damage: 0.1, maxSpeed: 0.8 }]),
                 TYPE: "undertowbullet",
+                MAX_CHILDREN: 2,
             }
         },
         {
@@ -3322,7 +3660,7 @@ Class.ambulance = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster]),
                 TYPE: "bullet",
-                LABEL: gunCalcNames.thruster,
+                LABEL: "thruster",
             },
         },
         {
@@ -3330,7 +3668,7 @@ Class.ambulance = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster]),
                 TYPE: "bullet",
-                LABEL: gunCalcNames.thruster,
+                LABEL: "thruster",
             },
         },
     ],
@@ -3364,7 +3702,7 @@ Class.surgeon = {
                 SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, { speed: 0.7, maxSpeed: 0.7 }]),
                 TYPE: "surgeonPillbox",
                 SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.block
+                STAT_CALCULATOR: "block",
             },
         },
         {
@@ -3498,7 +3836,7 @@ Class.overtrapper = makeOver({
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap]),
                 TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap
+                STAT_CALCULATOR: "trap",
             }
         }
     ]
@@ -3560,7 +3898,7 @@ Class.cruiserdrive = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm]),
                 TYPE: "autoturretswarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
+                STAT_CALCULATOR: "swarm",
             },
         },
         {
@@ -3568,7 +3906,7 @@ Class.cruiserdrive = {
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.swarm]),
                 TYPE: "autoturretswarm",
-                STAT_CALCULATOR: gunCalcNames.swarm,
+                STAT_CALCULATOR: "swarm",
             },
         },
     ],
@@ -3874,7 +4212,7 @@ Class.baseThrower = {
             TYPE: "bullet"
         }
     }, {
-        POSITION: [1, 38, 1, 0, 0, 0, 0],
+        POSITION: [1, 38, 1, 0, 0, 0, 0.5],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, g.boomerang, g.kiva]),
             TYPE: ["baseBullet", { COLOR: "#FC8208", KEEP_OWN_COLOR: false }],
@@ -3889,7 +4227,7 @@ Class.baseThrower = {
   ON: [{
         event: "altFire",
         handler: ({ body }) => {
-            body.define(Class.baseThrowerFire)
+            body.define(Class.baseThrowerFire, true)
         }
       }
     ]
@@ -4067,7 +4405,7 @@ Class.cloner = {
                     TYPE: "fastdrone",
                     AUTOFIRE: true,
                     SYNCS_SKILLS: true,
-                    STAT_CALCULATOR: gunCalcNames.drone,
+                    STAT_CALCULATOR: "drone",
                 }, },
         ],
     };
@@ -4402,7 +4740,7 @@ Class.revodirector = {
                 TYPE: "revoorbitdrone",
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
+                STAT_CALCULATOR: "drone",
                 MAX_CHILDREN: 5
             }
         }
@@ -4431,7 +4769,7 @@ Class.directdrive = {
                 TYPE: "turretedDrone",
                 AUTOFIRE: true,
                 SYNCS_SKILLS: true,
-                STAT_CALCULATOR: gunCalcNames.drone,
+                STAT_CALCULATOR: "drone",
                 MAX_CHILDREN: 6
             }
         }
@@ -4465,7 +4803,7 @@ Class.contagion = {
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.trap, g.morerange, g.lessspread]),
             TYPE: "trap",
-            STAT_CALCULATOR: gunCalcNames.trap
+            STAT_CALCULATOR: "trap",
         }
     }]
 };
@@ -4491,7 +4829,7 @@ Class.triContagion = {
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.trap, g.morerange, g.lessspread, g.flankGuard]),
             TYPE: "trap",
-            STAT_CALCULATOR: gunCalcNames.trap
+            STAT_CALCULATOR: "trap",
         }
     }], 3)
 }
@@ -4538,7 +4876,7 @@ Class.droneTrapper = {
             TYPE: "drone",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
-            STAT_CALCULATOR: gunCalcNames.drone,
+            STAT_CALCULATOR: "drone",
             MAX_CHILDREN: 6
         }
     }, {
@@ -4548,7 +4886,7 @@ Class.droneTrapper = {
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.trap]),
             TYPE: "trap",
-            STAT_CALCULATOR: gunCalcNames.trap
+            STAT_CALCULATOR: "drone",
         }
     }]
 }
@@ -4575,7 +4913,7 @@ Class.trojan = {
             TYPE: "drone",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
-            STAT_CALCULATOR: gunCalcNames.drone,
+            STAT_CALCULATOR: "drone",
             WAIT_TO_CYCLE: true,
             MAX_CHILDREN: 4
         }
@@ -4592,7 +4930,7 @@ Class.trojan = {
             TYPE: "drone",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
-            STAT_CALCULATOR: gunCalcNames.drone,
+            STAT_CALCULATOR: "drone",
             WAIT_TO_CYCLE: true,
             MAX_CHILDREN: 4
         }
@@ -4621,7 +4959,7 @@ Class.gundirector = {
             TYPE: "drone",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
-            STAT_CALCULATOR: gunCalcNames.drone,
+            STAT_CALCULATOR: "drone",
             MAX_CHILDREN: 6
         }
     }]
@@ -4649,7 +4987,7 @@ Class.protist = {
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.factory, g.babyfactory]),
             TYPE: "minion",
-            STAT_CALCULATOR: gunCalcNames.drone,
+            STAT_CALCULATOR: "drone",
             AUTOFIRE: true,
             SYNCS_SKILLS: true,
             MAX_CHILDREN: 4
@@ -5041,7 +5379,8 @@ Class.surge = {
         POSITION: [24, 8.5, 1, 0, 0, 0, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.sniper]),
-            TYPE: "bullet"
+            TYPE: "bullet",
+            IGNORES_CANSHOOT_CHECKS: true
         }
     }, {
         POSITION: [0, 0, 1, 0, 0, 0, 0],
@@ -5070,13 +5409,13 @@ Class.surge = {
     }, {
         event: "tick",
         handler: ({ body, gun }) => {
+        //setTimeout(() => sockets.broadcast(body.guns[0].shootSettings.toString()), 500);
         switch(body.variables.firingStage) {
             case 2:
                 body.guns[0].canShoot = false;
-                body.guns[0].settings = combineStats([g.lance, g.emplaser]);
-                body.guns[0].bulletTypes = [Class.surgeempBullet];
-                fireGun(body.guns[0]);
-                body.guns[0].color.interpret(getTeamColor(TEAM_BLUE));
+                body.guns[0].shootSettings = combineStats([g.lance, g.emplaser, { health: 0.1, recoil: 0 }]);
+                body.guns[0].setBulletType('surgeempBullet');
+                body.guns[0].fire();
                 
                 body.variables.surgeTimer++;
                 if (body.variables.surgeTimer === body.variables.surgeMax) {
@@ -5084,21 +5423,19 @@ Class.surge = {
                 }
             break;
             case 3:
-                body.guns[0].settings = combineStats([g.basic, { health: 1.3, pen: 1.6, speed: 3, maxSpeed: 3, size: 1.2, range: 0.5 }, g.tonsmorerecoil, g.noSpread]);
-                body.guns[0].bulletTypes = [Class.lineEMP];
-                fireGun(body.guns[0]);
+                body.guns[0].recoilVelocity = 0;
+                body.guns[0].shootSettings = combineStats([g.basic, { health: 1.3, pen: 1.6, speed: 3, maxSpeed: 3, size: 1.2, range: 0.5, recoil: 5 }, g.tonsmorerecoil, g.noSpread]);
+                body.guns[0].setBulletType('lineEMP');
+                body.guns[0].fire();
                 body.variables.firingStage++;
-                body.guns[0].color.interpret("orange");
             break;
             case 4:
-                body.guns[0].canShoot = false;
                 body.variables.surgeTimer--;
                 if (body.variables.surgeTimer === 0) {
-                    body.guns[0].settings = combineStats([g.basic, g.sniper]);
-                    body.guns[0].bulletTypes = [Class.bullet];
                     body.variables.firingStage = 1;
+                    body.guns[0].shootSettings = combineStats([g.basic, g.sniper]);
+                    body.guns[0].setBulletType('bullet');
                     body.guns[0].canShoot = true;
-                    body.guns[0].color.interpret("gray");
                 }
             break;
             }        
@@ -5127,7 +5464,8 @@ Class.lancer = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([g.basic, g.lance]),
         TYPE: ["bullet", { ALPHA: 0 }],
-        AUTOFIRE: true
+        AUTOFIRE: true,
+        STAT_CALCULATOR: "lancer"
       }
     },
     {
@@ -5151,7 +5489,8 @@ Class.trilancer = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([g.basic, g.lance]),
         TYPE: ["bullet", { ALPHA: 0 }],
-        AUTOFIRE: true
+        AUTOFIRE: true,
+        STAT_CALCULATOR: "lancer"
       }
     },
     {
@@ -5171,7 +5510,8 @@ Class.hexalancer = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([g.basic, g.lance]),
         TYPE: ["bullet", { ALPHA: 0 }],
-        AUTOFIRE: true
+        AUTOFIRE: true,
+        STAT_CALCULATOR: "lancer"
       }
     },
     {
@@ -5193,6 +5533,7 @@ Class.chasseur = {
         SHOOT_SETTINGS: combineStats([g.basic, g.lance]),
         TYPE: ["bullet", { ALPHA: 0 }],
         AUTOFIRE: true,
+        STAT_CALCULATOR: "lancer"
       }
     },
     {
@@ -5213,41 +5554,18 @@ Class.trichasseur = {
     DAMAGE: base.DAMAGE * 1
   },
   HAS_NO_RECOIL: true,
-  GUNS: [
-    {
+  GUNS: weaponArray([{
       POSITION: [25, 15, 0.001, 0, 0, 0, 0],
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([g.basic, g.lance]),
         TYPE: ["bullet", { ALPHA: 0 }],
-        AUTOFIRE: true
+        AUTOFIRE: true,
+        STAT_CALCULATOR: "lancer"
       }
     },
     {
       POSITION: [30, 15, 0.001, 0, 0, 0, 0]
-    },
-    {
-      POSITION: [25, 15, 0.001, 0, 0, 120, 0],
-      PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.basic, g.lance]),
-        TYPE: ["bullet", { ALPHA: 0 }],
-        AUTOFIRE: true
-      }
-    },
-    {
-      POSITION: [30, 15, 0.001, 0, 0, 120, 0]
-    },
-    {
-      POSITION: [25, 15, 0.001, 0, 0, 240, 0],
-      PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.basic, g.lance]),
-        TYPE: ["bullet", { ALPHA: 0 }],
-        AUTOFIRE: true
-      }
-    },
-    {
-      POSITION: [30, 15, 0.001, 0, 0, 240, 0]
-    }
-  ]
+    }], 3)
 }
 Class.tripleur = {
   PARENT: "genericLancer",
@@ -5257,41 +5575,18 @@ Class.tripleur = {
     DAMAGE: base.DAMAGE * 1
   },
   HAS_NO_RECOIL: true,
-  GUNS: [
-    {
+  GUNS: weaponArray([{
       POSITION: [25, 15, 0.001, 0, 0, 0, 0],
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([g.basic, g.lance]),
         TYPE: ["bullet", { ALPHA: 0 }],
-        AUTOFIRE: true
+        AUTOFIRE: true,
+        STAT_CALCULATOR: "lancer"
       }
     },
     {
       POSITION: [30, 15, 0.001, 0, 0, 0, 0]
-    },
-    {
-      POSITION: [20, 15, 0.001, 0, 0, -30, 0],
-      PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.basic, g.lance]),
-        TYPE: ["bullet", { ALPHA: 0 }],
-        AUTOFIRE: true
-      }
-    },
-    {
-      POSITION: [25, 15, 0.001, 0, 0, -30, 0]
-    },
-    {
-      POSITION: [20, 15, 0.001, 0, 0, 30, 0],
-      PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.basic, g.lance]),
-        TYPE: ["bullet", { ALPHA: 0 }],
-        AUTOFIRE: true
-      }
-    },
-    {
-      POSITION: [25, 15, 0.001, 0, 0, 30, 0]
-    }
-  ]
+    }], 3)
 }
 Class.trailblazer = {
   PARENT: "genericLancer",
@@ -5308,7 +5603,8 @@ Class.trailblazer = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([g.basic, g.lance]),
         TYPE: ["bullet", { ALPHA: 0 }],
-        AUTOFIRE: true
+        AUTOFIRE: true,
+        STAT_CALCULATOR: "lancer"
       }
     },
     {
@@ -5319,7 +5615,7 @@ Class.trailblazer = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster]),
         TYPE: "bullet",
-        LABEL: gunCalcNames.thruster,
+        LABEL: "thruster",
       },
     },
     {
@@ -5327,7 +5623,7 @@ Class.trailblazer = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster]),
         TYPE: "bullet",
-        LABEL: gunCalcNames.thruster,
+        LABEL: "thruster",
       },
     }
   ]
@@ -5348,7 +5644,8 @@ Class.katana = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([g.basic, g.lance, { recoil: 0 }]),
         TYPE: ["bullet", { ALPHA: 0 }],
-        AUTOFIRE: true
+        AUTOFIRE: true,
+        STAT_CALCULATOR: "lancer"
       }
     },
     {
@@ -5407,7 +5704,8 @@ Class.dasher = {
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([g.basic, g.lance, { recoil: 0 }]),
         TYPE: ["bullet", { ALPHA: 0 }],
-        AUTOFIRE: true
+        AUTOFIRE: true,
+        STAT_CALCULATOR: "lancer"
       }
     },
     {
@@ -5443,6 +5741,222 @@ Class.dasher = {
       }
   }]
 }
+Class.bayonet = {
+  PARENT: "genericLancer",
+  LABEL: "Bayonet",
+  BODY: {
+    SPEED: base.SPEED * 1.2,
+    DAMAGE: base.DAMAGE * 0.9
+  },
+  HAS_NO_RECOIL: true,
+  GUNS: [
+    {
+      POSITION: [20, 15, 0.001, 0, 0, 0, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.lance]),
+        TYPE: ["bullet", { ALPHA: 0 }],
+        AUTOFIRE: true,
+        STAT_CALCULATOR: "lancer"
+      }
+    },
+    {
+      POSITION: [25, 15, 0.001, 0, 0, 0, 0]
+    }, {
+        POSITION: [13, 7, 1, 0, 0, 0, 0.2],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.littleHunter, g.hunter]),
+            TYPE: "bullet"
+      }
+    }
+  ]
+}
+
+Class.propel = {
+    PARENT: "genericTank",
+    LABEL: "Propeller",
+    BODY: {
+        HEALTH: 0.9 * base.HEALTH,
+        SHIELD: 0.9 * base.SHIELD,
+        DENSITY: 0.7 * base.DENSITY,
+    },
+    GUNS: [
+        {
+            POSITION: [18, 8, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.triAngleFront, { recoil: 4 }]),
+                TYPE: "bullet",
+                LABEL: "Front",
+            },
+        },
+        {
+            POSITION: [16, 8, 1, 0, 0, 180, 0.1],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster]),
+                TYPE: "bullet",
+                LABEL: "thruster",
+            },
+        },
+    ],
+}
+Class.bateau = {
+    PARENT: "genericTank",
+    LABEL: "Bateau",
+    BODY: {
+        HEALTH: 0.9 * base.HEALTH,
+        SHIELD: 0.9 * base.SHIELD,
+        DENSITY: 0.7 * base.DENSITY,
+        ACCELERATION: 2 * base.ACCEL,
+    },
+    DANGER: 6,
+    GUNS: [
+        {
+            POSITION: [18, 8, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.triAngleFront, { recoil: 4 }]),
+                TYPE: "bullet",
+                LABEL: "Front",
+            },
+        },
+        {
+            POSITION: [16, 8, 1.3, 0, 0, 180, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { reload: 0.6, spray: 1.5, recoil: 2.3, damage: 0.7, range: 0.5 }]),
+                TYPE: "bullet",
+                LABEL: "thruster",
+            },
+        },
+    ],
+}
+Class.assblaster = {
+    PARENT: "genericTank",
+    LABEL: "Ass Blaster",
+    BODY: {
+        HEALTH: 0.9 * base.HEALTH,
+        SHIELD: 0.9 * base.SHIELD,
+        DENSITY: 0.7 * base.DENSITY,
+        ACCELERATION: 2.2 * base.ACCEL,
+    },
+    DANGER: 7,
+    GUNS: [
+        {
+            POSITION: [18, 8, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.triAngleFront, { recoil: 4 }]),
+                TYPE: "bullet",
+                LABEL: "Front",
+            },
+        },
+        {
+            POSITION: [17, 12, 1.5, 0, 0, 180, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { reload: 0.4, spray: 2, recoil: 2.8, damage: 0.6, range: 0.35, size: 1.5 }]),
+                TYPE: "bullet",
+                LABEL: "thruster",
+            },
+        },
+    ],
+}
+Class.rocker = {
+    PARENT: "genericTank",
+    LABEL: "Rocker",
+    BODY: {
+        HEALTH: 0.5 * base.HEALTH,
+        SHIELD: 0.5 * base.SHIELD,
+        DENSITY: 0.4 * base.DENSITY,
+    },
+    DANGER: 6,
+    GUNS: [
+        {
+            POSITION: [18, 8, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.triAngleFront, { recoil: 4 }]),
+                TYPE: "bullet",
+                LABEL: "Front",
+            },
+        },
+        {
+            POSITION: [16, 8, 1.3, 0, 0, 150, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { reload: 0.6, spray: 1.5, recoil: 2.3, damage: 0.7, range: 0.5 }]),
+                TYPE: "bullet",
+                LABEL: "thruster",
+            },
+        },
+        {
+            POSITION: [16, 8, 1.3, 0, 0, 210, 0.5],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { reload: 0.6, spray: 1.5, recoil: 2.3, damage: 0.7, range: 0.5 }]),
+                TYPE: "bullet",
+                LABEL: "thruster",
+            },
+        },
+    ],
+}
+Class.jouster = {
+  PARENT: "genericLancer",
+  LABEL: "Jouster",
+  BODY: {
+    HEALTH: 0.7 * base.HEALTH,
+    SHIELD: 0.7 * base.SHIELD,
+    DENSITY: 0.7 * base.DENSITY,
+  },
+  HAS_NO_RECOIL: false,
+  GUNS: [
+    {
+      POSITION: [20, 15, 0.001, 0, 0, 0, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.lance, { recoil: 2 }]),
+        TYPE: ["bullet", { ALPHA: 0 }],
+        AUTOFIRE: true,
+        STAT_CALCULATOR: "lancer"
+      }
+    },
+    {
+      POSITION: [25, 15, 0.001, 0, 0, 0, 0]
+    },
+    {
+      POSITION: [16, 8, 1, 0, 0, 180, 0.1],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { recoil: 0.6 }]),
+        TYPE: "bullet",
+        LABEL: "thruster",
+      },
+    },
+  ]
+}
+Class.knight = {
+  PARENT: "genericLancer",
+  LABEL: "Knight",
+  BODY: {
+    HEALTH: 0.6 * base.HEALTH,
+    SHIELD: 0.6 * base.SHIELD,
+    DENSITY: 0.7 * base.DENSITY,
+    ACCELERATION: 1.8 * base.ACCEL,
+  },
+  HAS_NO_RECOIL: false,
+  GUNS: [
+    {
+      POSITION: [20, 15, 0.001, 0, 0, 0, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.basic, g.lance]),
+        TYPE: ["bullet", { ALPHA: 0 }],
+        AUTOFIRE: true,
+        STAT_CALCULATOR: "lancer"
+      }
+    },
+    {
+      POSITION: [25, 15, 0.001, 0, 0, 0, 0]
+    },
+     {
+        POSITION: [16, 8, 1.3, 0, 0, 180, 0.5],
+        PROPERTIES: {
+             SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { reload: 0.6, spray: 1.5, recoil: 2.3, damage: 0.7, range: 0.5 }]),
+             TYPE: "bullet",
+             LABEL: "thruster",
+       },
+    },
+  ]
+}
 
 // Auto tanks
 Class.autoBasic = makeAuto("basic", "Auto-Basic");
@@ -5454,9 +5968,10 @@ Class.autoDirector = makeAuto("director", "Chairman");
 Class.autoPound = makeAuto("pounder", "Scratcher");
 Class.autoTrap = makeAuto("trapper", "Auto-Trapper");
 Class.autoDesmos = makeAuto("desmos", "Charter");
-Class.autolittleHunter = makeAuto("littleHunter", "Auto-Subduer")
+Class.autolittleHunter = makeAuto("littleHunter", "Duelist")
 Class.autoinception = makeAuto("inception", "Deployer");
 Class.autoauto2 = makeAuto("auto2", "Auto²-2");
+Class.autoPropel = makeAuto("propel", "Grazer");
 Class.autoCloner = makeAuto({
   PARENT: "genericTank",
   GUNS: [
@@ -5485,7 +6000,7 @@ Class.autoCloner = makeAuto({
     }
   ]
 }, "Auto-Cloner");
-Class.autoDouble = makeAuto("doubleTwin", "Auto-Double")
+Class.autoDouble = makeAuto("doubleTwin", "Mechanism")
 Class.autoAssassin = makeAuto("assassin")
 Class.autoGunner = makeAuto("gunner")
 Class.autoTriAngle = makeAuto("triAngle")
@@ -5494,22 +6009,23 @@ Class.autoRevolutionist = makeAuto("revolutionist", "Audioboard");
 Class.autoCruiser = makeAuto("cruiser")
 Class.autoSpawner = makeAuto("spawner")
 Class.autoBuilder = makeAuto("builder")
-Class.autoBinary = makeAuto("binary", "Auto-Binary")
+Class.autoBinary = makeAuto("binary", "Computist")
 Class.autoinceptionist = makeAuto("autoinceptionistbody", "Poster", {type: 'ceptionistturret'});
-Class.autoGundirector = makeAuto("gundirector", "Auto-Pathogen")
-Class.autoBigSubduer = makeAuto("bigSubduer", "Auto-Mitochondrion")
-Class.autoFlankdue = makeAuto("flankdue", "Auto-Flankduer")
-Class.autoTripleShot = makeAuto("tripleShot", "Auto-Triple Shot");
+Class.autoGundirector = makeAuto("gundirector", "Virus")
+Class.autoBigSubduer = makeAuto("bigSubduer", "Membrane")
+Class.autoFlankdue = makeAuto("flankdue", "Flank-Duelist")
+Class.autoBateau = makeAuto("bateau", "Riverboat")
+Class.autoTripleShot = makeAuto("tripleShot", "Oppressor");
 Class.autoHunter = makeAuto("hunter", "Twogate");
 Class.autoRifle = makeAuto("rifle", "Sidepoint");
-Class.autoTwinsniper = makeAuto("twinsniper", "Auto-Twiper");
+Class.autoTwinsniper = makeAuto("twinsniper", "Watchlist");
 Class.autoAcid = makeAuto("acid", "Cyanide");
 Class.autoChill = makeAuto("chiller", "Coldpoint");
 Class.autoMini = makeAuto("minigun", "Streamer");
-Class.autoSprayer = makeAuto("sprayer", "Auto-Sprayer");
-Class.autoHexaTank = makeAuto("hexaTank", "Auto-HexaTank");
+Class.autoSprayer = makeAuto("sprayer", "Splasher");
+Class.autoHexaTank = makeAuto("hexaTank", "Moat");
 Class.autoAuto3 = makeAuto("auto3", "Auto²-3");
-Class.autoUnderseer = makeAuto("underseer", "Auto-Underseer");
+Class.autoUnderseer = makeAuto("underseer", "Plauge");
 Class.autoDestroy = makeAuto("destroyer", "Executer");
 Class.autoArtillery = makeAuto("artillery", "Bombarder");
 Class.autoLaunch = makeAuto("launcher", "Harbinger");
@@ -5528,7 +6044,7 @@ Class.autoTriTrapper = makeAuto({
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.trap, g.flankGuard]),
                 TYPE: "trap",
-                STAT_CALCULATOR: gunCalcNames.trap
+                STAT_CALCULATOR: "trap",
             }
         }
     ], 3)
@@ -5538,10 +6054,12 @@ Class.autoSidewinder = makeAuto("sidewinder", "Auto-Sidewinder");
 Class.autoHelix = makeAuto("helix", "DNA");
 Class.autoUndertow = makeAuto("undertow", "Current");
 Class.autoRepeater = makeAuto("repeater", "Patterner");
-Class.automachinception = makeAuto("machinception", "Machine-Deployer");
+Class.automachinception = makeAuto("machinception", "Mechanist");
 Class.autotailgator = makeAuto("tailgator", "Tailplayer");
 Class.autoflankinception = makeAuto("flankinception", "Flank-Deployer");
 Class.autoBackShield = makeAuto("backShield", "Coverer");
+Class.autoSwivel2 = makeAuto("swivel2", "Scowerer");
+Class.autoJouster = makeAuto("jouster", "Horse");
 Class.autoSmasher = makeAuto({
     PARENT: "genericSmasher",
     DANGER: 6,
@@ -5566,9 +6084,10 @@ Class.flankbrid = makeOver('flankGuard', "Flankbrid", {count: 1, independent: tr
 Class.poundbrid = makeOver('pounder', "Poundbrid", {count: 1, independent: true, cycle: false})
 Class.trapbrid = makeOver('trapper', "Trapbrid", {count: 1, independent: true, cycle: false})
 Class.desmosbrid = makeOver('desmos', "Desmosbrid", {count: 1, independent: true, cycle: false})
-Class.littleHunterbrid = makeOver('littleHunter', "Subduerbrid", {count: 1, independent: true, cycle: false})
+Class.littleHunterbrid = makeOver('littleHunter', "Subbrid", {count: 1, independent: true, cycle: false})
 Class.inceptionbrid = makeOver('inception', "Inceptionbrid", {count: 1, independent: true, cycle: false})
 Class.auto2brid = makeOver('auto2', "Auto-2brid", {count: 1, independent: true, cycle: false})
+Class.propelbrid = makeOver('propel', "Racer", {count: 1, independent: true, cycle: false})
 Class.doubletwinbrid = makeOver('doubleTwin', "Double Twinbrid", {count: 1, independent: true, cycle: false})
 Class.hexatankbrid = makeOver('hexaTank', "Hexatankbrid", {count: 1, independent: true, cycle: false})
 Class.auto3brid = makeOver('auto3', "Auto-3brid", {count: 1, independent: true, cycle: false})
@@ -5618,6 +6137,7 @@ Class.trapguardbrid = makeOver('trapGuard', "TG-Hybrid", {count: 1, independent:
 Class.builderbrid = makeOver('builder', "Builderbrid", {count: 1, independent: true, cycle: false})
 Class.launchbrid = makeOver('launcher', "Launcherbrid", {count: 1, independent: true, cycle: false})
 Class.tritrapperbrid = makeOver('triTrapper', "T3T-Hybrid", {count: 1, independent: true, cycle: false})
+Class.trianglebrid = makeOver('triAngle', "Trianglebrid", {count: 1, independent: true, cycle: false})
 Class.helixbrid = makeOver('helix', "Gyre", {count: 1, independent: true, cycle: false})
 Class.sidewinderbrid = makeOver('sidewinder', "Sidewinderbrid", {count: 1, independent: true, cycle: false})
 Class.undertowbrid = makeOver('undertow', "Pullist", {count: 1, independent: true, cycle: false})
@@ -5626,6 +6146,9 @@ Class.inceptionistbrid = makeOver('inceptionist', "Inceptionistbrid", {count: 1,
 Class.machinceptionbrid = makeOver('machinception', "Machinceptibrid", {count: 1, independent: true, cycle: false})
 Class.tailgatorbrid = makeOver('tailgator', "Tailgatorbrid", {count: 1, independent: true, cycle: false})
 Class.flankinceptionbrid = makeOver('flankinception', "Flankinceptibrid", {count: 1, independent: true, cycle: false})
+Class.bateaubrid = makeOver('bateau', "Kayak", {count: 1, independent: true, cycle: false})
+Class.swivel2brid = makeOver('swivel2', "Swivel2brid", {count: 1, independent: true, cycle: false})
+Class.jousterbrid = makeOver('jouster', "Jousterbrid", {count: 1, independent: true, cycle: false})
 
 //auto hybrid tanks
 Class.autotwinbrid = makeOver('autoTwin', "Auto-Twinbrid", {count: 1, independent: true, cycle: false})
@@ -5638,6 +6161,7 @@ Class.autodesmosbrid = makeOver('autoDesmos', "Chartebrid", {count: 1, independe
 Class.autobascrid = makeOver('autoBasic', "Auto-Basebrid", {count: 1, independent: true, cycle: false})
 Class.autoinceptionbrid = makeOver('autoinception', "Deployerbrid", {count: 1, independent: true, cycle: false})
 Class.autolittleHunterbrid = makeOver('autolittleHunter', "Auto-Subbrid", {count: 1, independent: true, cycle: false})
+Class.autopropelbrid = makeOver('propel', "Grazerbrid", {count: 1, independent: true, cycle: false})
 Class.autoauto2brid = makeOver('auto2', "Auto²-2brid", {count: 1, independent: true, cycle: false})
 
 //hybrid drive tanks
@@ -5652,7 +6176,9 @@ Class.porsche = makeOver('autoBasic', "Porsche", {count: 1, independent: true, c
 Class.mazda = makeOver('desmos', "Mazda", {count: 1, independent: true, cycle: false, type: "turretedDrone"})
 Class.volkswagen = makeOver('littleHunter', "Volkswagen", {count: 1, independent: true, cycle: false, type: "turretedDrone"})
 Class.audi = makeOver('inception', "Audi", {count: 1, independent: true, cycle: false, type: "turretedDrone"})
+Class.mustang = makeOver('propel', "Mustang", {count: 1, independent: true, cycle: false, type: "turretedDrone"})
 Class.ferrari = makeOver('auto2', "Ferrari", {count: 1, independent: true, cycle: false, type: "turretedDrone"})
+Class.ram = makeOver('lancer', "Ram", {count: 1, independent: true, cycle: false, type: "turretedDrone"})
 
 //Ceptions
 Class.basicCeption = makeCeption('basic', "Basiception");
@@ -5667,6 +6193,7 @@ Class.desmosCeption = makeCeption('desmos', "Desmosception");
 Class.bascridCeption = makeCeption('bascrid', "Baseception");
 Class.littleHunterCeption = makeCeption('littleHunter', "Subception");
 Class.inceptCeption = makeCeption('inception', "Incepticon");
+Class.propelCeption = makeCeption('propel', "Propeleception");
 Class.auto2Ception = makeCeption('auto2', "Auto-2²");
 Class.revoception = makeCeption('revolutionist', "revonception");
 
@@ -5693,8 +6220,9 @@ Class.homingautoPound = makeAuto("pounder", "Homing Scratcher", {type: 'homingAu
 Class.homingautoTrap = makeAuto("trapper", "Homing Auto-Trapper", {type: 'homingAutoTurret'});
 Class.homingautoDesmos = makeAuto("desmos", "Homing Charter", {type: 'homingAutoTurret'});
 Class.homingautobascrid = makeAuto("bascrid", "Homing Auto-Basebrid", {type: 'homingAutoTurret'})
-Class.homingautolittleHunter = makeAuto("littleHunter", "Homing Auto-Subduer", {type: 'homingAutoTurret'})
+Class.homingautolittleHunter = makeAuto("littleHunter", "Homing Duelist", {type: 'homingAutoTurret'})
 Class.homingautoinception = makeAuto("inception", "Homing Deployer", {type: 'homingAutoTurret'});
+Class.homingautopropel = makeAuto("propel", "Homing Grazer", {type: 'homingAutoTurret'});
 Class.homingautoauto2 = makeAuto("auto2", "Homing Auto²-2", {type: 'homingAutoTurret'});
 Class.homingautolancer = makeAuto("lancer", "Homing Lancer", {type: 'homingAutoTurret'});
 
@@ -5711,6 +6239,7 @@ Class.auraAutoBasic = makeAura(Class.autoBasic);
 Class.auraBascrid = makeAura(Class.bascrid);
 Class.auraLittleHunter = makeAura(Class.littleHunter);
 Class.auraInception = makeAura(Class.inception);
+Class.auraPropel = makeAura(Class.propel);
 Class.auraDesmos = makeAura(Class.desmos);
 Class.auraAuto2 = makeAura(Class.auto2);
 Class.auraSmasher = makeAura(Class.smasher);
@@ -5727,7 +6256,8 @@ Class.damageAuraAutoBasic = makeAura(Class.autoBasic, "Omen Auto-Basic", {type: 
 Class.damageAuraBascrid = makeAura(Class.bascrid, "Omen Basebrid", {type: 'auraDamageGen'});
 Class.damageAuraLittleHunter = makeAura(Class.littleHunter, "Omen Subduer", {type: 'auraDamageGen'});
 Class.damageAuraInception = makeAura(Class.inception, "Omen Inception", {type: 'auraDamageGen'});
-Class.damageAuraDesmos = makeAura(Class.desmos, "Omen Desmos", {type: 'auraDamageGen'});
+Class.damageAuraPropel = makeAura(Class.propel, "Omen Subduer", {type: 'auraDamageGen'});
+Class.damageAuraDesmos = makeAura(Class.desmos, "Omen Propeller", {type: 'auraDamageGen'});
 Class.damageAuraAuto2 = makeAura(Class.auto2, "Omen Auto-2", {type: 'auraDamageGen'});
 Class.damageAuraLancer = makeAura(Class.lancer, "Omen Lancer", {type: 'auraDamageGen'});
 
@@ -5743,6 +6273,7 @@ Class.rangeAuraAutoBasic = makeAura(Class.autoBasic, "Mega-Aura Auto-Basic", {ty
 Class.rangeAuraBascrid = makeAura(Class.bascrid, "Mega-Aura Bascrid", {type: 'auraRangeGen'});
 Class.rangeAuraLittleHunter = makeAura(Class.littleHunter, "Mega-Aura Subduer", {type: 'auraRangeGen'});
 Class.rangeAuraInception = makeAura(Class.inception, "Mega-Aura Inception", {type: 'auraRangeGen'});
+Class.rangeAuraPropel = makeAura(Class.propel, "Mega-Aura Propeller", {type: 'auraRangeGen'});
 Class.rangeAuraDesmos = makeAura(Class.desmos, "Mega-Aura Desmos", {type: 'auraRangeGen'});
 Class.rangeAuraAuto2 = makeAura(Class.auto2, "Mega-Aura Auto-2", {type: 'auraRangeGen'});
 Class.rangeAuraLancer = makeAura(Class.lancer, "Mega-Aura Lancer", {type: 'auraRangeGen'});
@@ -5798,6 +6329,7 @@ Class.auraAutoLittleHunter = makeAura(Class.autolittleHunter);
 Class.auraAutoInception = makeAura(Class.autoinception);
 Class.auraAutoAuto2 = makeAura(Class.autoauto2);
 Class.auraAutoLancer = makeAura(Class.autolancer);
+Class.auraAutoPropel = makeAura(Class.propel);
 Class.auraBasicCeption = makeAura(Class.basicCeption);
 Class.auraHomingautoBasic = makeAura(Class.homingautoBasic);
 
@@ -5811,6 +6343,7 @@ Class.auraautobascrid = makeAura(Class.autobascrid);
 Class.auradesmosbrid = makeAura(Class.desmosbrid);
 Class.auralittlehunterbrid = makeAura(Class.littleHunterbrid);
 Class.aurainceptionbrid = makeAura(Class.inceptionbrid);
+Class.aurapropelbrid = makeAura(Class.auto2brid);
 Class.auraauto2brid = makeAura(Class.auto2brid);
 Class.auralancebrid = makeAura(Class.lancebrid);
 Class.jeep = makeAura(Class.car, "jeep");
@@ -5831,14 +6364,19 @@ Class.auraHelix = makeAura(Class.helix);
 Class.auraUndertow = makeAura(Class.undertow);
 Class.auraRepeater = makeAura(Class.repeater);
 
+Class.auraSwivel2 = makeAura(Class.swivel2);
+
 Class.auraLancer = makeAura(Class.lancer);
 Class.auraChasseur = makeAura(Class.chasseur);
 Class.auraTriLancer = makeAura(Class.trilancer);
 
+Class.auraBateau = makeAura(Class.bateau);
+Class.auraJouster = makeAura(Class.jouster);
+
 // TANK UPGRADE PATHS
-Class.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "director", "pounder", "trapper", "autoBasic", "desmos", "bascrid", "littleHunter", "inception", "lancer", "auto2", "auraBasic"]
+Class.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "director", "pounder", "trapper", "autoBasic", "desmos", "bascrid", "littleHunter", "inception", "propel", "lancer", "auto2", "auraBasic", "whirlwind"]
     Class.basic.UPGRADES_TIER_2 = ["smasher", "cloner"]
-        Class.smasher.UPGRADES_TIER_3 = ["megaSmasher", "spike", "landmine", "cocci", "pion", "trackerSmasher", "skater", "acidsmasher", "flail", "autoSmasher", "auraSmasher"]
+        Class.smasher.UPGRADES_TIER_3 = ["megaSmasher", "spike", "landmine", "cocci", "pion", "trackerSmasher", "skater", "acidsmasher", "flail", "autoSmasher", "auraSmasher", "jumpSmasher"]
         Class.healer.UPGRADES_TIER_3 = ["medic", "ambulance", "surgeon", "paramedic"]
         Class.cloner.UPGRADES_TIER_3 = ["hivemind", "autoCloner"]
 
@@ -5847,11 +6385,12 @@ Class.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "di
         Class.doubleTwin.UPGRADES_TIER_3 = ["tripleTwin", "hewnDouble", "autoDouble", "bentDouble", "doubletwinbrid", "auraDoubleTwin"]
         Class.tripleShot.UPGRADES_TIER_3 = ["pentaShot", "spreadshot", "bentDouble", "triplet", "autoTripleShot", "triplex", "bentHybrid", "trinary", "auraTripleShot"]
 
-    Class.sniper.UPGRADES_TIER_2 = ["assassin", "hunter", "minigun", "rifle", "twinsniper", "autoSniper", "snipebrid", "trackerSniper", "acid", "chiller", "chasseur", "auraSniper"]
+    Class.sniper.UPGRADES_TIER_2 = ["assassin", "hunter", "minigun", "rifle", "marksman", "twinsniper", "autoSniper", "snipebrid", "trackerSniper", "acid", "chiller", "chasseur", "auraSniper"]
         Class.sniper.UPGRADES_TIER_3 = ["bushwhacker"]
-        Class.assassin.UPGRADES_TIER_3 = ["ranger", "xHunter", "falcon", "stalker", "autoAssassin", "assbrid", "trackerAssassin", "disintegrator", "freezer", "auraAssassin", "single"]
-        Class.hunter.UPGRADES_TIER_3 = ["predator", "xHunter", "poacher", "ordnance", "railgun", "dual","autoHunter", "trackerHunter", 'auraHunter']
-        Class.rifle.UPGRADES_TIER_3 = ["musket", "crossbow", "armsman", "autoRifle", "trackerRifle", "auraRifle"]
+        Class.assassin.UPGRADES_TIER_3 = ["ranger", "xHunter", "falcon", "stalker", "autoAssassin", "deadeye", "assbrid", "trackerAssassin", "disintegrator", "freezer", "auraAssassin", "single"]
+        Class.hunter.UPGRADES_TIER_3 = ["predator", "xHunter", "poacher", "ordnance", "railgun", "dual", "nimrod", "autoHunter", "trackerHunter", 'auraHunter']
+        Class.rifle.UPGRADES_TIER_3 = ["musket", "crossbow", "armsman", "revolver", "autoRifle", "trackerRifle", "auraRifle"]
+        Class.marksman.UPGRADES_TIER_3 = ["deadeye", "nimrod", "revolver", "fork"]
         Class.trackerSniper.UPGRADES_TIER_3 = ["trackerAssassin", "trackerHunter", "trackerMini", "trackerRifle", "trackerTwinsniper", "trackerSniperHybrid", "trackerAcid", "trackerChill", "auraTrackerSniper"]
         Class.twinsniper.UPGRADES_TIER_3 = ["dual", "musket", "autoTwinsniper", "twipebrid", "trackerTwinsniper", "auraTwinSniper"]
         Class.acid.UPGRADES_TIER_3 = ["disintegrator", "acidsmasher", "autoAcid", "acidbrid", "trackerAcid", "auraAcid"]
@@ -5864,31 +6403,31 @@ Class.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "di
 
     Class.flankGuard.UPGRADES_TIER_2 = ["hexaTank", "triAngle", "auto3", "trapGuard", "triTrapper", "autoFlank", "flankbrid", "flankdue", "flankinception", "trilancer", "backShield", "auraFlankGuard"]
         Class.flankGuard.UPGRADES_TIER_3 = ["tripleTwin", "quadruplex"]
-        Class.hexaTank.UPGRADES_TIER_3 = ["octoTank", "cyclone", "hexaTrapper", "autoHexaTank", "hexatankbrid", "hexalancer", "auraHexaTank", "auraHexaTank"]
-        Class.triAngle.UPGRADES_TIER_3 = ["fighter", "booster", "falcon", "bomber", "autoTriAngle", "surfer", "eagle", "phoenix", "vulture", "subway", "helecopter", "trailblazer"]
+        Class.hexaTank.UPGRADES_TIER_3 = ["octoTank", "cyclone", "hexaTrapper", "autoHexaTank", "hexatankbrid", "hexalancer", "auraHexaTank", "auraHexaTank", "hexaWhirl"]
+        Class.triAngle.UPGRADES_TIER_3 = ["fighter", "booster", "falcon", "bomber", "autoTriAngle", "trianglebrid", "surfer", "eagle", "phoenix", "vulture", "subway", "helecopter", "trailblazer", "rocker"]
         Class.backShield.UPGRADES_TIER_3 = ["mirrorBackShield", "brella", "autoBackShield", "auraBackShield"]
 
     Class.director.UPGRADES_TIER_2 = ["overseer", "cruiser", "underseer", "gundirector", "spawner", "directdrive", "autoDirector", "auraDirector"]
         Class.director.UPGRADES_TIER_3 = ["manager", "bigCheese"]
         Class.overseer.UPGRADES_TIER_3 = ["overlord", "overtrapper", "overgunner", "banshee", "autoOverseer", "trojan", "overdrive", "commander", "auraOverseer"]
-        Class.cruiser.UPGRADES_TIER_3 = ["carrier", "battleship", "fortress", "autoCruiser", "commander", "auraCruiser"]
-        Class.underseer.UPGRADES_TIER_3 = ["necromancer", "maleficitor", "infestor", "autoUnderseer", "auraUnderseer"]
+        Class.cruiser.UPGRADES_TIER_3 = ["carrier", "battleship", "fortress", "surfer", "autoCruiser", "commander", "auraCruiser"]
+        Class.underseer.UPGRADES_TIER_3 = ["necromancer", "maleficitor", "infestor", "autoUnderseer", "auraUnderseer"/* "prophet",*/]
         Class.spawner.UPGRADES_TIER_3 = ["factory", "protist", "ranch", "autoSpawner", "auraSpawner"]
         Class.directdrive.UPGRADES_TIER_3 = ["overdrive", "cruiserdrive", "revodirector", "honda", "dictator", "factory", "autoMotor", "auraDirectdrive"]
 
     Class.pounder.UPGRADES_TIER_2 = ["destroyer", "builder", "artillery", "launcher", "autoPound", "sidewinder", "poundbrid", "tailgator", "auraPounder"]
         Class.pounder.UPGRADES_TIER_3 = ["shotgun", "eagle"]
         Class.destroyer.UPGRADES_TIER_3 = ["conqueror", "annihilator", "hybrid", "construct", "autoDestroy", "waterfall", "interceptor", "auraDestroyer"]
-        Class.artillery.UPGRADES_TIER_3 = ["mortar", "ordnance", "beekeeper", "fieldGun", "autoArtillery", "artilbrid", "auraArtillery"]
-        Class.launcher.UPGRADES_TIER_3 = ["skimmer", "twister", "swarmer", "rocketeer", "fieldGun", "shrapnelgun", "firecracker", "autoLaunch", "launchbrid", "auraLauncher"]
+        Class.artillery.UPGRADES_TIER_3 = ["mortar", "ordnance", "beekeeper", "fieldGun", "autoArtillery", "artilbrid", "auraArtillery", "munition"]
+        Class.launcher.UPGRADES_TIER_3 = ["skimmer", "twister", "swarmer", "rocketeer", "fieldGun", "shrapnelgun", "firecracker", "python", "autoLaunch", "launchbrid", "auraLauncher", "vortex"]
 
     Class.trapper.UPGRADES_TIER_2 = ["builder", "triTrapper", "trapGuard", "contagion", "autoTrap", "trapbrid", "auraTrapper"]
         Class.trapper.UPGRADES_TIER_3 = ["barricade"]
         Class.builder.UPGRADES_TIER_3 = ["construct", "autoBuilder", "engineer", "boomer", "assembler", "architect", "conqueror", "fort", "builderbrid"]
         Class.triTrapper.UPGRADES_TIER_3 = ["fortress", "hexaTrapper", "septaTrapper", "architect", "triContagion", "autoTriTrapper", "tritrapperbrid"]
-        Class.trapGuard.UPGRADES_TIER_3 = ["bushwhacker", "gunnerTrapper", "bomber", "conqueror", "bulwark", "autoTrapGuard", "trapguardbrid"]
+        Class.trapGuard.UPGRADES_TIER_3 = ["bushwhacker", "gunnerTrapper", "bomber", "conqueror", "bulwark", "autoTrapGuard", "trapguardbrid", "auraTrapGuard", "whirlGuard"]
 
-    Class.autoBasic.UPGRADES_TIER_2 = ["autoTwin", "autoSniper", "autoMach", "autoFlank", "autoDirector", "autoPound", "autoTrap", "autoDesmos", "basicCeption", "autobascrid", "autolittleHunter", "autoinception", "autolancer", "autoauto2", "auraAutoBasic", "homingautoBasic"]
+    Class.autoBasic.UPGRADES_TIER_2 = ["autoTwin", "autoSniper", "autoMach", "autoFlank", "autoDirector", "autoPound", "autoTrap", "autoDesmos", "basicCeption", "autobascrid", "autolittleHunter", "autoinception", "autoPropel", "autolancer", "autoauto2", "auraAutoBasic", "homingautoBasic"]
         Class.autoBasic.UPGRADES_TIER_3 = ["autoSmasher", "autoCloner"]
         Class.autoTwin.UPGRADES_TIER_3 = ["autoDouble", "autoTripleShot", "autoGunner", "autoHexaTank", "equilibrium", "autoBinary", "autoTwinsniper", "twinCeption", "autotwinbrid", "auraAutoTwin", "homingautoTwin"]
         Class.autoSniper.UPGRADES_TIER_3 = ["autoAssassin", "autoHunter", "autoMini", "autoRifle", "autoTwinsniper", "autoAcid", "autoChill", "snipeCeption", "autosnipebrid", "autochasseur", "auraAutoSniper", "homingautoSniper"]
@@ -5900,28 +6439,31 @@ Class.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "di
         Class.autoDesmos.UPGRADES_TIER_3 = ["autoSidewinder", "autoHelix", "autoUndertow", "autoRepeater", "desmosCeption", "autodesmosbrid", "auraAutoDesmos", "homingautoDesmos"]
         Class.autolittleHunter.UPGRADES_TIER_3 = ["autoMini", "autoBinary", "autoHunter", "autoSprayer", "autoContagion", "autoGundirector", "autoBigSubduer", "autoFlankdue", "autolittleHunterbrid", "littleHunterCeption", "auraAutoLittleHunter", "homingautolittleHunter"]
         Class.autoinception.UPGRADES_TIER_3 = ["autoinceptionist", "automachinception", "autotailgator", "autoflankinception", "autoinceptionbrid", "inceptCeption", "auraAutoInception", "homingautoinception"]
+        Class.autoPropel.UPGRADES_TIER_3 = ["autoTriAngle", "autoBateau", "autoJouster", "propelCeption", "autopropelbrid", "auraAutoPropel", "homingautopropel"]
         Class.autoauto2.UPGRADES_TIER_3 = ["autoAuto3", "autoRevolutionist", "autoauto2brid", "auto2Ception", "auraAutoAuto2", "homingautoauto2"]
-        Class.autolancer.UPGRADES_TIER_3 = ["autochasseur", "autolancebrid", "autotrilancer", "lancerception", "auraAutoLancer", "homingautolancer"]
-        Class.basicCeption.UPGRADES_TIER_3 = ["twinCeption", "snipeCeption", "machCeption", "flankCeption", "directCeption", "poundCeption", "trapCeption", "desmosCeption", "bascridCeption", "littleHunterCeption", "inceptCeption", "lancerception", "auraBasicCeption"]
-        Class.homingautoBasic.UPGRADES_TIER_3 = ["homingautoTwin", "homingautoSniper", "homingautoMach", "homingautoFlank", "homingautoDirector", "homingautoPound", "homingautoTrap", "homingautoDesmos", "homingautobascrid", "homingautolittleHunter", "homingautoinception", "auraHomingautoBasic"]
+        Class.autolancer.UPGRADES_TIER_3 = ["autochasseur", "autotrilancer", "autoJouster", "lancerception", "autolancebrid", "auraAutoLancer", "homingautolancer"]
+        Class.basicCeption.UPGRADES_TIER_3 = ["twinCeption", "snipeCeption", "machCeption", "flankCeption", "directCeption", "poundCeption", "trapCeption", "desmosCeption", "bascridCeption", "littleHunterCeption", "inceptCeption", "propelCeption", "lancerception", "auto2Ception", "auraBasicCeption"]
+        Class.homingautoBasic.UPGRADES_TIER_3 = ["homingautoTwin", "homingautoSniper", "homingautoMach", "homingautoFlank", "homingautoDirector", "homingautoPound", "homingautoTrap", "homingautoDesmos", "homingautobascrid", "homingautolittleHunter", "homingautoinception", "homingautopropel", "homingautolancer", "homingautoauto2", "auraHomingautoBasic"]
 
     Class.bascrid.UPGRADES_TIER_2 = ["twinbrid", "snipebrid", "machbrid", "flankbrid", "overseer", "poundbrid", "trapbrid", "autobascrid", "desmosbrid", "littleHunterbrid", "inceptionbrid", "lancebrid", "auto2brid", "car", "auraBascrid"]
         Class.bascrid.UPGRADES_TIER_3 = ["clonebrid"]
         Class.twinbrid.UPGRADES_TIER_3 = ["doubletwinbrid", "bentHybrid", "overgunner", "hexatankbrid", "autotwinbrid", "helixbrid", "binarybrid", "twipebrid", "mercedes", "auratwinbrid"]
         Class.snipebrid.UPGRADES_TIER_3 = ["assbrid", "poacher", "cropDuster", "armsman", "twipebrid", "autosnipebrid", "trackerSniperHybrid", "acidbrid", "chillbrid", "chasseubrid", "tesla", "aurasnipebrid"]
         Class.machbrid.UPGRADES_TIER_3 = ["artilbrid", "cropDuster", "overgunner", "spraybrid", "automachbrid", "machinceptionbrid", "toyota", "auramachbrid"]
-        Class.flankbrid.UPGRADES_TIER_3 = ["hexatankbrid", "surfer", "auto3brid", "trapguardbrid", "tritrapperbrid", "autoflankbrid", "flankduebrid", "flankinceptionbrid", "trilancebrid", "ford", "auraflankbrid"]
+        Class.flankbrid.UPGRADES_TIER_3 = ["hexatankbrid", "trianglebrid", "auto3brid", "trapguardbrid", "tritrapperbrid", "autoflankbrid", "flankduebrid", "flankinceptionbrid", "trilancebrid", "ford", "auraflankbrid"]
         Class.poundbrid.UPGRADES_TIER_3 = ["hybrid", "builderbrid", "artilbrid", "launchbrid", "autopoundbrid", "sidewinderbrid", "tailgatorbrid", "honda", "aurapoundbrid"]
         Class.trapbrid.UPGRADES_TIER_3 = ["builderbrid", "tritrapperbrid", "trapguardbrid", "contagionbrid", "autotrapbrid", "overtrapper", "gmc", "auratrapbrid"]
-        Class.autobascrid.UPGRADES_TIER_3 = ["autotwinbrid", "autosnipebrid", "automachbrid", "autoflankbrid", "autopoundbrid", "autotrapbrid", "autodesmosbrid", "autolittleHunterbrid", "autoinceptionbrid", "autolancebrid", "bascridCeption", "porsche", "auraautobascrid"]
+        Class.autobascrid.UPGRADES_TIER_3 = ["autotwinbrid", "autosnipebrid", "automachbrid", "autoflankbrid", "autopoundbrid", "autotrapbrid", "autodesmosbrid", "autolittleHunterbrid", "autoinceptionbrid", "autopropelbrid", "autolancebrid", "bascridCeption", "porsche", "auraautobascrid"]
         Class.desmosbrid.UPGRADES_TIER_3 = ["sidewinderbrid", "helixbrid", "undertowbrid", "repeaterbrid", "autodesmosbrid", "mazda", "auradesmosbrid"]
         Class.littleHunterbrid.UPGRADES_TIER_3 = ["cropDuster", "binarybrid", "poacher", "spraybrid", "contagionbrid", "bigsubduerbrid", "flankduebrid", "autolittleHunterbrid", "volkswagen", "auralittlehunterbrid"]
-        Class.inceptionbrid.UPGRADES_TIER_3 = ["inceptionistbrid", "machinceptionbrid", "tailgatorbrid", "flankinceptionbrid", "overdrive", "autoinceptionbrid", "audi", "aurainceptionbrid"]
+        Class.inceptionbrid.UPGRADES_TIER_3 = ["trianglebrid", "machinceptionbrid", "tailgatorbrid", "flankinceptionbrid", "overdrive", "autoinceptionbrid", "audi", "aurainceptionbrid"]
+        Class.propelbrid.UPGRADES_TIER_3 = ["trianglebrid", "bateaubrid", "jousterbrid", "autopropelbrid", "mustang", "aurapropelbrid"]
         Class.auto2brid.UPGRADES_TIER_3 = ["auto3brid", "revobrid", "autoauto2brid", "ferrari", "auraauto2brid"]
-        Class.lancebrid.UPGRADES_TIER_3 = ["chasseubrid", "trilancebrid", "autolancebrid", "auralancebrid"]
-        Class.car.UPGRADES_TIER_3 = ["mercedes", "tesla", "toyota", "ford", "overdrive", "honda", "gmc", "porsche", "mazda", "volkswagen", "audi", "jeep"]
+        Class.lancebrid.UPGRADES_TIER_3 = ["chasseubrid", "trilancebrid", "jousterbrid", "autolancebrid", "ram", "auralancebrid"]
+        Class.car.UPGRADES_TIER_3 = ["mercedes", "tesla", "toyota", "ford", "overdrive", "honda", "gmc", "porsche", "mazda", "volkswagen", "audi", "mustang", "ram", "ferrari", "jeep"]
 
     Class.littleHunter.UPGRADES_TIER_2 = ["minigun", "binary", "hunter", "sprayer", "contagion", "gundirector", "bigSubduer", "flankdue", "autolittleHunter", "littleHunterbrid", "auraLittleHunter"]
+        Class.littleHunter.UPGRADES_TIER_3 = ["bayonet"]
         Class.binary.UPGRADES_TIER_3 = ["trinary", "dual", "autoBinary", "binarybrid", "auraBinary"]
         Class.contagion.UPGRADES_TIER_3 = ["fort", "triContagion", "autoContagion", "droneTrapper", "contagionbrid", "auraContagion"]
         Class.gundirector.UPGRADES_TIER_3 = ["trojan", "protist", "droneTrapper", "autoGundirector"]
@@ -5954,17 +6496,23 @@ Class.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "di
         Class.auraDesmos.UPGRADES_TIER_3 = ["auraSidewinder", "auraHelix", "auraUndertow", "auraRepeater", "auraAutoDesmos", "auradesmosbrid", "damageAuraDesmos", "rangeAuraDesmos"]
         Class.auraLittleHunter.UPGRADES_TIER_3 = ["auraMinigun", "auraBinary", "auraHunter", "auraSprayer", "auraContagion", "auraGundirector", "auraBigSubduer", "auraFlankdue", "auraAutoLittleHunter", "auralittlehunterbrid", "damageAuraLittleHunter", "rangeAuraLittleHunter"]
         Class.auraInception.UPGRADES_TIER_3 = ["auraInceptionist", "auraMachinception", "auraTailgator", "auraFlankinception", "auraAutoInception", "aurainceptionbrid", "damageAuraInception", "rangeAuraInception"]
+        Class.auraPropel.UPGRADES_TIER_3 = ["auraTriAngle", "auraBateau", "auraJouster", "auraAutoPropel", "aurapropelbrid", "damageAuraPropel", "rangeAuraPropel"]
         Class.auraAuto2.UPGRADES_TIER_3 = ["auraAuto3", "auraRevolutionist", "auraAutoAuto2", "auraauto2brid", "damageAuraAuto2", "rangeAuraAuto2"]
-        Class.auraLancer.UPGRADES_TIER_3 = ["auraChasseur", "auraTriLancer", "auraAutoLancer", "auralancebrid", "damageAuraLancer", "rangeAuraLancer"]
-        Class.damageAuraBasic.UPGRADES_TIER_3 = ["damageAuraTwin", "damageAuraSniper", "damageAuraMachineGun", "damageAuraFlankGuard", "damageAuraDirector", "damageAuraPounder", "damageAuraTrapper", "damageAuraAutoBasic", "damageAuraBascrid", "damageAuraDesmos", "damageAuraLittleHunter", "damageAuraInception", "damageAuraAuto2", "damageAuraLancer", "moredamageAuraBasic", "damagerangeAuraBasic"]
-        Class.rangeAuraBasic.UPGRADES_TIER_3 = ["rangeAuraTwin", "rangeAuraSniper", "rangeAuraMachineGun", "rangeAuraFlankGuard", "rangeAuraDirector", "rangeAuraPounder", "rangeAuraTrapper", "rangeAuraAutoBasic", "rangeAuraBascrid", "rangeAuraDesmos", "rangeAuraLittleHunter", "rangeAuraInception", "rangeAuraAuto2", "rangeAuraLancer", "morerangeAuraBasic", "damagerangeAuraBasic"]
+        Class.auraLancer.UPGRADES_TIER_3 = ["auraChasseur", "auraTriLancer", "auraJouster", "auraAutoLancer", "auralancebrid", "damageAuraLancer", "rangeAuraLancer"]
+        Class.damageAuraBasic.UPGRADES_TIER_3 = ["damageAuraTwin", "damageAuraSniper", "damageAuraMachineGun", "damageAuraFlankGuard", "damageAuraDirector", "damageAuraPounder", "damageAuraTrapper", "damageAuraAutoBasic", "damageAuraBascrid", "damageAuraDesmos", "damageAuraLittleHunter", "damageAuraInception", "damageAuraPropel", "damageAuraAuto2", "damageAuraLancer", "moredamageAuraBasic", "damagerangeAuraBasic"]
+        Class.rangeAuraBasic.UPGRADES_TIER_3 = ["rangeAuraTwin", "rangeAuraSniper", "rangeAuraMachineGun", "rangeAuraFlankGuard", "rangeAuraDirector", "rangeAuraPounder", "rangeAuraTrapper", "rangeAuraAutoBasic", "rangeAuraBascrid", "rangeAuraDesmos", "rangeAuraLittleHunter", "rangeAuraInception", "rangeAuraPropel", "rangeAuraAuto2", "rangeAuraLancer", "morerangeAuraBasic", "damagerangeAuraBasic"]
 
   Class.auto2.UPGRADES_TIER_2 = ["auto3", "revolutionist", "swivel2", "autoauto2", "auto2brid", "auraAuto2"]
-        Class.auto3.UPGRADES_TIER_3 = ["auto5", "mega3", "auto4", "banshee", "autoAuto3", "auto3brid", "auraAuto3"]
+        Class.auto3.UPGRADES_TIER_3 = ["auto5", "mega3", "auto4", "banshee", "autoAuto3", "auto3brid", "auraAuto3", "whirl3"]
         Class.revolutionist.UPGRADES_TIER_3 = ["subverter", "autoRevolutionist", "proton", "pion", "hadron", "equilibrium", "revobrid", "baseThrower", "revodirector", "auraRevolutionist"]
-        Class.swivel2.UPGRADES_TIER_3 = ["swivel3"]
+        Class.swivel2.UPGRADES_TIER_3 = ["swivel3", "autoSwivel2", "swivel2brid", "auraSwivel2"]
 
-  Class.lancer.UPGRADES_TIER_2 = ["chasseur", "trilancer", "autolancer", "lancebrid", "auraLancer"]
-        Class.lancer.UPGRADES_TIER_3 = ["katana"]
+  Class.lancer.UPGRADES_TIER_2 = ["chasseur", "trilancer", "jouster", "autolancer", "lancebrid", "auraLancer"]
+        Class.lancer.UPGRADES_TIER_3 = ["bayonet", "katana"]
         Class.chasseur.UPGRADES_TIER_3 = ["tripleur", "flail", "trichasseur", "autochasseur", "chasseubrid", "auraChasseur"]
         Class.trilancer.UPGRADES_TIER_3 = ["trichasseur", "hexalancer", "trailblazer", "autotrilancer", "trilancebrid", "auraTriLancer"]
+
+  Class.propel.UPGRADES_TIER_2 = ["triAngle", "bateau", "jouster", "autoPropel", "propelbrid", "auraPropel"]
+        Class.propel.UPGRADES_TIER_3 = ["jumpSmasher"]
+        Class.bateau.UPGRADES_TIER_3 = ["assblaster", "rocker", "knight", "autoBateau", "bateaubrid", "auraBateau"]
+        Class.jouster.UPGRADES_TIER_3 = ["trailblazer", "knight", "autoJouster", "jousterbrid", "auraJouster"]

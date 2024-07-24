@@ -75,23 +75,6 @@ module.exports = {
 			BULLET_DAMAGE: 'Ball Damage',
 			RELOAD: 'Ball Density',
 		},
-    lancer: {
-      BULLET_HEALTH: 'Lance Longevity',
-      BULLET_PEN: 'Lance Sharpness',
-      BULLET_DAMAGE: 'Lance Damage',
-      RELOAD: 'Lance Density'
-    }
-	},
-	gunCalcNames: {
-	    default: 0,
-	    bullet: 1,
-	    drone: 2,
-	    swarm: 3,
-	    fixedReload: 4,
-	    thruster: 5,
-	    sustained: 6,
-	    necro: 7,
-	    trap: 8,
 	},
 	base: {
 	    ACCEL: 1.6,
@@ -102,7 +85,7 @@ module.exports = {
 	    PENETRATION: 1.05,
 	    SHIELD: 8,
 	    REGEN: 0.025,
-	    FOV: 1.03,
+	    FOV: 1.02,
 	    DENSITY: 0.5,
 	}
 };

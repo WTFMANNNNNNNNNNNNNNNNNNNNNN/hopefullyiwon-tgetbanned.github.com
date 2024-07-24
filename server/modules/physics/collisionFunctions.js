@@ -308,181 +308,108 @@ function mooncollide(moon, n) {
     let dy = moon.y - n.y;
     let d2 = dx * dx + dy * dy;
     let totalRadius = moon.realSize + n.realSize;
-    if (d2 > totalRadius * totalRadius)
+    if (d2 > totalRadius ** 2) {
         return;
+    }
+
     let dist = Math.sqrt(d2);
     let sink = totalRadius - dist;
     dx /= dist;
     dy /= dist;
-    n.accel.x -= dx * n.pushability * 0.05 * sink * 2;
-    n.accel.y -= dy * n.pushability * 0.05 * sink * 2;
+    n.x -= dx * n.pushability * sink;
+    n.y -= dy * n.pushability * sink;
+}
+
+function mazewallcollidekill(bounce, wall) {
+        if (bounce.type !== 'tank' && bounce.type !== 'miniboss' && bounce.type !== 'food' && bounce.type !== 'crasher' && bounce.type !== "flail" && bounce.type !== "brella") {
+        bounce.kill();
+    } else {
+        bounce.collisionArray.push(wall);
+    }
 }
 
 function mazewallcollide(wall, bounce) {
     if (bounce.god === true || bounce.passive === true || bounce.isArenaCloser || bounce.master.isArenaCloser) return;
     if (bounce.store.noWallCollision) return;
     if (bounce.team === wall.team && bounce.type === "tank") return;
-    let trueWallSize = wall.size * lazyRealSizes[4] / 1.414 + 2;
+    let trueWallSize = wall.size * lazyRealSizes[4] / Math.SQRT2 + 2;
     if (bounce.x + bounce.size < wall.x - trueWallSize ||
         bounce.x - bounce.size > wall.x + trueWallSize ||
         bounce.y + bounce.size < wall.y - trueWallSize ||
         bounce.y - bounce.size > wall.y + trueWallSize) return 0;
-    if (wall.intangibility) return 0
-    let bounceBy = bounce.type === 'tank' ? 1.0 : bounce.type === 'miniboss' ? 2.5 : 0.1
-    let left = bounce.x < wall.x - trueWallSize
-    let right = bounce.x > wall.x + trueWallSize
-    let top = bounce.y < wall.y - trueWallSize
-    let bottom = bounce.y > wall.y + trueWallSize
-    let leftExposed = bounce.x - bounce.size < wall.x - trueWallSize
-    let rightExposed = bounce.x + bounce.size > wall.x + trueWallSize
-    let topExposed = bounce.y - bounce.size < wall.y - trueWallSize
-    let bottomExposed = bounce.y + bounce.size > wall.y + trueWallSize
+    if (wall.intangibility) return 0;
+    
+    // Get collision face
+    // [left, top, right, bottom]
+    let collisionFaces = [
+        bounce.x < wall.x,
+        bounce.y < wall.y,
+        bounce.x >= wall.x, // Biased just in case something ends up directly at the center of the wall
+        bounce.y > wall.y,
+    ];
+    
+    // For corner checking
+    // [left, top, right, bottom]
+    let extendedOverFaces = [
+        bounce.x < wall.x - trueWallSize,
+        bounce.y < wall.y - trueWallSize,
+        bounce.x > wall.x + trueWallSize,
+        bounce.y > wall.y + trueWallSize,
+    ];
 
-    let intersected = true
+    // Push to position if colliding with a given face
+    let wallPushPositions = [
+        {x: wall.x - trueWallSize - bounce.size},
+        {y: wall.y - trueWallSize - bounce.size},
+        {x: wall.x + trueWallSize + bounce.size},
+        {y: wall.y + trueWallSize + bounce.size},
+    ]
 
-    if (left && right) {
-        left = right = false
-    }
-    if (top && bottom) {
-        top = bottom = false
-    }
-    if (leftExposed && rightExposed) {
-        leftExposed = rightExposed = false
-    }
-    if (topExposed && bottomExposed) {
-        topExposed = bottomExposed = false
-    }
-    if ((left && !top && !bottom) || (leftExposed && !topExposed && !bottomExposed)) {
-        bounce.accel.x -= (bounce.x + bounce.size - wall.x + trueWallSize) * bounceBy
-    } else if ((right && !top && !bottom) || (rightExposed && !topExposed && !bottomExposed)) {
-        bounce.accel.x -= (bounce.x - bounce.size - wall.x - trueWallSize) * bounceBy
-    } else if ((top && !left && !right) || (topExposed && !leftExposed && !rightExposed)) {
-        bounce.accel.y -= (bounce.y + bounce.size - wall.y + trueWallSize) * bounceBy
-    } else if ((bottom && !left && !right) || (bottomExposed && !leftExposed && !rightExposed)) {
-        bounce.accel.y -= (bounce.y - bounce.size - wall.y - trueWallSize) * bounceBy
-    } else {
-        let x = leftExposed ? -trueWallSize : rightExposed ? trueWallSize : 0
-        let y = topExposed ? -trueWallSize : bottomExposed ? trueWallSize : 0
+    // Face collisions
+    for (let i = 0; i < 4; i++) {
+        // if not hitting a face or extending over neighboring faces, continue to the next face
+        if (!collisionFaces[i] | extendedOverFaces[(i + 3) % 4] | extendedOverFaces[(i + 1) % 4]) continue;
 
-        let point = new Vector(wall.x + x - bounce.x, wall.y + y - bounce.y)
+        // Decide to kill bounce type
+        mazewallcollidekill(bounce, wall);
 
-        if (!x || !y) {
-            if (bounce.x + bounce.y < wall.x + wall.y) { // top left
-                if (bounce.x - bounce.y < wall.x - wall.y) { // bottom left
-                    bounce.accel.x -= (bounce.x + bounce.size - wall.x + trueWallSize) * bounceBy
-                } else { // top right
-                    bounce.accel.y -= (bounce.y + bounce.size - wall.y + trueWallSize) * bounceBy
-                }
-            } else { // bottom right
-                if (bounce.x - bounce.y < wall.x - wall.y) { // bottom left
-                    bounce.accel.y -= (bounce.y - bounce.size - wall.y - trueWallSize) * bounceBy
-                } else { // top right
-                    bounce.accel.x -= (bounce.x - bounce.size - wall.x - trueWallSize) * bounceBy
-                }
-            }
-        } else if (!(left || right || top || bottom)) {
-            let force = (bounce.size / point.length - 1) * bounceBy / 2
-            bounce.accel.x += point.x * force
-            bounce.accel.y += point.y * force
-        } else if (point.isShorterThan(bounce.size)) {
-            //let force = (bounce.size - point.length) / point.length * bounceBy
-            // once to get collision amount, once to norm
-            let force = (bounce.size / point.length - 1) * bounceBy / 2 // simplified
-            bounce.accel.x -= point.x * force
-            bounce.accel.y -= point.y * force
-        } else {
-            intersected = false
+        // Push and fix velocity to zero
+        for (let axis in wallPushPositions[i]) {
+            bounce[axis] = wallPushPositions[i][axis];
+            bounce.velocity[axis] = 0;
+            return true;
         }
     }
 
-    if (intersected) {
-        if (bounce.type !== 'tank' && bounce.type !== 'miniboss' && bounce.type !== 'food' && bounce.type !== "flail" && bounce.type !== "brella") {
-            bounce.kill();
-        } else {
-            bounce.collisionArray.push(wall);
-        }
-    }
-};
+    // Corner collision points
+    // [left & top, top & right, right & bottom, bottom & left]
+    let cornerPositions = [
+        {x: wall.x - trueWallSize, y: wall.y - trueWallSize},
+        {x: wall.x + trueWallSize, y: wall.y - trueWallSize},
+        {x: wall.x + trueWallSize, y: wall.y + trueWallSize},
+        {x: wall.x - trueWallSize, y: wall.y + trueWallSize},
+    ]
 
-function mazewallcollidenokill(wall, bounce) {
-    if (bounce.god === true || bounce.passive === true || bounce.ac || bounce.master.ac) return;
-    if (bounce.store.noWallCollision) return;
-    if (bounce.team === wall.team && bounce.type === "tank") return;
-    let trueWallSize = wall.size * lazyRealSizes[4] / 1.414 + 2;
-    if (bounce.x + bounce.size < wall.x - trueWallSize ||
-        bounce.x - bounce.size > wall.x + trueWallSize ||
-        bounce.y + bounce.size < wall.y - trueWallSize ||
-        bounce.y - bounce.size > wall.y + trueWallSize) return 0;
-    if (wall.intangibility) return 0
-    let bounceBy = bounce.type === 'tank' ? 1.0 : bounce.type === 'miniboss' ? 2.5 : 0.1
-    let left = bounce.x < wall.x - trueWallSize
-    let right = bounce.x > wall.x + trueWallSize
-    let top = bounce.y < wall.y - trueWallSize
-    let bottom = bounce.y > wall.y + trueWallSize
-    let leftExposed = bounce.x - bounce.size < wall.x - trueWallSize
-    let rightExposed = bounce.x + bounce.size > wall.x + trueWallSize
-    let topExposed = bounce.y - bounce.size < wall.y - trueWallSize
-    let bottomExposed = bounce.y + bounce.size > wall.y + trueWallSize
+    // Corner collisions
+    for (let i = 0; i < 4; i++) {
+        // Check for current face and next face simultanously, as well as if we're sticking over that face
+        if (
+            !collisionFaces[i] | !collisionFaces[(i + 1) % 4] | 
+            !extendedOverFaces[i] | !extendedOverFaces[(i + 1) % 4]
+        ) continue;
 
-    let intersected = true
+        let cornerX = cornerPositions[i].x;
+        let cornerY = cornerPositions[i].y;
+        // Exit if too far away from the corner
+        if (util.getDistance(bounce, {x: cornerX, y: cornerY}) > bounce.size) return;
 
-    if (left && right) {
-        left = right = false
-    }
-    if (top && bottom) {
-        top = bottom = false
-    }
-    if (leftExposed && rightExposed) {
-        leftExposed = rightExposed = false
-    }
-    if (topExposed && bottomExposed) {
-        topExposed = bottomExposed = false
-    }
-    if ((left && !top && !bottom) || (leftExposed && !topExposed && !bottomExposed)) {
-        bounce.accel.x -= (bounce.x + bounce.size - wall.x + trueWallSize) * bounceBy
-    } else if ((right && !top && !bottom) || (rightExposed && !topExposed && !bottomExposed)) {
-        bounce.accel.x -= (bounce.x - bounce.size - wall.x - trueWallSize) * bounceBy
-    } else if ((top && !left && !right) || (topExposed && !leftExposed && !rightExposed)) {
-        bounce.accel.y -= (bounce.y + bounce.size - wall.y + trueWallSize) * bounceBy
-    } else if ((bottom && !left && !right) || (bottomExposed && !leftExposed && !rightExposed)) {
-        bounce.accel.y -= (bounce.y - bounce.size - wall.y - trueWallSize) * bounceBy
-    } else {
-        let x = leftExposed ? -trueWallSize : rightExposed ? trueWallSize : 0
-        let y = topExposed ? -trueWallSize : bottomExposed ? trueWallSize : 0
-
-        let point = new Vector(wall.x + x - bounce.x, wall.y + y - bounce.y)
-
-        if (!x || !y) {
-            if (bounce.x + bounce.y < wall.x + wall.y) { // top left
-                if (bounce.x - bounce.y < wall.x - wall.y) { // bottom left
-                    bounce.accel.x -= (bounce.x + bounce.size - wall.x + trueWallSize) * bounceBy
-                } else { // top right
-                    bounce.accel.y -= (bounce.y + bounce.size - wall.y + trueWallSize) * bounceBy
-                }
-            } else { // bottom right
-                if (bounce.x - bounce.y < wall.x - wall.y) { // bottom left
-                    bounce.accel.y -= (bounce.y - bounce.size - wall.y - trueWallSize) * bounceBy
-                } else { // top right
-                    bounce.accel.x -= (bounce.x - bounce.size - wall.x - trueWallSize) * bounceBy
-                }
-            }
-        } else if (!(left || right || top || bottom)) {
-            let force = (bounce.size / point.length - 1) * bounceBy / 2
-            bounce.accel.x += point.x * force
-            bounce.accel.y += point.y * force
-        } else if (point.isShorterThan(bounce.size)) {
-            //let force = (bounce.size - point.length) / point.length * bounceBy
-            // once to get collision amount, once to norm
-            let force = (bounce.size / point.length - 1) * bounceBy / 2 // simplified
-            bounce.accel.x -= point.x * force
-            bounce.accel.y -= point.y * force
-        } else {
-            intersected = false
-        }
-    }
-
-    if (!intersected) {
-            bounce.collisionArray.push(wall);
+        // Decide to kill bounce type
+        mazewallcollidekill(bounce, wall);
+        
+        let angleFromCornerToBounce = Math.atan2(bounce.y - cornerY, bounce.x - cornerX);
+        bounce.x = cornerX + bounce.size * Math.cos(angleFromCornerToBounce);
+        bounce.y = cornerY + bounce.size * Math.sin(angleFromCornerToBounce);
+        return true;
     }
 };
 
@@ -492,7 +419,5 @@ module.exports = {
     reflectcollide,
     advancedcollide,
     mooncollide,
-    mazewallcollide,
-    mirrorcollide,
-    mazewallcollidenokill,
+    mazewallcollide
 };

@@ -13,7 +13,31 @@
         <li>Added Mini Defender</li>
         <li>Integrated Lancer into Main & Added More Lancer Things</li>
         <li>buffed kiva</li>
-        <p style="color:red;" class="vsaucereference" onclick="PlaySoundholeymoley()" >Holay Molay</p>
+        <li>menu tweaks</li>
+        <li>Added new servers and domain</li>
+        <li>Necromancer Rebalance + Gun Rework</li>
+        <li>Added more killstreak messages and an extra bonus at 100 kills :)</li>
+        <li>small server side optoimizations</li>
+        <li>added mobile controls :D (now you can play on the go)</li>
+        <li>added versitile switching from between pc and mobile controls in the menu</li>
+        <li>super huge bugfixes and balancing</li>
+        <li>fixed surge and added lancer range stat</li>
+        <li>fixed game crashing bug (i put two square brackets)</li>
+        <li>added respawn cooldown and tips n stuff</li>
+        <li>added /menu command</li>
+        <li>added custom keybinds</li>
+        <li>fixed bug where toggables do not work</li>
+        <li>fixed maze wall size bug</li>
+        <li>fixed death sound bug</li>
+        <li>fixed missing upgrades</li>
+        <li>added propel branch</li>
+        <li>added new extra tanks</li>
+        <li>added jouster branch</li>
+        <li>fixed mockups bug</li>
+        <li>fixed physics bugs</li>
+        <li>fixed machine gun bullet size</li>
+        <li>fixed sidewinder bug</li>
+        <p style="color:red;" class="vsaucereference" onclick="PlaySoundpianioio()" >RANDOM BULLSHIT, GO!</p>
     </ul>
 </div>
 <div class="slider2">

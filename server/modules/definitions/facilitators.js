@@ -1,4 +1,3 @@
-const { gunCalcNames } = require('./constants.js')
 const { MAX_SKILL } = require("../../config.js")
 const g = require('./gunvals.js')
 let skcnv = {
@@ -114,7 +113,7 @@ exports.makeGuard = (type, name = -1) => {
         PROPERTIES: {
             SHOOT_SETTINGS: exports.combineStats([g.trap]),
             TYPE: "trap",
-            STAT_CALCULATOR: gunCalcNames.trap,
+            STAT_CALCULATOR: "trap",
         },
     }];
     output.GUNS = type.GUNS == null ? cannons : type.GUNS.concat(cannons);
@@ -153,7 +152,7 @@ exports.makeBird = (type, name = -1, options = {}) => {
 
     // Thrusters
     let backRecoil = 0.5 * backRecoilFactor;
-    let thrusterProperties = { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { recoil: backRecoil }]), TYPE: "bullet", LABEL: gunCalcNames.thruster };
+    let thrusterProperties = { SHOOT_SETTINGS: exports.combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { recoil: backRecoil }]), TYPE: "bullet", LABEL: "thruster" };
     let shootyBois = [{
             POSITION: [16, 8, 1, 0, 0, 150, 0.1],
             PROPERTIES: thrusterProperties
@@ -212,7 +211,7 @@ exports.makeOver = (type, name = -1, options = {}) => {
         TYPE: [dronetype, {INDEPENDENT: independent}],
         AUTOFIRE: true,
         SYNCS_SKILLS: true,
-        STAT_CALCULATOR: gunCalcNames.drone,
+        STAT_CALCULATOR: "drone",
         WAIT_TO_CYCLE: cycle,
         MAX_CHILDREN: maxChildren,
     };
@@ -259,7 +258,7 @@ exports.makeBattle = (type, name = -1, options = {}) => {
     let spawnerProperties = {
         SHOOT_SETTINGS: exports.combineStats([g.swarm, ...stats]),
         TYPE: independent ? "autoswarm" : "swarm",
-        STAT_CALCULATOR: gunCalcNames.swarm,
+        STAT_CALCULATOR: "swarm",
     };
 
     let spawners = [];
@@ -499,7 +498,7 @@ exports.makeTurret = (type, options = {}) => {
     }
 
     let GUNS = type.GUNS;
-    let extraStats = options.extraStats ?? [];
+    let extraStats = options.extraStats ?? [g.autoTurret];
     if (!Array.isArray(extraStats)) {
         extraStats = [extraStats];
     }
@@ -507,7 +506,7 @@ exports.makeTurret = (type, options = {}) => {
         if (!gun.PROPERTIES) continue;
         if (!gun.PROPERTIES.SHOOT_SETTINGS) continue;
 
-        gun.PROPERTIES.SHOOT_SETTINGS = exports.combineStats([gun.PROPERTIES.SHOOT_SETTINGS, g.autoTurret, ...extraStats])
+        gun.PROPERTIES.SHOOT_SETTINGS = exports.combineStats([gun.PROPERTIES.SHOOT_SETTINGS, ...extraStats])
     }
 
     return {
@@ -518,6 +517,7 @@ exports.makeTurret = (type, options = {}) => {
         INDEPENDENT: options.independent ?? false,
         CONTROLLERS,
         GUNS,
+        AI: options.aiSettings,
         TURRETS: type.TURRETS,
     }
 }
@@ -700,7 +700,7 @@ class LayeredBoss {
 exports.LayeredBoss = LayeredBoss;
 
 // Food facilitators
-exports.makeRelic = (type, scale = 1, gem, SIZE) => {
+exports.makeRelic = (type, scale = 1, gem, SIZE, yBase = 8.25) => {
     // Code by Damocles (https://discord.com/channels/366661839620407297/508125275675164673/1090010998053818488)
     // Albeit heavily modified because the math in the original didn't work LOL
     type = ensureIsClass(type);
@@ -722,18 +722,14 @@ exports.makeRelic = (type, scale = 1, gem, SIZE) => {
     Class[Math.random().toString(36)] = relicCasing;
     Class[Math.random().toString(36)] = relicBody;
     let width = 6 * scale,
-        y = 8.25 + ((scale % 1) * 5),
+        y = yBase + ((scale % 1) * 5),
         isEgg = type.SHAPE == 0,
         casings = isEgg ? 8 : type.SHAPE,
         fraction = 360 / casings,
         GUNS = [],
         TURRETS = [{ POSITION: [32.5, 0, 0, 0, 0, 0], TYPE: relicBody }],
-        PARENT = [type],
+        PARENT = type,
         additionalAngle = type.SHAPE % 2 === 0 ? 0 : fraction / 2;
-
-    if (SIZE) {
-        PARENT.push({ SIZE });
-    }
 
     for (let i = 0; i < casings; i++) {
         let angle = i * fraction,
@@ -771,7 +767,7 @@ exports.makeRelic = (type, scale = 1, gem, SIZE) => {
         });
     }
 
-    return {
+    let out = {
         PARENT,
         LABEL: type.LABEL + ' Relic',
         COLOR: "white", // This is the color of the floor, this makes it look hollow.
@@ -783,29 +779,37 @@ exports.makeRelic = (type, scale = 1, gem, SIZE) => {
         GUNS,
         TURRETS
     };
+
+    if (SIZE) {
+        out.SIZE = SIZE;
+    }
+
+    return out;
 }
 
 exports.makeCrasher = type => ({
     PARENT: type,
     COLOR: 'pink',
-    TYPE: "crasher",
+    TYPE: 'crasher',
     LABEL: 'Crasher ' + type.LABEL,
     CONTROLLERS: ['nearestDifferentMaster', 'mapTargetToGoal'],
     MOTION_TYPE: "motor",
     FACING_TYPE: "smoothWithMotion",
     HITS_OWN_TYPE: "hard",
     HAS_NO_MASTER: true,
+    VALUE: type.VALUE * 5,
     BODY: {
-        SPEED: 1 + 5 / Math.max(2, type.TURRETS.length + type.SHAPE),
+        SPEED: 1 + 5 / Math.max(2, (type.PROPS.length ?? 0) + type.SHAPE),
+        HEALTH: Math.pow(type.BODY.HEALTH, 2/3),
+        DAMAGE: Math.pow(type.BODY.HEALTH, 1/3) * type.BODY.DAMAGE,
         ACCELERATION: 5,
         PUSHABILITY: 0.5,
-        DENSITY: 10,
-        RESIST: 2,
+        DENSITY: 10
     },
     AI: {
         NO_LEAD: true,
     }
-})
+});
 
 exports.makeRare = (type, level) => {
     type = ensureIsClass(type);
@@ -818,14 +822,14 @@ exports.makeRare = (type, level) => {
         COLOR: ["lightGreen", "teal", "darkGrey", "rainbow", "trans"][level],
         ALPHA: level == 2 ? 0.25 : 1,
         BODY: {
-            DAMAGE: type.BODY.DAMAGE + level,
-            DENSITY: type.BODY.DENSITY + level,
-            HEALTH: [10, 20, 40, 80, 100][level] * type.BODY.HEALTH,
-            PENETRATION: type.BODY.PENETRATION + level,
+            DAMAGE: [1, 1, 2, 2.5, 2.5][level] * type.BODY.DAMAGE,
+            DENSITY: [1, 1, 2, 2.5, 2.5][level] * type.BODY.DENSITY,
+            HEALTH: [2, 4, 4, 6, 8][level] * type.BODY.HEALTH,
+            PENETRATION: [1.5, 1.5, 2, 2.5, 2.5][level] * type.BODY.PENETRATION,
             ACCELERATION: type.BODY.ACCELERATION
         },
         DRAW_HEALTH: true,
-        INTANGIBLE: false,
+        INTANGIBLE: type.INTANGIBLE,
         GIVE_KILL_MESSAGE: true,
     }
 }
@@ -834,7 +838,7 @@ exports.makeLaby = (type, level, baseScale = 1) => {
     type = ensureIsClass(type);
     let usableSHAPE = Math.max(type.SHAPE, 3),
         downscale = Math.cos(Math.PI / usableSHAPE),
-        strengthMultiplier = 6 ** level;
+        strengthMultiplier = 5 ** level;
     return {
         PARENT: "food",
         LABEL: ["", "Beta ", "Alpha ", "Omega ", "Gamma ", "Delta "][level] + type.LABEL,
@@ -856,9 +860,10 @@ exports.makeLaby = (type, level, baseScale = 1) => {
         DRAW_HEALTH: type.DRAW_HEALTH,
         GIVE_KILL_MESSAGE: type.GIVE_KILL_MESSAGE || level > 1,
         GUNS: type.GUNS ?? [],
-        TURRETS: [...(type.TURRETS ? type.TURRETS : []), ...Array(level).fill().map((_, i) => ({
-            POSITION: [20 * downscale ** (i + 1), 0, 0, !(i & 1) ? 180 / usableSHAPE : 0, 0, 1],
-            TYPE: [type, { COLOR: -1, MIRROR_MASTER_ANGLE: true }]
-        }))]
+        TURRETS: type.TURRETS ?? [],
+        PROPS: Array(level).fill().map((_, i) => ({
+            POSITION: [20 * downscale ** (i + 1), 0, 0, !(i & 1) ? 180 / usableSHAPE : 0, 1],
+            TYPE: [type, { COLOR: 'mirror' }]
+        }))
     };
 }

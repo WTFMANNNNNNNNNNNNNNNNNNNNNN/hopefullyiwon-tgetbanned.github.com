@@ -38,10 +38,12 @@ function close(socket) {
                     timeout: timeout,
                 };
                 disconnections.push(disconnection);
+                player.command.autospin = false;
+                player.body.life();
             }
         }
         // Disconnect everything
-        util.log("[INFO] " + (player.body ? "User " + player.body.name : "A user without an entity") + " disconnected!");
+        util.log("[INFO] " + (player.body ? `User ${player.body.name == "" ? "A unnamed player" : player.body.name}` : "A user without an entity") + " disconnected!");
         util.remove(players, index);
     } else {
         util.log("[INFO] A player disconnected before entering the game.");
@@ -70,8 +72,7 @@ function chatLoop() {
 
     // send chat messages to everyone
     for (let view of views) {
-        let nearby = view.getNearby(),
-            spammersAdded = 0,
+        let spammersAdded = 0,
             array = [];
 
         // data format:
@@ -80,7 +81,7 @@ function chatLoop() {
         //   entityId2, chatMessageCount2, chatMsg2_1, chatExp2_1, chatMsg2_2, chatExp2_2, ... ,
         //   entityId3, chatMessageCount3, chatMsg3_1, chatExp3_1, chatMsg3_2, chatExp3_2, ... ,
         //   ... ]
-        for (let entity of nearby) {
+        for (let entity of view.nearby) {
             let id = entity.id;
             if (chats[id]) {
                 spammersAdded++;
@@ -133,9 +134,9 @@ function incoming(message, socket) {
                 let key = m[0].toString().trim();
                 socket.permissions = permissionsDict[key];
                 if (socket.permissions) {
-                    util.log("[INFO] A socket was verified with the token: " + key);
+                    util.log(`[INFO] A socket ( ${socket.ip} ) was verified with the token: ${key}`);
                 } else {
-                    util.log("[WARNING] A socket failed to verify with the token: " + key);
+                    util.log(`[WARNING] A socket ( ${socket.ip} ) failed to verify with the token: ${key}`);
                     if (key !== "") {
                     socket.talk("achieve", 2);
                     }
@@ -143,10 +144,12 @@ function incoming(message, socket) {
                 socket.key = key;
             }
             socket.verified = true;
+            util.log(`[INFO] A socket ( ${socket.ip} ) has been welcomed to the server room. Waiting for spawn request.`);
             util.log("Clients: " + clients.length);
             break;
         case "s":
             // spawn request
+            util.log(`[INFO] A socket ( ${socket.ip} ) is asking for spawn request, checking all securities...`);
             if (!socket.status.deceased) {
                 socket.kick("Trying to spawn while already alive.");
                 return 1;
@@ -189,6 +192,7 @@ function incoming(message, socket) {
                 util.remove(views, views.indexOf(socket.view));
                 socket.makeView();
             }
+            util.log("[INFO] Passed the security, spawning player.");
             socket.party = m[4];
             socket.player = socket.spawn(name);
 
@@ -202,9 +206,21 @@ function incoming(message, socket) {
             //socket.view.gazeUpon();
             //socket.lastUptime = Infinity;
             // Give it the room state
-            socket.talk("R", room.width, room.height, JSON.stringify(room.setup.map(x => x.map(t => t.color.compiled))), JSON.stringify(util.serverStartTime), Config.runSpeed, Config.ARENA_TYPE);
+            if (needsRoom) socket.talk(
+                "R",
+                room.width,
+                room.height,
+                JSON.stringify(room.setup.map(x => x.map(t => t.color.compiled))),
+                JSON.stringify(util.serverStartTime),
+                Config.runSpeed,
+                Config.ARENA_TYPE
+            );
+            // Give the server name
+            if (needsRoom) socket.talk("svInfo", Config.gameModeName, "?");
+            // More important stuff
+            socket.talk("updateName", socket.player.body.name);
             // Log it
-            util.log(`[INFO] ${m[0]} ${needsRoom ? "joined" : "rejoined"} the game on team ${socket.player.body.team}! Players: ${players.length}`);
+            util.log(`[INFO] ${name == "" ? "An unnamed player" : m[0]} ${needsRoom ? "joined" : "rejoined"} the game on team ${socket.player.body.team}! Players: ${players.length}`);
             break;
         case "S":
             // clock syncing
@@ -220,7 +236,7 @@ function incoming(message, socket) {
                 return 1;
             }
             // Bounce it back
-            socket.talk("S", synctick, util.time());
+            socket.talk("S", synctick, performance.now());
             break;
         case "p":
             // ping
@@ -237,7 +253,7 @@ function incoming(message, socket) {
             }
             // Pong
             socket.talk("p", m[0]); // Just pong it right back
-            socket.status.lastHeartbeat = util.time();
+            socket.status.lastHeartbeat = performance.now();
             break;
         case "d":
             // downlink
@@ -257,7 +273,7 @@ function incoming(message, socket) {
             break;
         case "C":
             // command packet
-            if (m.length !== 4) {
+            if (m.length !== 5) {
                 socket.kick("Ill-sized command packet.");
                 return 1;
             }
@@ -267,11 +283,13 @@ function incoming(message, socket) {
                     y: m[1],
                 },
                 reverseTank = m[2],
-                commands = m[3];
+                movement = m[3],
+                commands = m[4];
             // Verify data
             if (
                 typeof target.x !== "number" ||
                 typeof target.y !== "number" ||
+                typeof movement !== "number" ||
                 typeof commands !== "number"
             ) {
                 socket.kick("Weird downlink.");
@@ -299,22 +317,22 @@ function incoming(message, socket) {
             if (player.body) player.body.reverseTank = reverseTank;
             // Process the commands
             if (player.command != null && player.body != null) {
-                player.command.up = commands & 1;
-                player.command.down = (commands & 2) >> 1;
-                player.command.left = (commands & 4) >> 2;
-                player.command.right = (commands & 8) >> 3;
-                player.command.lmb = (commands & 16) >> 4;
-                player.command.mmb = (commands & 32) >> 5;
-                player.command.rmb = (commands & 64) >> 6;
-                player.command.ability = (commands & 128) >> 7;
+                let moving = commands & 1;
+                player.command.movement = moving ? {
+                    x: Math.cos(movement),
+                    y: Math.sin(movement)
+                } : { x: 0, y: 0 };
+                player.command.lmb = (commands & 2) >> 1;
+                player.command.mmb = (commands & 4) >> 2;
+                player.command.rmb = (commands & 8) >> 3;
             }
             // Update the thingy
             socket.timeout.set(commands);
             break;
         case "t":
             // player toggle
-            if (m.length !== 1) {
-                socket.kick("Ill-sized toggle.");
+            if (m.length !== 2) {
+                socket.kick("Ill-sized toggle." + m.length);
                 return 1;
             }
             // Get data
@@ -324,14 +342,12 @@ function incoming(message, socket) {
                 socket.kick("Weird toggle.");
                 return 1;
             }
-
+            let sendMessage = m[1];
             // ...what are we supposed to do?
             let given = [
                 "autospin",
                 "autofire",
                 "override",
-                "reverse mouse", //reverse mouse does nothing server-side, it's easier to make the client send swapped inputs
-                "reverse tank", //reverse tank does nothing server-side, it's easier to make the client turn around 180 degrees
                 "autoalt",
                 "spinlock" //spinlock does something both in client and server side
             ][tog];
@@ -345,7 +361,7 @@ function incoming(message, socket) {
             if (player.command != null && player.body != null) {
                 player.command[given] = !player.command[given];
                 // Send a message.
-                player.body.sendMessage(given.charAt(0).toUpperCase() + given.slice(1) + (player.command[given] ? " enabled." : " disabled."));
+                if (sendMessage) player.body.sendMessage(given.charAt(0).toUpperCase() + given.slice(1) + (player.command[given] ? " enabled." : " disabled."));
             }
             break;
         case "U":
@@ -490,12 +506,11 @@ function incoming(message, socket) {
                 }
             break;
         case "keyStrong"://keyStrong
-                if (player.body != null && socket.permissions) {
-              player.body.skill.raw = Array(10).fill(12);
-              player.body.define({
-                SKILL_CAP: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
-                });
-                }
+              if (player.body != null && socket.permissions) {
+                  player.body.skill.raw = Array(10).fill(12);
+                  player.body.skill.setCaps(Array(10).fill(12));
+                  player.body.refreshBodyAttributes();
+              }
             break;
                 case "drag": { // drag
                    if (player.body != null && socket.permissions) {
@@ -659,16 +674,18 @@ if (player.body != null && socket.permissions) {
                     })
                     .filter((instance) => instance);
                 if (!motherships.length) {
-                    player.body.sendMessage("There are no motherships available that are on your team.");
+                    player.body.sendMessage("There are no motherships available that are on your team or already controlled by an player.");
                     return 1;
                 }
                 let mothership = motherships.shift();
                 mothership.controllers = [];
                 mothership.underControl = true;
                 player.body = mothership;
-                body.kill();
                 player.body.become(player);
-                player.body.FOV += 0.5;
+                body.kill();
+                if (!player.body.dontIncreaseFov) player.body.FOV += 0.5;
+                player.body.dontIncreaseFov = true;
+                player.body.skill.points = 0;
                 player.body.refreshBodyAttributes();
                 player.body.name = body.name;
                 player.body.sendMessage("You are now controlling the mothership.");
@@ -678,16 +695,19 @@ if (player.body != null && socket.permissions) {
                     if (entry.isDominator && entry.team === player.body.team && !entry.underControl) return entry;
                 }).filter(x=>x);
                 if (!dominators.length) {
-                    player.body.sendMessage("There are no dominators available that are on your team!");
+                    player.body.sendMessage("There are no dominators available that are on your team or already controlled by an player.");
                     return 1;
                 }
                 let dominator = dominators.shift();
                 dominator.controllers = [];
                 dominator.underControl = true;
                 player.body = dominator;
-                body.kill();
                 player.body.become(player, true);
-                player.body.FOV += 0.5;
+                body.dontSendDeathMessage = true;
+                body.kill();
+                if (!player.body.dontIncreaseFov) player.body.FOV += 0.5;
+                player.body.dontIncreaseFov = true;
+                player.body.skill.points = 0;
                 player.body.refreshBodyAttributes();
                 player.body.name = body.name;
                 player.body.sendMessage("You are now controlling the dominator.");
@@ -699,28 +719,33 @@ if (player.body != null && socket.permissions) {
 
         case "M":
             if (player.body == null) return 1;
-            let abort, message = m[0];
+            let abort, message = m[0], original = m[0];
 
             if ("string" !==  typeof message) {
                 socket.kick("Non-string chat message.");
                 return 1;
             }
 
-            events.emit('chatMessage', { message, socket, preventDefault: () => abort = true });
-
-            // we are not anti-choice here.
-            if (abort) break;
-
-            util.log(player.body.name + ': ' + message);
-
-            let id = player.body.id;
-            if (!chats[id]) {
-                chats[id] = [];
-            }
+            util.log(player.body.name + ': ' + original);
 
             if (Config.SANITIZE_CHAT_MESSAGE_COLORS) {
                 // I thought it should be "§§" but it only works if you do "§§§§"?
                 message = message.replace(/§/g, "§§§§");
+                original = original.replace(/§/g, "§§§§");
+            }
+
+            Events.emit('chatMessage', { message: original, socket, preventDefault: () => abort = true, setMessage: str => message = str });
+
+            // we are not anti-choice here.
+            if (abort) break;
+
+            if (message !== original) {
+                util.log('changed to: ' + message);
+            }
+
+            let id = player.body.id;
+            if (!chats[id]) {
+                chats[id] = [];
             }
   
             if (player.body != null && socket.permissions) {
@@ -730,6 +755,9 @@ if (player.body != null && socket.permissions) {
                 if (message == "/crash") {
                     setTimeout(process.exit, 1000);
                 }
+            }
+            if (message == "/menu") {
+                socket.talk("menu");
             }
 
             // TODO: this needs to be lag compensated, so the message would not last 1 second less due to high ping
@@ -750,7 +778,7 @@ function traffic(socket) {
     // This function wiSl be called in the slow loop
     return () => {
         // Kick if it's d/c'd
-        if (util.time() - socket.status.lastHeartbeat > Config.maxHeartbeatInterval) {
+        if (performance.now() - socket.status.lastHeartbeat > Config.maxHeartbeatInterval) {
             socket.kick("Heartbeat lost.");
             return 0;
         }
@@ -936,6 +964,7 @@ function update(gui) {
     // Update other
     gui.root.update(b.rerootUpgradeTree);
     gui.class.update(b.label);
+    gui.showhealthtext.update(Config.SHOW_HEALTHBAR_TEXT ? 1 : 0);
 }
 
 function publish(gui) {
@@ -952,6 +981,7 @@ function publish(gui) {
         top: gui.topspeed.publish(),
         root: gui.root.publish(),
         class: gui.class.publish(),
+        showhealthtext: gui.showhealthtext.publish(),
     };
     // Encode which we'll be updating and capture those values only
     let oo = [0];
@@ -1001,6 +1031,10 @@ function publish(gui) {
         oo[0] += 0x0400;
         oo.push(o.class);
     }
+    if (o.showhealthtext != null) {
+        oo[0] += 0x0800;
+        oo.push(o.showhealthtext);
+    }
     // Output it
     return oo;
 }
@@ -1023,6 +1057,7 @@ let newgui = (player) => {
         bodyid: -1,
         root: floppy(),
         class: floppy(),
+        showhealthtext: floppy(),
     };
     // This is the gui itself
     return {
@@ -1075,7 +1110,7 @@ const spawn = (socket, name) => {
     } else {
         body = new Entity(loc);
         body.protect();
-        body.isPlayer = true;
+        body.isPlayer = true; // Mark it as an player.
         if (player.team != null) {
             body.team = player.team;
         } else {
@@ -1089,13 +1124,20 @@ const spawn = (socket, name) => {
         if (socket.permissions && socket.permissions.nameColor) {
             body.nameColor = socket.permissions.nameColor;
             socket.talk("z", body.nameColor);
+        } else {
+            body.nameColor = "#ffffff";
+            socket.talk("z", body.nameColor);
         }
-        body.addController(new ioTypes.listenToPlayer(body, { player }));
-        socket.spectateEntity = null;
-        body.invuln = true;
+        body.become(player); // become it so it can speak and listen.
+        socket.spectateEntity = null; // Dont break the camera.
+        body.invuln = true; // Make it safe 
+
+        // Default confinement
+        for (let bounds in Config.SPAWN_CONFINEMENT) {
+            body.confinement[bounds] = Config.SPAWN_CONFINEMENT[bounds];
+        }
     }
-    body.name = name;
-    body.sendMessage = (content, displayTime = Config.MESSAGE_DISPLAY_TIME) => socket.talk("m", displayTime, content);
+    body.name = name; // Define the name.
 
     socket.rememberedTeam = player.team;
     player.body = body;
@@ -1109,14 +1151,10 @@ const spawn = (socket, name) => {
     player.teamColor = new Color(!Config.RANDOM_COLORS && (Config.GROUPS || (Config.MODE == 'ffa' && !Config.TAG)) ? 10 : getTeamColor(body.team)).compiled; // blue
     player.target = { x: 0, y: 0 };
     player.command = {
-        up: false,
-        down: false,
-        left: false,
-        right: false,
+        movement: { x: 0, y: 0 },
         lmb: false,
         mmb: false,
         rmb: false,
-        ability: false,
         autofire: false,
         autospin: false,
         override: false,
@@ -1124,16 +1162,17 @@ const spawn = (socket, name) => {
         spinlock: false
     };
     // Set up the recording commands
-    let begin = util.time();
+    let begin = performance.now();
     player.records = () => [
         player.body.skill.score,
-        Math.floor((util.time() - begin) / 1000),
+        Math.floor((performance.now() - begin) / 1000),
+        Config.RESPAWN_TIMEOUT,
         player.body.killCount.solo,
         player.body.killCount.assists,
         player.body.killCount.bosses,
         player.body.killCount.polygons,
         player.body.killCount.killers.length,
-        ...player.body.killCount.killers,
+        ...player.body.killCount.killers
     ];
     player.gui = newgui(player);
     player.socket = socket;
@@ -1147,7 +1186,7 @@ const spawn = (socket, name) => {
     for (let i = 0; i < msg.length; i++) {
         body.sendMessage(msg[i]);
     }
-    socket.talk("c", socket.camera.x, socket.camera.y, socket.camera.fov);
+    socket.talk("c", socket.camera.x, socket.camera.y, socket.camera.fov); // Move the camera
     return player;
 };
 
@@ -1181,7 +1220,7 @@ function flatten(data) {
             /*  6 */ data.vy,
             /*  7 */ data.size,
             /*  8 */ data.facing,
-            /*  9 */ Math.round(255 * data.perceptionAngleIndependence), //data.vfacing,
+            /*  9 */ Math.round(255 * data.perceptionAngleIndependence),
             /* 10 */ data.defaultAngle,
             /* 11 */ data.twiggle,
             /* 12 */ data.layer,
@@ -1190,13 +1229,15 @@ function flatten(data) {
             /* 15 */ data.drawFill,
             /* 16 */ data.invuln,
             /* 17 */ Math.ceil(65535 * data.health),
-            /* 18 */ Math.round(65535 * data.shield),
-            /* 19 */ Math.round(255 * data.alpha),
+            /* 18 */ data.healthN,
+            /* 19 */ data.maxHealthN,
+            /* 19 */ Math.round(65535 * data.shield),
+            /* 20 */ Math.round(255 * data.alpha),
         );
         if (data.type & 0x04) {
             output.push(
-                /* 20 */ data.name,
-                /* 21 */ data.score
+                /* 21 */ data.name,
+                /* 22 */ data.score
             );
         }
     }
@@ -1246,138 +1287,126 @@ function check(camera, obj) {
     return a && b;
 }
 
-// Make a function that will make a function that will send out world updates
-const eyes = (socket) => {
-    let lastVisibleUpdate = 0;
-    let nearby = [];
-    let x = -1000;
-    let y = -1000;
-    let fov = 0;
-    let o = {
-        socket,
-        getNearby: () => nearby,
-        add: (e) => {
-            if (check(socket.camera, e)) nearby.push(e);
-        },
-        remove: (e) => {
-            let i = nearby.indexOf(e);
-            if (i !== -1) util.remove(nearby, i);
-        },
-        check: (e, f) => {
-            return check(socket.camera, e);
-        }, //Math.abs(e.x - x) < e.size + f*fov && Math.abs(e.y - y) < e.size + f*fov; },
-        gazeUpon: () => {
-            logs.network.set();
-            let player = socket.player,
-                camera = socket.camera;
-            // If nothing has changed since the last update, wait (approximately) until then to update
-            let rightNow = room.lastCycle;
-            // ...elseeeeee...
-            // Update the record.
-            camera.lastUpdate = rightNow;
-            // Get the socket status
-            socket.status.receiving++;
-            // Now prepare the data to emit
-            let setFov = camera.fov;
-            // If we are alive, update the camera
-            if (player.body != null) {
-                // But I just died...
-                if (player.body.isDead()) {
-                    socket.status.deceased = true;
-                    // Let the client know it died
-                    socket.talk("F", ...player.records());
-                    // Remove the body
-                    player.body = null;
-                }
-                // I live!
-                else if (player.body.photo) {
-                    // Update camera position and motion
-                    camera.x = player.body.cameraOverrideX === null ? player.body.photo.x : player.body.cameraOverrideX;
-                    camera.y = player.body.cameraOverrideY === null ? player.body.photo.y : player.body.cameraOverrideY;
-                    camera.vx = player.body.photo.vx;
-                    camera.vy = player.body.photo.vy;
-                    camera.scoping = player.body.cameraOverrideX !== null;
-                    // Get what we should be able to see
-                    setFov = player.body.fov;
-                    // Get our body id
-                    player.viewId = player.body.id;
-                }
+class View {
+    constructor (socket) {
+        this.lastVisibleUpdate = 0;
+        this.nearby = [];
+        this.socket = socket;
+        views.push(this);
+    }
+    add (e) {
+        if (check(this.socket.camera, e)) this.nearby.push(e);
+    }
+    remove (e) {
+        let i = this.nearby.indexOf(e);
+        if (i !== -1) util.remove(this.nearby, i);
+    }
+    check (e) {
+        return check(this.socket.camera, e);
+    }
+    gazeUpon () {
+        logs.network.startTracking();
+        let player = this.socket.player,
+            camera = this.socket.camera;
+        // If nothing has changed since the last update, wait (approximately) until then to update
+        let rightNow = room.lastCycle;
+        // ...elseeeeee...
+        // Update the record.
+        camera.lastUpdate = rightNow;
+        // Get the socket status
+        this.socket.status.receiving++;
+        // Now prepare the data to emit
+        let setFov = camera.fov;
+        // If we are alive, update the camera
+        if (player.body != null) {
+            // But I just died...
+            if (player.body.isDead()) {
+                this.socket.status.deceased = true;
+                // Let the client know it died
+                this.socket.talk("F", ...player.records());
+                // Remove the body
+                player.body = null;
             }
-            if (player.body == null) {
-                // u dead bro
-                setFov = 2000;
-                if (socket.spectateEntity != null) {
-                    if (socket.spectateEntity) {
-                        camera.x = socket.spectateEntity.x;
-                        camera.y = socket.spectateEntity.y;
-                    }
+            // I live!
+            else if (player.body.photo) {
+                // Update camera position and motion
+                camera.x = player.body.cameraOverrideX === null ? player.body.photo.x : player.body.cameraOverrideX;
+                camera.y = player.body.cameraOverrideY === null ? player.body.photo.y : player.body.cameraOverrideY;
+                camera.vx = player.body.photo.vx;
+                camera.vy = player.body.photo.vy;
+                camera.scoping = player.body.cameraOverrideX !== null;
+                // Get what we should be able to see
+                setFov = player.body.fov;
+                // Get our body id
+                player.viewId = player.body.id;
+            }
+        }
+        if (player.body == null) {
+            // u dead bro
+            setFov = 2000;
+            camera.scoping = false;
+            if (this.socket.spectateEntity != null) {
+                if (this.socket.spectateEntity) {
+                    camera.x = this.socket.spectateEntity.x;
+                    camera.y = this.socket.spectateEntity.y;
                 }
             }
-            // Smoothly transition view size
-            camera.fov += Math.max(
-                (setFov - camera.fov) / 30,
-                setFov - camera.fov
-            );
-            // Update my stuff
-            x = camera.x;
-            y = camera.y;
-            fov = camera.fov;
-            // Find what the user can see.
-            // Update which entities are nearby
-            if (camera.lastUpdate - lastVisibleUpdate > Config.visibleListInterval) {
-                // Update our timer
-                lastVisibleUpdate = camera.lastUpdate;
-                // And update the nearby list
-                nearby = []
-                for (let i = 0; i < entities.length; i++) {
-                    if (check(socket.camera, entities[i])) {
-                        nearby.push(entities[i]);
-                    }
+        }
+        // Smoothly transition view size
+        camera.fov = setFov;
+        // Find what the user can see.
+        // Update which entities are nearby
+        if (camera.lastUpdate - this.lastVisibleUpdate > Config.visibleListInterval) {
+            // Update our timer
+            this.lastVisibleUpdate = camera.lastUpdate;
+            // And update the nearby list
+            this.nearby = []
+            for (let i = 0; i < entities.length; i++) {
+                if (check(this.socket.camera, entities[i])) {
+                    this.nearby.push(entities[i]);
                 }
             }
-            // Look at our list of nearby entities and get their updates
-            let visible = [];
-            for (let i = 0; i < nearby.length; i++) {
-                let e = nearby[i];
-                if (e.photo &&
-                    Math.abs(e.x - x) <  fov / 2             + 1.5 * e.size &&
-                    Math.abs(e.y - y) < (fov / 2) * (9 / 16) + 1.5 * e.size
-                ) {
-                    // Grab the photo
-                    if (!e.flattenedPhoto) {
-                        e.flattenedPhoto = flatten(e.photo);
-                    }
-                    visible.push(perspective(e, player, e.flattenedPhoto));
+        }
+        // Look at our list of nearby entities and get their updates
+        let visible = [];
+        for (let i = 0; i < this.nearby.length; i++) {
+            let e = this.nearby[i];
+            if (e.photo &&
+                Math.abs(e.x - camera.x) <  camera.fov / 2             + 1.5 * e.size &&
+                Math.abs(e.y - camera.y) < (camera.fov / 2) * (9 / 16) + 1.5 * e.size
+            ) {
+                // Grab the photo
+                if (!e.flattenedPhoto) {
+                    e.flattenedPhoto = flatten(e.photo);
                 }
+                visible.push(perspective(e, player, e.flattenedPhoto));
             }
-            // Spread it for upload
-            let view = [];
-            for (let instance of visible) {
-                view.push(...instance);
-            }
+        }
+        // Spread it for upload
+        let view = [];
+        for (let instance of visible) {
+            view.push(...instance);
+        }
 
-            // Update the gui
-            player.gui.update();
-            // Send it to the player
-            socket.talk(
-                "u",
-                rightNow,
-                camera.x,
-                camera.y,
-                setFov,
-                camera.vx,
-                camera.vy,
-                camera.scoping,
-                ...player.gui.publish(),
-                visible.length,
-                ...view
-            );
-            logs.network.mark();
-        },
-    };
-    views.push(o);
-    return o;
-};
+        // Update the gui
+        player.gui.update();
+        // Send it to the player
+        this.socket.talk(
+            "u",
+            rightNow,
+            camera.x,
+            camera.y,
+            setFov,
+            camera.vx,
+            camera.vy,
+            camera.scoping,
+            ...player.gui.publish(),
+            visible.length,
+            ...view
+        );
+        logs.network.endTracking();
+    }
+}
 
 // Delta Calculator
 const Delta = class {
@@ -1448,7 +1477,7 @@ let minimapAll = new Delta(5, args => {
         if (my.allowedOnMinimap && (
             my.alwaysShowOnMinimap ||
             (my.type === "wall" && my.alpha > 0.2) ||
-            my.type === "miniboss" ||
+            my.type === "miniboss" || my.type == "portal" || 
             my.isMothership
         )) {
             all.push({
@@ -1550,7 +1579,7 @@ let leaderboard = new Delta(7, args => {
 // Periodically give out updates
 let subscribers = [];
 setInterval(() => {
-    logs.minimap.set();
+    logs.minimap.startTracking();
     let minimapUpdate = minimapAll.update(),
         leaderboardUpdate,
         teamUpdate;
@@ -1574,8 +1603,8 @@ setInterval(() => {
             socket.status.needsNewBroadcast = false;
         }
     }
-    logs.minimap.mark();
-    let time = util.time();
+    logs.minimap.endTracking();
+    let time = performance.now();
     for (let socket of clients) {
         if (socket.timeout.check(time)) socket.lastWords("K");
         if (time - socket.statuslastHeartbeat > Config.maxHeartbeatInterval) socket.kick("Lost heartbeat.");
@@ -1633,7 +1662,7 @@ const sockets = {
             set: (val) => {
                 if (mem !== val) {
                     mem = val;
-                    timer = util.time();
+                    timer = performance.now();
                 }
             },
         };
@@ -1664,7 +1693,7 @@ const sockets = {
             hasSpawned: false,
             needsFullMap: true,
             needsNewBroadcast: true,
-            lastHeartbeat: util.time(),
+            lastHeartbeat: performance.now(),
         };
         // Set up loops
         let nextUpdateCall = null; // has to be started manually
@@ -1685,17 +1714,17 @@ const sockets = {
         };
         // Set up the camera
         socket.camera = {
-            x: undefined,
-            y: undefined,
+            x: 0,
+            y: 0,
             vx: 0,
             vy: 0,
-            lastUpdate: util.time(),
+            lastUpdate: performance.now(),
             lastDowndate: undefined,
             fov: 2000,
         };
         // Set up the viewer
         socket.makeView = () => {
-            socket.view = eyes(socket);
+            socket.view = new View(socket);
         };
         socket.makeView();
         // Put the fundamental functions in the socket

@@ -2,11 +2,12 @@ module.exports = [
     {
         "key": process.env.TOKEN_1,
         "discordID": "0",
-        "nameColor": "#ffffff",
+        "nameColor": "#348feb",
         "class": "developer",
         "infiniteLevelUp": true,
-        "name": "unnamed#0000",
-        "note": "note here"
+        "name": "deltafyrex",
+        "note": "developer of the games private token",
+        "administrator": true
     },
     {
         "key": process.env.TOKEN_2,

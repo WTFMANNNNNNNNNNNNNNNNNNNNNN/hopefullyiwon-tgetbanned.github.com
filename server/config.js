@@ -44,8 +44,6 @@ module.exports = {
     // The dimensions of a single tile on the map.
     TILE_WIDTH: 200, //400
     TILE_HEIGHT: 200, //400
-  
-  
 
     // Miscellaneous
 
@@ -71,12 +69,18 @@ module.exports = {
     
     // How long a popup message lasts before fading out in milliseconds.
     MESSAGE_DISPLAY_TIME: 10_000,
+
+    // How long you have to wait to respawn in seconds.
+    RESPAWN_TIMEOUT: 3,
     
 
     // Physics
 
     // General multiplier for acceleration and max speeds.
     runSpeed: 1.5, //1.5
+	
+    // Where the bullet spawns, where 1 is fully outside the barrel and -1 is fully inside the barrel, and 0 is halfway between.
+    bulletSpawnOffset: -1,
 
     // General damage multiplier everytime damage is dealt.
     DAMAGE_CONSTANT: 0.5, // 0.5
@@ -118,7 +122,7 @@ module.exports = {
     LEVEL_CHEAT_CAP: 45,
 
     // Amount of player-bots to spawn.
-    BOTS: 0,
+    BOTS: 2,
 
     // How much XP player-bots get per second until they reach LEVEL_CAP.
     BOT_XP: 125,
@@ -137,6 +141,12 @@ module.exports = {
 
     // The class that players and player-bots spawn as.
     SPAWN_CLASS: "basic",
+
+    // How every entity regenerates their health.
+    REGENERATE_TICK: 300,
+    // How many members a team can have in comparison to an unweighed team.
+    // Example: Lets say we have team A and B. If the weigh of A is 2 and B is 1, then the game will try to give A twice as many members as B.
+    TEAM_WEIGHTS: {},
 
 
 
@@ -216,7 +226,7 @@ module.exports = {
         message: "A strange trembling...",
     },{
         bosses: ["paladin", "freyja", "zaphkiel", "nyx", "theia"],
-        amount: [1], chance: 0.1,
+        amount: [1], chance: 0.01,
         message: "The world tremors as the celestials are reborn anew!",
     },{
         bosses: ["julius", "genghis", "napoleon"],
@@ -242,5 +252,6 @@ module.exports = {
     HUNT: false,
     MODE: "ffa",
     TAG: false,
-    GOVERNMENTAL: false
+    GOVERNMENTAL: false,
+    SPAWN_CONFINEMENT: {},
 }

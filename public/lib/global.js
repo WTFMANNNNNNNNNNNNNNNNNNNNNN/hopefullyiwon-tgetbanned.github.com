@@ -76,7 +76,7 @@ const global = {
 
     KEY_LEVEL_UP: 78,
     KEY_FUCK_YOU: 192,
-    KEY_PING: 76,
+    KEY_DEBUG: 76,
     KEY_CLASS_TREE: 84,
     KEY_MAX_STAT: 77,
     KEY_SUICIDE: 79,
@@ -94,10 +94,12 @@ const global = {
     KEY_HEAL: 220,
     KEY_WATCH_THIS: 219,
     KEY_DRAG: 221,
-    KEY_SPAWN_WALL: 90,
+    KEY_SPAWN_WALL: 17,
     KEY_RANDOM_TEST: 81,
     KEY_CHANGE_SONG: 112,
     KEY_ABILITY: 17,
+    KEY_SCREENSHOT: 81,//Q
+    KEY_RECORD: 90,//Z
 
     KEY_UPGRADE_ATK: 49,
     KEY_UPGRADE_HTL: 50,
@@ -122,7 +124,6 @@ const global = {
   
     showTree: false,
 
-    showDebug: !1,
     scrollX: 0,
     realScrollX: 0,
     // Canvas
@@ -132,10 +133,15 @@ const global = {
     gameHeight: 0,
     xoffset: -0,
     yoffset: -0,
+    movement: false,
+    motion: { x: 0, y: 0 },
     gameLoading: false,
     gameStart: false,
     disconnected: false,
     autoSpin: false,
+    syncingWithTank: false,
+    respawnTimeout: false,
+    showDebug: false,
     died: false,
     kicked: false,
     continuity: false,
@@ -145,6 +151,7 @@ const global = {
     backgroundColor: '#f2fbff',
     lineColor: '#000000',
     nameColor: "#FFFFFF",
+    message: "",
     player: {},
     messages: [],
     mockups: [],
@@ -156,6 +163,7 @@ const global = {
         upgrade: Region(100),
         hover: Region(1),
         skipUpgrades: Region(1),
+        mobileButtons: Region(20),
     },
     statHover: false,
     upgradeHover: false,
@@ -171,6 +179,20 @@ const global = {
         lastuplink: 0,
         killcount: 0,
         shapecount: 0,
+    },
+    mobileStatus: {
+        enableCrosshair: false,
+        showCrosshair: false,
+        useBigJoysticks: false,
+        showJoysticks: false,
+    },
+    GUIStatus: {
+        renderGUI: false,
+        renderLeaderboard: false,
+        renderhealth: false,
+        renderPlayerNames: false,
+        renderPlayerScores: false,
+        minimapReducedInfo: false,
     },
     emojiloaded: false,
     wikidisplaytank: 999,

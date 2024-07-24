@@ -8,7 +8,7 @@ module.exports = {
     productionist: { reload: 56, recoil: 0.25, shudder: 0.05, size: 0.7, damage: 0.75, speed: 4, range: 1.5, spray: 5 },
 
 // Spammers
-    desmos: { shudder: 0, spray: 0, size: 0.8 },
+    desmos: { shudder: 0, spray: 0, size: 0.8, damage: 0.9, reload: 1.1 },
     single: { reload: 1.05, speed: 1.05 },
     twin: { recoil: 0.5, shudder: 0.9, health: 0.9, damage: 0.7, spray: 1.2 },
     doubleTwin: { damage: 0.9 },
@@ -33,7 +33,7 @@ module.exports = {
     railgun: { reload: 2, health: 0.85, damage: 0.5, pen: 0.9 },
 
 // Machine guns
-    machineGun: { reload: 0.5, recoil: 0.8, shudder: 1.7, health: 0.7, damage: 0.7, maxSpeed: 0.8, spray: 2.5 },
+    machineGun: { reload: 0.5, recoil: 0.8, shudder: 1.7, health: 0.7, damage: 0.7, maxSpeed: 0.8, spray: 2.5, size: 0.8 },
     minigun: { reload: 1.25, recoil: 0.6, size: 0.8, health: 0.55, damage: 0.45, pen: 1.25, speed: 1.33, density: 1.25, spray: 0.5, resist: 1.1 },
     streamliner: { reload: 1.1, recoil: 0.6, damage: 0.65, speed: 1.24 },
     nailgun: { reload: 0.85, recoil: 2.5, size: 0.8, damage: 0.7, density: 2 },
@@ -60,9 +60,9 @@ module.exports = {
     baseProtector: { reload: 2, recoil: 0.000001, health: 100, range: 0.5, density: 5, resist: 10 },
     battleship: { health: 1.25, damage: 1.15, maxSpeed: 0.85, resist: 1.1 },
     carrier: { reload: 1.5, damage: 0.8, speed: 1.3, maxSpeed: 1.2, range: 1.2 },
-    bee: { reload: 1.3, size: 1.4, damage: 1.5, pen: 0.5, speed: 3, maxSpeed: 1.5, density: 0.25 },
-    sunchip: { reload: 5, size: 1.4, health: 0.5, damage: 0.4, pen: 0.6, density: 0.8 },
-    maleficitor: { reload: 0.5, size: 1.05, health: 1.15, damage: 1.15, pen: 1.15, speed: 0.8, maxSpeed: 0.8, density: 1.15 },
+    bee: { reload: 1.3, size: 1.4, damage: 1.5, pen: 0.5, speed: 1.5, maxSpeed: 1.5, density: 0.25 },
+    sunchip: { reload: 4, size: 1.4, health: 0.5, damage: 0.4, pen: 0.6, density: 0.8 },
+    maleficitor: { reload: 0.25, size: 1.05, health: 1.15, damage: 1.15, pen: 1.15, speed: 0.8, maxSpeed: 0.8, density: 1.15 },
     summoner: { reload: 0.3, size: 1.125, health: 0.4, damage: 0.345, pen: 0.4, density: 0.8 },
     minionGun: { recoil: 0, shudder: 2, health: 0.4, damage: 0.4, pen: 1.2, range: 0.75, spray: 2 },
     babyfactory: { reload: 1.5, maxSpeed: 1.35 },
@@ -150,7 +150,7 @@ module.exports = {
     fakewithrecoil: { recoil: 1, size: 0.00001, health: 0.0001, speed: 0.00001, maxSpeed: 2, range: 0 },
     kiva: { damage: 0.7, pen: 0, health: 4, range: 1.5, speed: 1, maxSpeed: 1.4 },
     xxtrahealth: { health: 999 },
-    lance: { reload: 0.4, speed: 0.1, maxSpeed: 0.1, range: 0.1, pen: 3, health: 0.75 },
+    lance: { reload: 0.4, speed: 0.18, maxSpeed: 0.18, range: 0.07, pen: 3, health: 0.8, recoil: 0 },
     lesspower: { health: 0.9, damage: 0.9, pen: 0.9 },
     grenade_explosion: { reload: 8, recoil: 0, shudder: 4.25, size: 2, health: 2.25, damage: 1.75, pen: 1.5, speed: 1.35, spray: 4 },
     literallyamachinegun: { reload: 0.2, speed: 5, maxSpeed: 5, spray: 0.3, shudder: 0.6 },
@@ -160,8 +160,8 @@ module.exports = {
     brella: { reload: 2.5, health: 35, pen: 0, damage: 0.2, maxSpeed: 0.8, spray: 0, range: 2.25, size: 2.4, shudder: 0.1 },
     magnet: { damage: 0, health: 0.8, spray: 45, range: 0.08, recoil: 0, speed: 0.8, pen: 0 },
     solarioblast: { reload: 0.05, health: 5, pen: 100, speed: 12, maxSpeed: 12, spread: 4, size: 2, range: 0.12 },
-    emplaser: { reload: 1.25, recoil: 0, size: 2.1 },
+    emplaser: { reload: 1.25, recoil: 0, size: 1.7 },
     empbullet: { reload: 1.25, recoil: 0, size: 2.5, speed: 1.1, maxSpeed: 1.1, spray: 0.2 },
     cloner: { damage: 0.9, pen: 0.85 },
-    
+    sidewinder: { shudder: 0, spray: 0, size: 0.8, speed: 0.001, damage: 2 },
 }

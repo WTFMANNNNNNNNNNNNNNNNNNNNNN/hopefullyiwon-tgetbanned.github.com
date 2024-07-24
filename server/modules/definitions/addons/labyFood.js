@@ -1,8 +1,8 @@
 module.exports = ({ Config }) => {
 	// To enable this addon, simply comment out the line below.
-		return console.log('[labyFood.js] Addon disabled by default');
+	//return console.log('[labyFood.js] Addon disabled by default');
 
-		const disableCrashers = false;
+	const disableCrashers = false;
 
 	// there is no `ENEMY_CAP`, so we are "reconstructing them"
 	Config.ENEMY_CAP_NEST = 0;
@@ -20,7 +20,7 @@ module.exports = ({ Config }) => {
 			// 6-wide dimension of the 6 shiny modifiers
 			Array(6).fill().map((_, k, c) => [
 				// Chance of spawning, set to 200mil for regular polygons and exponents of 10 otherwise
-				k ? 10 ** (Config.length - k - 1) : 200_000_000,
+				k ? 10 ** (c.length - k - 1) : 200_000_000,
 
 				
 				disableCrashers ? // no crashers
@@ -45,7 +45,7 @@ module.exports = ({ Config }) => {
 			// 6-wide dimension of the 6 shiny modifiers
 			Array(6).fill().map((_, k, c) => [
 				// Chance of spawning, set to 200mil for regular polygons and exponents of 10 otherwise
-				k ? 10 ** (Config.length - k - 1) : 200_000_000,
+				k ? 10 ** (c.length - k - 1) : 200_000_000,
 
 				
 				disableCrashers ? // no crashers

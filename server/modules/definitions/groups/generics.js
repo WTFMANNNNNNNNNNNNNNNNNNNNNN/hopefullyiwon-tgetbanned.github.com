@@ -23,6 +23,7 @@ Class.genericEntity = {
     FACING_TYPE: "toTarget",
     DRAW_HEALTH: false,
     DRAW_SELF: true,
+    IS_IMMUNE_TO_TILES: false,
     DAMAGE_EFFECTS: true,
     RATEFFECTS: true,
     MOTION_EFFECTS: true,
@@ -39,6 +40,7 @@ Class.genericEntity = {
     HEALTH_WITH_LEVEL: true,
     CAN_BE_ON_LEADERBOARD: true,
     HAS_NO_RECOIL: false,
+    SYNC_WITH_TANK: false,
     BUFF_VS_FOOD: false,
     OBSTACLE: false,
     CRAVES_ATTENTION: false,
@@ -97,12 +99,15 @@ Class.genericTank = {
         BRIGHTNESS_SHIFT: 0,
         ALLOW_BRIGHTNESS_INVERT: true,
     },
+    SHAPE: 0,
     MOTION_TYPE: "motor",
     FACING_TYPE: "toTarget",
     SIZE: 12,
     MAX_CHILDREN: 0,
     DAMAGE_EFFECTS: false,
     IGNORED_BY_AI: false,
+    SYNC_WITH_TANK: false,
+    IS_IMMUNE_TO_TILES: false,
     REROOT_UPGRADE_TREE: "basic",
     BODY: {
         ACCELERATION: base.ACCEL,
@@ -127,6 +132,12 @@ Class.genericTank = {
     RESET_EVENTS: true,
     HITS_OWN_TYPE: "hardOnlyTanks"
 }
+Class.genericLancer = {
+    PARENT: "genericTank",
+    DANGER: 6,
+    SKILL_CAP: [dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl],
+    STAT_NAMES: statnames.lancer,
+}
 Class.genericSmasher = {
     PARENT: "genericTank",
     DANGER: 7,
@@ -137,12 +148,6 @@ Class.genericSmasher = {
         FOV: 1.05 * base.FOV,
         DENSITY: 2 * base.DENSITY
     }
-}
-Class.genericLancer = {
-    PARENT: "genericTank",
-    DANGER: 6,
-    SKILL_CAP: [dfltskl, dfltskl, dfltskl, dfltskl, 0, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl],
-    STAT_NAMES: statnames.lancer,
 }
 Class.genericBoss = {
     PARENT: "genericTank",
@@ -176,10 +181,12 @@ Class.food = {
     MOTION_TYPE: "drift",
     FACING_TYPE: "turnWithSpeed",
     VARIES_IN_SIZE: true,
+    IS_IMMUNE_TO_TILES: false,
     LEVEL_CAP: 1,
     BODY: {
         STEALTH: 30,
         PUSHABILITY: 1,
+        REGEN: 0
     },
     DAMAGE_EFFECTS: false,
     RATEFFECTS: false,
@@ -314,8 +321,11 @@ Class.satellite = {
     DRAW_HEALTH: false,
     CLEAR_ON_MASTER_UPGRADE: true,
     BUFF_VS_FOOD: true,
-    MOTION_TYPE: 'motor',
-    CAN_GO_OUTSIDE_ROOM: true
+    MOTION_TYPE: 'motor'
+}
+Class.squareSatellite = {
+    PARENT: "satellite",
+    SHAPE: 4
 }
 
 Class.auraBase = {
@@ -345,7 +355,7 @@ Class.aura = {
     LABEL: "Aura",
     COLOR: "teal",
     BODY: {
-        DAMAGE: 0.15,
+        DAMAGE: 0.4,
     },
 };
 Class.healAura = {
@@ -354,7 +364,7 @@ Class.healAura = {
     HEALER: true,
     COLOR: "red",
     BODY: {
-        DAMAGE: 0.05,
+        DAMAGE: 0.4 / 3,
     },
 };
 Class.auraSymbol = {

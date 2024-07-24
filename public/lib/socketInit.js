@@ -26,14 +26,14 @@ var serverStart = 0,
         ],
         skills: [
             { amount: 0, color: 'purple', cap: 1, softcap: 1 },
-            { amount: 0, color: 'pink'  , cap: 1, softcap: 1 },
-            { amount: 0, color: 'blue'  , cap: 1, softcap: 1 },
+            { amount: 0, color: 'pink', cap: 1, softcap: 1 },
+            { amount: 0, color: 'blue', cap: 1, softcap: 1 },
             { amount: 0, color: 'lgreen', cap: 1, softcap: 1 },
-            { amount: 0, color: 'red'   , cap: 1, softcap: 1 },
+            { amount: 0, color: 'red', cap: 1, softcap: 1 },
             { amount: 0, color: 'yellow', cap: 1, softcap: 1 },
-            { amount: 0, color: 'green' , cap: 1, softcap: 1 },
-            { amount: 0, color: 'teal'  , cap: 1, softcap: 1 },
-            { amount: 0, color: 'gold'  , cap: 1, softcap: 1 },
+            { amount: 0, color: 'green', cap: 1, softcap: 1 },
+            { amount: 0, color: 'teal', cap: 1, softcap: 1 },
+            { amount: 0, color: 'gold', cap: 1, softcap: 1 },
             { amount: 0, color: 'orange', cap: 1, softcap: 1 }
         ],
         points: 0,
@@ -53,16 +53,17 @@ var serverStart = 0,
                 }
             },
             update: () => {
-                levelscore = Math.ceil(1.8 * Math.pow(level + 1, 1.8) - 2 * level + 1);
-                if (sscore.get() - deduction >= levelscore - 0.001) {
-                    deduction += levelscore;
+                levelscore = Math.ceil(Math.pow(level, 3) * 0.3083);
+                if (sscore.get() >= levelscore - 0.01) {
+                    deduction = levelscore;
                     level += 1;
                 }
             },
-            getProgress: () => levelscore ? Math.min(1, Math.max(0, (sscore.get() - deduction) / levelscore)) : 0,
+            getProgress: () => levelscore ? Math.min(1, Math.max(0, (sscore.get() - deduction) / (levelscore - deduction))) : 0,
             getScore: () => sscore.get(),
             getLevel: () => level,
         },
+        showhealthtext: false,
         type: 0,
         root: "",
         class: "",
@@ -471,7 +472,7 @@ const process = (z = {}) => {
         z.vy = get.next();
         z.size = get.next();
         z.facing = get.next();
-        z.perceptionAngleIndependence = get.next(); //z.vfacing = get.next();
+        z.perceptionAngleIndependence = get.next();
         z.defaultAngle = get.next();
         z.twiggle = get.next();
         z.layer = get.next();
@@ -482,11 +483,15 @@ const process = (z = {}) => {
         // Update health, flagging as injured if needed
         if (isNew) {
             z.health = get.next() / 65535;
+            z.healthN = get.next();
+            z.maxHealthN = get.next();
             z.shield = get.next() / 65535;
         } else {
             let hh = z.health,
                 ss = z.shield;
             z.health = get.next() / 65535;
+            z.healthN = get.next();
+            z.maxHealthN = get.next();
             z.shield = get.next() / 65535;
             // Update stuff
             if (z.health < hh || z.shield < ss) {
@@ -623,6 +628,7 @@ const convert = {
         let index = get.next(),
             // Translate the encoded index
             indices = {
+                showhealthtext: index & 0x0800,
                 class: index & 0x0400,
                 root: index & 0x0200,
                 topspeed: index & 0x0100,
@@ -688,6 +694,9 @@ const convert = {
         }
         if (indices.class) {
             gui.class = get.next();
+        }
+        if (indices.showhealthtext) {
+            gui.showhealthtext = get.next();
         }
     },
     broadcast: () => {
@@ -756,15 +765,10 @@ const socketInit = port => {
     // Handle commands
     let flag = false;
     let commands = [
-        false, // up
-        false, // down
-        false, // left
-        false, // right
+        false, // moving
         false, // lmb
         false, // mmb
         false, // rmb
-        false, // ability
-        false,
     ];
     socket.cmd = {
         set: (index, value) => {
@@ -776,17 +780,13 @@ const socketInit = port => {
         talk: () => {
             flag = false;
             let o = 0;
-            for (let i = 0; i < 8; i++) {
+            for (let i = 0; i < commands.length; i++) {
                 if (commands[i]) o += Math.pow(2, i);
             }
             let ratio = util.getRatio();
-            socket.talk('C', Math.round(global.target.x / ratio), Math.round(global.target.y / ratio), global.reverseTank, o);
+            socket.talk('C', Math.round(global.target.x / ratio), Math.round(global.target.y / ratio), global.reverseTank, global.movement, o);
         },
         check: () => flag,
-        getMotion: () => ({
-            x: commands[3] - commands[2],
-            y: commands[1] - commands[0],
-        }),
     };
     // Learn how to talk
     socket.talk = async (...message) => {
@@ -825,11 +825,15 @@ const socketInit = port => {
         switch (m.shift()) {
             case 'w': // welcome to the game
                 if (m[0]) { // Ask to spawn
-                    console.log('The server has welcomed us to the game room. Sending spawn request.');
-                    socket.talk('s', global.playerName, 1, 1 * settings.game.autoLevelUp, global.skin);
-                    global.message = '';
+                    console.log('The server has welcomed us to the game room.');
+                    global.message = 'Loading mockups, this could take a bit...';
+                    global.mockupLoading.then(() => {
+                        console.log('Sending spawn request.');
+                        socket.talk('s', global.playerName, 1, 1 * settings.game.autoLevelUp, global.skin);
+                        global.message = '';
+                    });
                 }
-            break;
+                break;
             case 'R': // room setup
                 global.gameWidth = m[0];
                 global.gameHeight = m[1];
@@ -849,9 +853,22 @@ const socketInit = port => {
                 global.message = m[0];
                 console.log(m[0]);
                 break;
+            case "svInfo": // For debugging.
+                global.serverName = m[0];
+                global.mspt = m[1];
+                if (global.showDebug) console.log(`mspt: ${global.mspt} total entities on screen: ${global.entities.length} Player X: ${(global.player.renderx).toFixed(1)} Player Y: ${(global.player.rendery).toFixed(1)}`);
+                break;
+            case "updateName": // Update the name if needed.
+                global.player.name = m[0];
+                break;
           case "achieve":
                 const achievementTable = ['killachievement', 'killachievement2', 'tokenachievement'] // lookup table of achievements and their ids
                 util.submitAchievementToLocalStorage(achievementTable[m[0]]) // whatever code to actually give the player the achievement
+                break;
+          case "menu":
+                document.getElementById("startMenuWrapper").style = "display: block; inset: 0; animation: fadezoomin 300ms forwards;";
+                document.getElementById("startMenuWrapper").focus();
+                document.getElementById("startButton").innerHTML = "Resume!"
                 break;
           case "killgained":
                 PlaySoundKS()
@@ -866,8 +883,6 @@ const socketInit = port => {
                 break;
           case "killstreakreset":
                 global.metrics.killcount = 0;
-                break;
-          case "popuptroll":
                 break;
             case 'c': // force camera move
                 global.player.renderx = global.player.cx = m[0];
@@ -887,6 +902,7 @@ const socketInit = port => {
                 if (sync.length < 10) {
                     // Wait a bit just to space things out
                     setTimeout(() => socket.talk('S', getNow()), 10);
+                    global.canThrowSyncClockError = true;
                     global.message = "Syncing clocks, please do not tab away. " + sync.length + "/10...";
                 } else {
                     // Calculate the clock error
@@ -906,26 +922,20 @@ const socketInit = port => {
                         }
                     }
                     clockDiff = Math.round(sum / valid);
+                    global.canThrowSyncClockError = false;
                     // Start the game
                     console.log(sync);
-                    console.log('Syncing complete, calculated clock difference ' + clockDiff + 'ms.');
-                    global.message = 'Loading mockups, this could take a bit...';
-                    global.mockupLoading.then(() => {
+                    console.log('Syncing complete, calculated clock difference ' + clockDiff + 'ms. Beginning game.');
                         console.log('Beginning game.');
                         global.gameStart = true;
                         global.entities = [];
                         global.message = '';
+                        global.canThrowClosedMessage = true;
                         global.stopthefuckingkillsoundyouprick = true;
-                    });
                 }
                 break;
             case 'm': // message
-                global.messages.push({
-                    text: m[1],
-                    status: 2,
-                    alpha: 0,
-                    time: Date.now() + m[0],
-                });
+                global.createMessage(m[1], m[0]);
                 break;
             case 'u': // uplink
                 // Pull the camera info
@@ -1001,19 +1011,40 @@ const socketInit = port => {
                 global.finalLifetime = util.Smoothbar(0, 5);
                 global.finalLifetime.set(m[1]);
                 global.finalKills = [util.Smoothbar(0, 3), util.Smoothbar(0, 4.5), util.Smoothbar(0, 2.5), util.Smoothbar(0, 10)];
-                global.finalKills[0].set(m[2]);
-                global.finalKills[1].set(m[3]);
-                global.finalKills[2].set(m[4]);
-                global.finalKills[3].set(m[5]);
+                global.respawnTimeout = m[2];
+                if (global.respawnTimeout > 0) {
+                    global.cannotRespawn = true;
+                    let respawnTimeoutloop = setInterval(() => {
+                        if (global.respawnTimeout <= 1) {
+                            global.cannotRespawn = false;
+                            global.respawnTimeout = false;
+                            clearInterval(respawnTimeoutloop);
+                        } else {
+                            global.respawnTimeout--;
+                        }
+                    }, 1000); // One second.
+                }
+                global.finalKills[0].set(m[3]);
+                global.finalKills[1].set(m[4]);
+                global.finalKills[2].set(m[5]);
+                global.finalKills[3].set(m[6]);
                 global.finalKillers = [];
-                for (let i = 0; i < m[6]; i++) {
-                    global.finalKillers.push(m[7 + i]);
+                for (let i = 0; i < m[7]; i++) {
+                    global.finalKillers.push(m[8 + i]);
                 }
                 window.animations.deathScreen.reset();
                 window.canvas.reverseDirection = false;
                 global.died = true;
                 global.autoSpin = false;
+                global.syncingWithTank = false;
                 window.onbeforeunload = () => false;
+                break;
+            case 'I': // sync with the tank
+                if (m[0]) {
+                    global.syncingWithTank = true;
+                } else {
+                    global.syncingWithTank = false;
+                }
                 break;
             case 'K': // kicked
                 window.onbeforeunload = () => false;
@@ -1048,6 +1079,8 @@ const socketInit = port => {
         clearInterval(socket.commandCycle);
         window.onbeforeunload = () => false;
         console.log('The connection has closed.');
+        if (global.canThrowSyncClockError) global.message = "Failed to sync with the server. Please try again."
+        if (global.canThrowClosedMessage) global.message = "The connection has closed. Refresh to continue playing!"
     };
     // Notify about errors
     socket.onerror = error => {
