@@ -120,6 +120,47 @@ Class.solarioTurret4 = {
         },
     ],
 }
+Class.solariominilaser = {
+    PARENT: "genericTank",
+    LABEL: "Solario SMG",
+    DANGER: 6,
+    HAS_NO_RECOIL: true,
+    BODY: {
+        FOV: 1.2,
+    },
+    GUNS: [
+        {
+            /*** LENGTH  WIDTH   ASPECT    X       Y     ANGLE   DELAY */
+            POSITION: [21, 8, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.minigun, g.doublereload, g.one_third_reload]),
+                TYPE: "laser",
+            },
+        },
+        {
+            POSITION: [19, 8, 1, 0, 0, 0, 1 / 3],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.minigun, g.doublereload, g.one_third_reload]),
+                TYPE: "laser",
+            },
+        },
+        {
+            POSITION: [17, 8, 1, 0, 0, 0, 2 / 3],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.minigun, g.doublereload, g.one_third_reload]),
+                TYPE: "laser",
+            },
+        },
+        {
+            POSITION: [24, 1, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                COLOR: 'red',
+                SHOOT_SETTINGS: combineStats([g.fake]),
+                TYPE: "laser",
+            },
+        }
+    ],
+}
 Class.solarioturretBase = {
     LABEL: "Base",
     SHAPE: 'M 0 -1.6 A 1.5 1.5 0 0 0 0 1.6 A 1.5 1.5 0 0 0 0 -1.6 Z M 0 -1.5 A 0.001 0.001 0 0 1 0 1.5 A 0.001 0.001 0 0 1 0 -1.5',
@@ -216,21 +257,88 @@ Class.solarioturretBase2ndRing2 = {
     INDEPENDENT: true,
     TURRETS: [{
         POSITION: [5, 30, 0, 90, 220, 1],
-        TYPE: ["solarioTurret1", { COLOR: 33 }],
+        TYPE: ["rocketeerTurret", { COLOR: 33, HAS_NO_RECOIL: true }],
     }, {
         POSITION: [5, 30, 0, 180, 220, 1],
-        TYPE: ["solarioTurret2", { COLOR: 33 }],
+        TYPE: ["boomerTurret", { COLOR: 33, HAS_NO_RECOIL: true }],
     }, {
         POSITION: [5, 30, 0, 270, 220, 1],
-        TYPE: ["solarioTurret3", { COLOR: 33 }],
+        TYPE: ["barricadeTurret", { COLOR: 33, HAS_NO_RECOIL: true }],
     }, {
         POSITION: [5, 30, 0, 0, 220, 1],
-        TYPE: ["solarioTurret4", { COLOR: 33 }],
+        TYPE: ["bigauto4gun", { COLOR: 33, HAS_NO_RECOIL: true }],
+    }]
+}
+Class.solarioturretBase3 = {
+    LABEL: "Base",
+    SHAPE: 'M 0 -1.6 A 1.5 1.5 0 0 0 0 1.6 A 1.5 1.5 0 0 0 0 -1.6 Z M 0 -1.5 A 0.001 0.001 0 0 1 0 1.5 A 0.001 0.001 0 0 1 0 -1.5',
+    COLOR: 32,
+    CONTROLLERS: [["spin", { independent: true }]],
+    INDEPENDENT: true,
+    TURRETS: [{
+        POSITION: [5, 15, 0, 90, 220, 1],
+        TYPE: ["solarioTurret1", { COLOR: 32, HAS_NO_RECOIL: true }],
+    }, {
+        POSITION: [5, 15, 0, 180, 220, 1],
+        TYPE: ["solarioTurret2", { COLOR: 32, HAS_NO_RECOIL: true }],
+    }, {
+        POSITION: [5, 15, 0, 270, 220, 1],
+        TYPE: ["solarioTurret3", { COLOR: 32, HAS_NO_RECOIL: true }],
+    }, {
+        POSITION: [5, 15, 0, 0, 220, 1],
+        TYPE: ["solarioTurret4", { COLOR: 32, HAS_NO_RECOIL: true }],
+    }]
+}
+Class.solarioturretBase2ndRing3 = {
+    LABEL: "Base",
+    SHAPE: 'M 0 -3.1 A 3 3 0 0 0 0 3.1 A 3 3 0 0 0 0 -3.1 Z M 0 -3 A 0.001 0.001 0 0 1 0 3 A 0.001 0.001 0 0 1 0 -3',
+    COLOR: 32,
+    CONTROLLERS: [["spin", { independent: true }]],
+    INDEPENDENT: true,
+    TURRETS: [{
+        POSITION: [5, 30, 0, 90, 220, 1],
+        TYPE: ["rocketeerTurret", { COLOR: 32, HAS_NO_RECOIL: true }],
+    }, {
+        POSITION: [5, 30, 0, 180, 220, 1],
+        TYPE: ["boomerTurret", { COLOR: 32, HAS_NO_RECOIL: true }],
+    }, {
+        POSITION: [5, 30, 0, 270, 220, 1],
+        TYPE: ["barricadeTurret", { COLOR: 32, HAS_NO_RECOIL: true }],
+    }, {
+        POSITION: [5, 30, 0, 0, 220, 1],
+        TYPE: ["bigauto4gun", { COLOR: 32, HAS_NO_RECOIL: true }],
+    }]
+}
+Class.solarioturretBase3rdRing3 = {
+    LABEL: "Base",
+    SHAPE: 'M 0 -4.8 A 4.5 4.5 90 0 0 0 4.8 A 4.5 4.5 90 0 0 0 -4.8 Z M 0 -4.5 A 0.001 0.001 90 0 1 0 4.5 A 0.001 0.001 90 0 1 0 -4.5',
+    COLOR: 32,
+    CONTROLLERS: [["spin", { independent: true }]],
+    INDEPENDENT: true,
+    TURRETS: [{
+        POSITION: [5, 47, 0, 60, 220, 1],
+        TYPE: ["machineTripleTurret", { COLOR: 32, HAS_NO_RECOIL: true }],
+    }, {
+        POSITION: [5, 47, 0, 120, 220, 1],
+        TYPE: ["launcherTurret", { COLOR: 32, HAS_NO_RECOIL: true }],
+    }, {
+        POSITION: [5, 47, 0, 180, 220, 1],
+        TYPE: ["skimmerTurret", { COLOR: 32, HAS_NO_RECOIL: true }],
+    }, {
+        POSITION: [5, 47, 0, 240, 220, 1],
+        TYPE: ["twisterTurret", { COLOR: 32, HAS_NO_RECOIL: true }],
+    }, {
+        POSITION: [5, 47, 0, 300, 220, 1],
+        TYPE: ["nailgunTurret", { COLOR: 32, HAS_NO_RECOIL: true }],
+    }, {
+        POSITION: [5, 47, 0, 0, 220, 1],
+        TYPE: ["artilleryTurret", { COLOR: 32, HAS_NO_RECOIL: true }],
     }]
 }
 Class.solarioOutline = makeDeco("M 0 -3.1 A 3 3 0 0 0 0 3.1 A 3 3 0 0 0 0 -3.1 Z M 0 -3 A 0.001 0.001 0 0 1 0 3 A 0.001 0.001 0 0 1 0 -3", 13)
 Class.solariobase = {
     PARENT: "genericBoss",
+    HAS_NO_RECOIL: true,
     LABEL: "Solario",
     SHAPE: 0,
     BODY: {
@@ -282,7 +390,15 @@ Class.solario = {
                 TYPE: "solarioRingAttack",
                 ALT_FIRE: true
             },
-        }, 
+        }, {
+            POSITION: [1, 10, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.xxtrahealth, {speed: 0.01, maxSpeed: 0.01, health: 99999, pen: 99, density: 38281381283, resist: 421848412}]),
+                TYPE: "blackholeondeath",
+                SHOOT_ON_DEATH: true,
+                ALT_FIRE: true
+            }
+        },
           ],
     TURRETS: [{
         POSITION: [30, 0, 0, 0, 360, 0],
@@ -324,7 +440,7 @@ Class.solario = {
         }, {
             event: "death",
             handler: ({}) => {
-                sockets.broadcast('YOU CANT DEFEAT ME!')
+                sockets.broadcast('NOOOOOOO!')
             }
         }, {
             event: "damage",
@@ -350,7 +466,7 @@ Class.solariolaser = {
         POSITION: [15, 10, 1, 0, 0, 0, 5],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast]),
-            TYPE: "laser",
+            TYPE: ["laser", {ARENA_CLOSER: true}],
             AUTOFIRE: true,
             COLOR: "red",
         },
@@ -358,18 +474,18 @@ Class.solariolaser = {
         POSITION: [15, 10, 1, 0, 0, 180, 5],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast]),
-            TYPE: "laser",
+            TYPE: ["laser", {ARENA_CLOSER: true}],
             AUTOFIRE: true,
             COLOR: "red",
         },
     }, {
-        POSITION: [350, 10, 2.5, 0, 0, 355, 0],
+        POSITION: [350, 10, 2.5, 0, 0, 360, 0],
         PROPERTIES: {
             COLOR: "red",
             ALPHA: 0.5
         }
     }, {
-        POSITION: [350, 10, 2.5, 0, 0, 175, 0],
+        POSITION: [350, 10, 2.5, 0, 0, 180, 0],
         PROPERTIES: {
             COLOR: "red",
             ALPHA: 0.5
@@ -382,6 +498,14 @@ Class.solariolaser = {
                 AUTOFIRE: true,
                 IDENTIFIER: "endlaserattack",
             },
+        }, {
+            POSITION: [1, 10, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.xxtrahealth, {speed: 0.01, maxSpeed: 0.01, health: 99999, pen: 99, density: 38281381283, resist: 421848412}]),
+                TYPE: "blackholeondeath",
+                SHOOT_ON_DEATH: true,
+                ALT_FIRE: true
+            }
         },
   ],
   TURRETS: [{
@@ -411,7 +535,7 @@ Class.solariolaser = {
         }, {
             event: "death",
             handler: ({}) => {
-                sockets.broadcast('YOU CANT DEFEAT ME!')
+                sockets.broadcast('NOOOOOOO!')
             }
         }, {
             event: "damage",
@@ -450,8 +574,45 @@ Class.solariophase2 = {
                 AUTOFIRE: true,
                 IDENTIFIER: "startlaserattack",
             },
+        }, {
+            POSITION: [1, 10, 1, 0, 0, 0, 1],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.fake, { reload: 2 }]),
+                TYPE: "bullet",
+                AUTOFIRE: true,
+                IDENTIFIER: "solarioAttack"
+            },
+        }, {
+            POSITION: [1, 10, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.grenade_explosion, g.xxtrahealth, { maxSpeed: 0, speed: 0, range: 5, pen: 3 }]),
+                TYPE: ["solarioCircAttack", { COLOR: 33}],
+                ALT_FIRE: true,
+            },
+        }, {
+            POSITION: [1, 10, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.xxtrahealth, { maxSpeed: 0, speed: 0, range: 1.4, reload: 5 }]),
+                TYPE: ["solarioRingAttack", { COLOR: 33}],
+                ALT_FIRE: true
+            },
+        }, {
+            POSITION: [1, 10, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.drone, { health: 4, size: 2 }]),
+                TYPE: "baseThrower",
+                ALT_FIRE: true
+            }
+           }, {
+            POSITION: [1, 10, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.xxtrahealth, {speed: 0.01, maxSpeed: 0.01, health: 99999, pen: 99, density: 38281381283, resist: 421848412}]),
+                TYPE: "blackholeondeath",
+                SHOOT_ON_DEATH: true,
+                ALT_FIRE: true
+            }
         },
-          ],
+        ],
     TURRETS: [{
         POSITION: [30, 0, 0, 0, 360, 0],
         TYPE: ["solarioturretBase2", { COLOR: 33 }],
@@ -467,15 +628,51 @@ Class.solariophase2 = {
     },
   ],
     ON: [
-        {
+{
             event: 'fire',
             handler: ({ body, gun }) => {
                 if (gun.identifier == 'startlaserattack') {
                     sockets.broadcast('Solario: DODGE THIS!!');
                     setTimeout(() => body.define('solariolaserphase2'), 1000);
                 }
-            }
+                if (gun.identifier == 'solarioAttack') {
+                    body.guns[3].canShoot = false;
+                    let attack = ~~(Math.random() * 3);
+                    switch(attack) {
+                        case 0:
+                            body.guns[6].fire();
+                            setTimeout(() => { if (body != null) body.guns[6].fire(); }, 4000);
+                            setTimeout(() => { if (body != null) body.guns[6].fire(); }, 8000);
+                            setTimeout(() => { if (body != null) body.guns[6].fire(); }, 12000);
+                        break;
+                        case 1:
+                            body.guns[7].fire();
+                        break;
+                        case 2:
+                            body.guns[8].fire();
+                            setTimeout(() => { if (body != null) body.guns[8].fire(); }, 500);
+                            setTimeout(() => { if (body != null) body.guns[8].fire(); }, 1000);
+                            setTimeout(() => { if (body != null) body.guns[8].fire(); }, 1500);
+                            setTimeout(() => { if (body != null) body.guns[8].fire(); }, 2000);
+                            setTimeout(() => { if (body != null) body.guns[8].fire(); }, 2500);
+                        break;
+                    }
+                }
         }
+        }, {
+            event: "death",
+            handler: ({}) => {
+                sockets.broadcast('NOOOOOOO!')
+            }
+        }, {
+            event: "damage",
+            handler: ({ body }) => {
+                if (body.health.amount < body.health.max / 3) {
+                    sockets.broadcast('Solario: GRRRAAAAAH, THATS IT!!!!!');
+                    body.define('solariophase3');
+                }
+            }
+        }, 
     ],
 };
 Class.solariolaserphase2 = {
@@ -484,7 +681,7 @@ Class.solariolaserphase2 = {
         POSITION: [15, 10, 1, 0, 0, 0, 5],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast]),
-            TYPE: "laser",
+            TYPE: ["laser", {ARENA_CLOSER: true}],
             AUTOFIRE: true,
             COLOR: "red",
         },
@@ -492,7 +689,7 @@ Class.solariolaserphase2 = {
         POSITION: [15, 10, 1, 0, 0, 90, 5],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast]),
-            TYPE: "laser",
+            TYPE: ["laser", {ARENA_CLOSER: true}],
             AUTOFIRE: true,
             COLOR: "red",
         },
@@ -500,7 +697,7 @@ Class.solariolaserphase2 = {
         POSITION: [15, 10, 1, 0, 0, 180, 5],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast]),
-            TYPE: "laser",
+            TYPE: ["laser", {ARENA_CLOSER: true}],
             AUTOFIRE: true,
             COLOR: "red",
         },
@@ -508,30 +705,30 @@ Class.solariolaserphase2 = {
         POSITION: [15, 10, 1, 0, 0, 270, 5],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast]),
-            TYPE: "laser",
+            TYPE: ["laser", {ARENA_CLOSER: true}],
             AUTOFIRE: true,
             COLOR: "red",
         },
     }, {
-        POSITION: [350, 10, 2.5, 0, 0, 355, 0],
+        POSITION: [350, 10, 2.5, 0, 0, 360, 0],
         PROPERTIES: {
             COLOR: "red",
             ALPHA: 0.5
         }
     }, {
-        POSITION: [350, 10, 2.5, 0, 0, 85, 0],
+        POSITION: [350, 10, 2.5, 0, 0, 90, 0],
         PROPERTIES: {
             COLOR: "red",
             ALPHA: 0.5
         }
     }, {
-        POSITION: [350, 10, 2.5, 0, 0, 175, 0],
+        POSITION: [350, 10, 2.5, 0, 0, 180, 0],
         PROPERTIES: {
             COLOR: "red",
             ALPHA: 0.5
         }
     }, {
-        POSITION: [350, 10, 2.5, 0, 0, 265, 0],
+        POSITION: [350, 10, 2.5, 0, 0, 270, 0],
         PROPERTIES: {
             COLOR: "red",
             ALPHA: 0.5
@@ -544,6 +741,14 @@ Class.solariolaserphase2 = {
                 AUTOFIRE: true,
                 IDENTIFIER: "endlaserattack",
             },
+        }, {
+            POSITION: [1, 10, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.xxtrahealth, {speed: 0.01, maxSpeed: 0.01, health: 99999, pen: 99, density: 38281381283, resist: 421848412}]),
+                TYPE: "blackholeondeath",
+                SHOOT_ON_DEATH: true,
+                ALT_FIRE: true
+            }
         },
   ],
     ON: [
@@ -558,9 +763,328 @@ Class.solariolaserphase2 = {
         }, {
             event: "death",
             handler: ({ body }) => {
-                sockets.broadcast('YOU CANT DEFEAT ME!')
+                sockets.broadcast('NOOOOOOO!')
+            }
+        }, {
+            event: "damage",
+            handler: ({ body }) => {
+                if (body.health.amount < body.health.max / 3) {
+                    sockets.broadcast('Solario: GRRRAAAAAH, THATS IT!!!!!');
+                    body.define('solariolaserphase3');
+                }
+            }
+        },
+    ],
+}
+Class.solariophase3 = {
+    PARENT: "solariobase",
+    SKILL_CAP: Array(10).fill(12),
+    SKILL: Array(10).fill(12),
+    COLOR: 32,
+    GLOW: {
+        RADIUS: 60,
+        STRENGTH: 32,
+        COLOR: 32,
+        ALPHA: 1,
+        RECURSION: 10
+    },
+    GUNS: [{
+        POSITION: [15, 20, 1, 0, 0, 0, 0],
+    }, {
+        POSITION: [15, 10, 1, 0, 0, 60, 0],
+    }, {
+        POSITION: [15, 10, 1, 0, 0, 120, 0],
+    }, {
+        POSITION: [15, 20, 1, 0, 0, 180, 0],
+    }, {
+        POSITION: [15, 10, 1, 0, 0, 240, 0],
+    }, {
+        POSITION: [15, 10, 1, 0, 0, 300, 0],
+    }, {
+            POSITION: [0, 0, 1, 0, 0, 0, 25],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.fake, { reload: 5 }]),
+                TYPE: "bullet",
+                AUTOFIRE: true,
+                IDENTIFIER: "startlaserattack",
+            },
+        }, {
+            POSITION: [1, 10, 1, 0, 0, 0, 1],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.fake, { reload: 75 }]), // reload: 75
+                TYPE: "bullet",
+                AUTOFIRE: true,
+                IDENTIFIER: "solarioAttack"
+            },
+        }, {
+            POSITION: [1, 10, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.grenade_explosion, g.xxtrahealth, { maxSpeed: 0, speed: 0, range: 5, pen: 3 }]),
+                TYPE: ["solarioCircAttack", { COLOR: 32 }],
+                ALT_FIRE: true,
+            },
+        }, {
+            POSITION: [1, 10, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.xxtrahealth, { maxSpeed: 0, speed: 0, range: 1.4, reload: 5 }]),
+                TYPE: ["solarioRingAttack", { COLOR: 32 }],
+                ALT_FIRE: true
+            },
+        }, {
+            POSITION: [1, 10, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.drone, { health: 10, size: 2.5 }]),
+                TYPE: "baseThrower",
+                ALT_FIRE: true
+            }
+           }, {
+            POSITION: [1, 10, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.xxtrahealth, {speed: 0.01, maxSpeed: 0.01, health: 99999, pen: 99, density: 38281381283, resist: 421848412}]),
+                TYPE: "blackholeondeath",
+                SHOOT_ON_DEATH: true,
+                ALT_FIRE: true
+            }
+        },
+        ],
+    TURRETS: [{
+        POSITION: [30, 0, 0, 0, 360, 0],
+        TYPE: ["solarioturretBase3", { COLOR: 32 }],
+    }, {
+        POSITION: [30, 0, 0, 0, 360, 0],
+        TYPE: ["solarioturretBase2ndRing3", { COLOR: 32 }],
+    }, {
+        POSITION: [30, 0, 0, 0, 360, 0],
+        TYPE: ["solarioturretBase3rdRing3", { COLOR: 32 }],
+    }, {
+        POSITION: [16, 0, 0, 0, 360, 3],
+        TYPE: ["minilaser", { HAS_NO_RECOIL: true, CONTROLLERS: ["canRepel", "onlyAcceptInArc", "mapAltToFire", "nearestDifferentMaster"]}]
+    }, {
+        POSITION: [8.2, 0, 0, 0, 360, 2],
+        TYPE: ["solarioOutline", { COLOR: 32 }]
+    }, {
+        POSITION: [10, 0, 0, 0, 360, -1],
+        TYPE: ["solarioOutline", { COLOR: 32 }]
+    },
+  ],
+    ON: [
+{
+            event: 'fire',
+            handler: ({ body, gun }) => {
+                if (gun.identifier == 'startlaserattack') {
+                    sockets.broadcast('Solario: DODGE THIS!!');
+                    setTimeout(() => body.define('solariolaserphase3'), 1000);
+                }
+                if (gun.identifier == 'solarioAttack') {
+                    body.guns[3].canShoot = false;
+                    let attack = ~~(Math.random() * 3);
+                    switch(attack) {
+                        case 0:
+                            body.guns[8].fire();
+                            setTimeout(() => { if (body != null) body.guns[8].fire(); }, 3000);
+                            setTimeout(() => { if (body != null) body.guns[8].fire(); }, 6000);
+                            setTimeout(() => { if (body != null) body.guns[8].fire(); }, 9000);
+                            setTimeout(() => { if (body != null) body.guns[8].fire(); }, 12000);
+                        break;
+                        case 1:
+                            body.guns[9].fire();
+                            setTimeout(() => { if (body != null) body.guns[9].fire(); }, 1000);
+                        break;
+                        case 2:
+                            body.guns[10].fire();
+                            setTimeout(() => { if (body != null) body.guns[10].fire(); }, 500);
+                            setTimeout(() => { if (body != null) body.guns[10].fire(); }, 1000);
+                            setTimeout(() => { if (body != null) body.guns[10].fire(); }, 1500);
+                            setTimeout(() => { if (body != null) body.guns[10].fire(); }, 2000);
+                            setTimeout(() => { if (body != null) body.guns[10].fire(); }, 2500);
+                            setTimeout(() => { if (body != null) body.guns[10].fire(); }, 3000);
+                            setTimeout(() => { if (body != null) body.guns[10].fire(); }, 3500);
+                            setTimeout(() => { if (body != null) body.guns[10].fire(); }, 4000);
+                            setTimeout(() => { if (body != null) body.guns[10].fire(); }, 4500);
+                            setTimeout(() => { if (body != null) body.guns[10].fire(); }, 5000);
+                        break;
+                    }
+                }
+        },
+        }, {
+            event: "death",
+            handler: ({ body }) => {
+                sockets.broadcast('NOOOOOOO!')
+            }
+        }, 
+    ],
+};
+Class.solariolaserphase3 = {
+    PARENT: "solariophase3",
+    GUNS: [{
+        POSITION: [15, 20, 1, 0, 0, 0, 5],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast, { spread: 0, size: 0.6 }]),
+            TYPE: ["hyperlaser", {ARENA_CLOSER: true}],
+            AUTOFIRE: true,
+            COLOR: "red",
+        },
+    }, {
+        POSITION: [15, 10, 1, 0, 0, 60, 5],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast]),
+            TYPE: ["laser", {ARENA_CLOSER: true}],
+            AUTOFIRE: true,
+            COLOR: "red",
+        },
+    }, {
+        POSITION: [15, 10, 1, 0, 0, 120, 5],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast]),
+            TYPE: ["laser", {ARENA_CLOSER: true}],
+            AUTOFIRE: true,
+            COLOR: "red",
+        },
+    }, {
+        POSITION: [15, 20, 1, 0, 0, 180, 5],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast, { spread: 0, size: 0.6 }]),
+            TYPE: ["hyperlaser", {ARENA_CLOSER: true}],
+            AUTOFIRE: true,
+            COLOR: "red",
+        }
+    }, {
+        POSITION: [15, 10, 1, 0, 0, 240, 5],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast]),
+            TYPE: ["laser", {ARENA_CLOSER: true}],
+            AUTOFIRE: true,
+            COLOR: "red",
+        },
+    }, {
+        POSITION: [15, 10, 1, 0, 0, 300, 5],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast]),
+            TYPE: ["laser", {ARENA_CLOSER: true}],
+            AUTOFIRE: true,
+            COLOR: "red",
+        },
+    }, {
+        POSITION: [350, 20, 2, 0, 0, 0, 0],
+        PROPERTIES: {
+            COLOR: "red",
+            ALPHA: 0.5
+        }
+    }, {
+        POSITION: [350, 10, 2.5, 0, 0, 60, 0],
+        PROPERTIES: {
+            COLOR: "red",
+            ALPHA: 0.5
+        }
+    }, {
+        POSITION: [350, 10, 2.5, 0, 0, 120, 0],
+        PROPERTIES: {
+            COLOR: "red",
+            ALPHA: 0.5
+        }
+    }, {
+        POSITION: [350, 20, 2, 0, 0, 180, 0],
+        PROPERTIES: {
+            COLOR: "red",
+            ALPHA: 0.5
+        }
+    }, {
+        POSITION: [350, 10, 2.5, 0, 0, 240, 0],
+        PROPERTIES: {
+            COLOR: "red",
+            ALPHA: 0.5
+        }
+    }, {
+        POSITION: [350, 10, 2.5, 0, 0, 300, 0],
+        PROPERTIES: {
+            COLOR: "red",
+            ALPHA: 0.5
+        }
+    }, {
+            POSITION: [0, 0, 1, 0, 0, 0, 15],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.fake, { reload: 5 }]),
+                TYPE: "bullet",
+                AUTOFIRE: true,
+                IDENTIFIER: "endlaserattack",
+            },
+        }, {
+            POSITION: [1, 10, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.xxtrahealth, {speed: 0.01, range: 7, maxSpeed: 0.01, health: 99999, pen: 99, density: 38281381283, resist: 421848412}]),
+                TYPE: "blackholeondeath",
+                SHOOT_ON_DEATH: true,
+                ALT_FIRE: true
+            }
+        },
+  ],
+    ON: [
+        {
+            event: 'fire',
+            handler: ({ body, gun }) => {
+                if (gun.identifier == 'endlaserattack') {
+                    sockets.broadcast('Solario: RAHH!');
+                    setTimeout(() => body.define('solariophase3'), 500);
+                }
+            }
+        }, {
+            event: "death",
+            handler: ({ body }) => {
+                sockets.broadcast('NOOOOOOO!')
             }
         }
     ],
 }
-Class.devBosses.UPGRADES_TIER_0.push('solario')
+Class.blackholeondeath = {
+  PARENT: "bullet",
+  PERSISTS_AFTER_DEATH: true,
+  COLOR: "black",
+  MOTION_TYPE: ["grow", { growSpeed: 1.4 }],
+  ARENA_CLOSER: true,
+  GUNS: [{
+      POSITION: [4, 4, 1, 0, 0, 0, 0],
+      PROPERTIES: {
+          SHOOT_SETTINGS: combineStats([g.basic, g.magnet]),
+          TYPE: ["bullet", { SIZE: 5, ALPHA: 0.5 }],
+          AUTOFIRE: true
+      },
+  }],
+  ON: [{
+        event: "tick",
+        handler: ({ body }) => {
+          for (let instance of entities) {
+                if (instance.team != body.team && (instance.isPlayer || instance.master.isPlayer || instance.type == "food")) {
+                let diffX = instance.x - body.x,
+                    diffY = instance.y - body.y,
+                    dist2 = diffX ** 2 + diffY ** 2,
+                    number1 = 1,
+                    number2 = 1,
+                    number3 = 1/7,
+                    number4 = 1,
+                    number5 = 1,
+                    distance = 250,
+                    forceMulti = (((((body.size / 12)*250) ** 2)** number1) * number2) / dist2;
+                if (dist2 <= ((body.size / 12)*250) ** 2) {
+                if (instance.id != body.id /*&& !instance.ac && instance.alpha*/) {
+                    instance.velocity.x += util.clamp(body.x - instance.x, -90, 90) * instance.damp * ((number5 - (number5/((forceMulti ** number3)* number4)))+ 0.001);//0.05
+                    instance.velocity.y += util.clamp(body.y - instance.y, -90, 90) * instance.damp * ((number5 - (number5/((forceMulti ** number3)* number4)))+ 0.001);//0.05
+            }
+        }
+             if (dist2 < body.size ** 2 + instance.size ** 2) {
+                if (instance.id != body.id) {
+                    instance.isProtected = false;
+                    instance.invuln = false;
+                    instance.damageReceived = Infinity,
+                    instance.kill(),
+                    instance.destroy(),
+                    instance.removeFromGrid(),
+                    instance.isGhost = true;
+            }
+        }
+        }
+        }
+        }
+    },
+    ],
+}
+Class.devBosses.UPGRADES_TIER_0.push('solario', 'solariophase2', 'solariophase3')

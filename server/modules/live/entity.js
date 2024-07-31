@@ -1888,7 +1888,7 @@ class Entity extends EventEmitter {
                 this.firingArc = [ref.facing + bound.angle, bound.arc / 2];
                 this.accel.null();
                 this.blend = ref.blend;
-                //if (this.bond.syncTurretSkills) this.skill.set(this.bond.skill.raw);
+                if (this.bond.syncTurretSkills) this.skill.set(this.bond.skill.raw);
                 break;
             case "withMaster":
                 this.x = this.source.x;

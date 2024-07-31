@@ -159,7 +159,7 @@ dfxwall = new Tile({
 	    let o = new Entity(tile.loc);
 	    o.define("dfxwall");
       o.team = TEAM_ROOM;
-	    o.SIZE = room.tileWidth / 2;
+	    o.SIZE = room.tileWidth / 1.82;
 	    o.protect();
 	    o.life();
       makeHitbox(o);
@@ -173,7 +173,35 @@ fovwall = new Tile({
 	    let o = new Entity(tile.loc);
 	    o.define("fovwall");
       o.team = TEAM_ROOM;
-	    o.SIZE = room.tileWidth / 2;
+	    o.SIZE = room.tileWidth / 1.82;
+	    o.protect();
+	    o.life();
+      makeHitbox(o);
+      walls.push(o);
+    }
+}),
+
+bigsizewall = new Tile({
+    color: 30,
+    init: tile => {
+	    let o = new Entity(tile.loc);
+	    o.define("bigsizewall");
+      o.team = TEAM_ROOM;
+	    o.SIZE = room.tileWidth / 1.82;
+	    o.protect();
+	    o.life();
+      makeHitbox(o);
+      walls.push(o);
+    }
+}),
+
+smallsizewall = new Tile({
+    color: 31,
+    init: tile => {
+	    let o = new Entity(tile.loc);
+	    o.define("smallsizewall");
+      o.team = TEAM_ROOM;
+	    o.SIZE = room.tileWidth / 1.82;
 	    o.protect();
 	    o.life();
       makeHitbox(o);
@@ -193,4 +221,4 @@ hookpoint = new Tile({
     }
 });
 
-module.exports = { normal, normalNoFood, nest, nestNoFood, wall, nestNoBoss, blacktile, dancefloor, dancefloor1, dancefloor2, dancefloor3, dancefloor4, dancefloor5, dfxwall, hookpoint, fovwall };
+module.exports = { normal, normalNoFood, nest, nestNoFood, wall, nestNoBoss, blacktile, dancefloor, dancefloor1, dancefloor2, dancefloor3, dancefloor4, dancefloor5, dfxwall, hookpoint, fovwall, bigsizewall, smallsizewall };

@@ -46,26 +46,56 @@ Class.wall = {
     SHAPE: 4,
     VARIES_IN_SIZE: false
 }
+let biggerfov = new StatusEffect(1, {fov: 2});
 Class.fovwall = {
-    PARENT: "rock",
-    LABEL: "Wall",
+    PARENT: "wall",
+    GLOW: {
+        RADIUS: 30,
+        COLOR: "yellow",
+        ALPHA: 1,
+        RECURSION: 5
+    },
     COLOR: "yellow",
-    SIZE: 25,
-    SHAPE: 4,
-    VARIES_IN_SIZE: false,
     ON: [{
         event: "collide",
         handler: ({ body, other }) => {
-        body.addStatusEffect(20 * 30, { fov: 2 })
+        other.addStatusEffect(biggerfov)
     }}]
 }
-
+let biggersize = new StatusEffect(1, {size: 2});
+Class.bigsizewall = {
+    PARENT: "wall",
+    GLOW: {
+        RADIUS: 30,
+        COLOR: 30,
+        ALPHA: 1,
+        RECURSION: 5
+    },
+    COLOR: 30,
+    ON: [{
+        event: "collide",
+        handler: ({ body, other }) => {
+        if (other.type != "wall") other.addStatusEffect(biggersize)
+    }}]
+}
+let smallersize = new StatusEffect(1, {size: 0.5});
+Class.smallsizewall = {
+    PARENT: "wall",
+    GLOW: {
+        RADIUS: 30,
+        COLOR: 31,
+        ALPHA: 1,
+        RECURSION: 5
+    },
+    COLOR: 31,
+    ON: [{
+        event: "collide",
+        handler: ({ body, other }) => {
+        if (other.type != "wall") other.addStatusEffect(smallersize)
+    }}]
+}
 Class.dfxwall = {
-    PARENT: "rock",
-    LABEL: "Wall",
-    SIZE: 25,
-    SHAPE: "M 1 1 L -1 1 L -1 -1 L 1 -1 Z",
-    VARIES_IN_SIZE: false,
+    PARENT: "wall",
     TURRETS: [{
         POSITION: [7, -5, -5, 0, 0, 3],
         TYPE: "dfxskin"

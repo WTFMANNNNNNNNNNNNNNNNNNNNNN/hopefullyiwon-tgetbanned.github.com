@@ -159,7 +159,7 @@ module.exports = {
     explosion: { speed: 0.01, maxSpeed: 0.01, health: 5, damage: 4, pen: 5, density: 3.7, resist: 3 },
     brella: { reload: 2.5, health: 35, pen: 0, damage: 0.2, maxSpeed: 0.8, spray: 0, range: 2.25, size: 2.4, shudder: 0.1 },
     magnet: { damage: 0, health: 0.8, spray: 45, range: 0.08, recoil: 0, speed: 0.8, pen: 0 },
-    solarioblast: { reload: 0.05, health: 5, pen: 100, speed: 12, maxSpeed: 12, spread: 4, size: 2, range: 0.12 },
+    solarioblast: { reload: 0.05, health: 5, pen: 100, speed: 14, maxSpeed: 14, spread: 4, size: 2, range: 0.12 },
     emplaser: { reload: 1.25, recoil: 0, size: 1.7 },
     empbullet: { reload: 1.25, recoil: 0, size: 2.5, speed: 1.1, maxSpeed: 1.1, spray: 0.2 },
     cloner: { damage: 0.9, pen: 0.85 },

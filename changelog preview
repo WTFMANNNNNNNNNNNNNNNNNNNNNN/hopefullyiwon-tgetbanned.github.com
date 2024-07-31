@@ -34,9 +34,14 @@
         <li>added new extra tanks</li>
         <li>added jouster branch</li>
         <li>fixed mockups bug</li>
-        <li>fixed physics bugs</li>
-        <li>fixed machine gun bullet size</li>
-        <li>fixed sidewinder bug</li>
+        <li>balance changes and sidewinder branch rework</li>
+        <li>optimizations</li>
+        <li>record and screenshot</li>
+        <li>updated options ui</li>
+        <li>added extra gui and ui customization</li>
+        <li>added keybinds and mobile crosshair</li>
+        <li>nerfed cloner clone spawn time and added cockatiel</li>
+        <li>balanced propel stuff</li>
         <p style="color:red;" class="vsaucereference" onclick="PlaySoundpianioio()" >RANDOM BULLSHIT, GO!</p>
     </ul>
 </div>

@@ -5624,7 +5624,6 @@ Class.trailblazer = {
     SHIELD: 0.8 * base.SHIELD,
     DENSITY: 0.6 * base.DENSITY,
   },
-  HAS_NO_RECOIL: false,
   GUNS: [
     {
       POSITION: [20, 15, 0.001, 0, 0, 0, 0],
@@ -5632,7 +5631,8 @@ Class.trailblazer = {
         SHOOT_SETTINGS: combineStats([g.basic, g.lance]),
         TYPE: ["bullet", { ALPHA: 0 }],
         AUTOFIRE: true,
-        STAT_CALCULATOR: "lancer"
+        STAT_CALCULATOR: "lancer",
+        HAS_NO_RECOIL: true
       }
     },
     {
@@ -5846,7 +5846,7 @@ Class.bateau = {
             },
         },
         {
-            POSITION: [16, 8, 1.3, 0, 0, 180, 0.5],
+            POSITION: [16, 8, 1.3, 0, 0, 180, 2],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { reload: 0.6, spray: 1.5, recoil: 2.3, damage: 0.7, range: 0.5 }]),
                 TYPE: "bullet",
@@ -5875,7 +5875,7 @@ Class.assblaster = {
             },
         },
         {
-            POSITION: [17, 12, 1.5, 0, 0, 180, 0.5],
+            POSITION: [17, 12, 1.5, 0, 0, 180, 2.5],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { reload: 0.4, spray: 2, recoil: 2.8, damage: 0.6, range: 0.35, size: 1.5 }]),
                 TYPE: "bullet",
@@ -5903,7 +5903,7 @@ Class.rocker = {
             },
         },
         {
-            POSITION: [16, 8, 1.3, 0, 0, 150, 0.5],
+            POSITION: [16, 8, 1.3, 0, 0, 150, 2],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { reload: 0.6, spray: 1.5, recoil: 2.3, damage: 0.7, range: 0.5 }]),
                 TYPE: "bullet",
@@ -5911,7 +5911,7 @@ Class.rocker = {
             },
         },
         {
-            POSITION: [16, 8, 1.3, 0, 0, 210, 0.5],
+            POSITION: [16, 8, 1.3, 0, 0, 210, 2],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { reload: 0.6, spray: 1.5, recoil: 2.3, damage: 0.7, range: 0.5 }]),
                 TYPE: "bullet",
@@ -5943,7 +5943,7 @@ Class.jouster = {
       POSITION: [25, 15, 0.001, 0, 0, 0, 0]
     },
     {
-      POSITION: [16, 8, 1, 0, 0, 180, 0.1],
+      POSITION: [16, 8, 1, 0, 0, 180, 0.5],
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { recoil: 0.6 }]),
         TYPE: "bullet",
@@ -5966,7 +5966,7 @@ Class.knight = {
     {
       POSITION: [20, 15, 0.001, 0, 0, 0, 0],
       PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.basic, g.lance]),
+        SHOOT_SETTINGS: combineStats([g.basic, g.lance, { recoil: 0 }]),
         TYPE: ["bullet", { ALPHA: 0 }],
         AUTOFIRE: true,
         STAT_CALCULATOR: "lancer"
@@ -5976,9 +5976,9 @@ Class.knight = {
       POSITION: [25, 15, 0.001, 0, 0, 0, 0]
     },
      {
-        POSITION: [16, 8, 1.3, 0, 0, 180, 0.5],
+        POSITION: [16, 8, 1.3, 0, 0, 180, 2],
         PROPERTIES: {
-             SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { reload: 0.6, spray: 1.5, recoil: 2.3, damage: 0.7, range: 0.5 }]),
+             SHOOT_SETTINGS: combineStats([g.basic, g.flankGuard, g.triAngle, g.thruster, { reload: 0.6, spray: 1.5, recoil: 2, damage: 0.7, range: 0.5 }]),
              TYPE: "bullet",
              LABEL: "thruster",
        },

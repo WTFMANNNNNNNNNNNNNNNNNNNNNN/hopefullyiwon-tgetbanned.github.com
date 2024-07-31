@@ -2058,11 +2058,19 @@ Class.jumpSmasher = {
     PARENT: "genericSmasher",
     LABEL: "Jump Smasher",
     DANGER: 7,
-    UPGRADE_TOOLTIP: "[DEV NOTE] This tank does not function as intended yet!",
+    GUNS: [
+        {
+            POSITION: [2, 12, 1, 0, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, { recoil: 12, reload: 13, damage: 0.2, range: 0.13 }]),
+                TYPE: "bullet",
+            },
+        },
+    ],
     TURRETS: [
         {
             POSITION: [21.5, 0, 0, 0, 360, 0],
-            TYPE: "smasherBody"
+            TYPE: "jumpsmashBody"
         }
     ]
 }
@@ -4280,6 +4288,72 @@ Class.bigrayofdeath = {
         }
     ],
 }
+Class.cheesedeco = {
+    SHAPE: "https://cdn.usdairy.com/optimize/getmedia/b5108b6f-59c3-4cc4-b1d5-4b9b0d1e0c54/swiss.jpg.jpg.aspx?format=webp"
+}
+Class.biggercheesedrone = {
+  PARENT: "drone",
+    TURRETS: [{
+        POSITION: [15, 0, 0, 0, 360, 2],
+        TYPE: "cheesedeco",
+    }],
+}
+Class.biggerCheese = {
+    PARENT: "genericTank",
+    LABEL: "Bigger Cheese",
+    STAT_NAMES: statnames.drone,
+    SKILL_CAP: Array(10).fill(255),
+    SKILL: Array(10).fill(255),
+    DANGER: 43,
+    ARENA_CLOSER: true,
+    BODY: {
+        SIZE: 2,
+        FOV: base.FOV * 3,
+    },
+    GUNS: [
+        {
+            POSITION: [27, 27, 6, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.drone, g.bigCheese, { size: 7 }]),
+                TYPE: "biggercheesedrone",
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: "drone",
+                MAX_CHILDREN: 1,
+            },
+        },
+    ],
+    TURRETS: [{
+        POSITION: [15, 0, 0, 0, 360, 2],
+        TYPE: "cheesedeco",
+    }],
+}
+Class.kivaship = {
+    PARENT: "genericTank",
+    LABEL: "Kivaship",
+    STAT_NAMES: statnames.drone,
+    SKILL_CAP: Array(10).fill(10),
+    SKILL: Array(10).fill(10),
+    DANGER: 8,
+    ARENA_CLOSER: true,
+    GUNS: [
+        {
+            POSITION: [6, 11, 1.3, 7, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.drone]),
+                TYPE: "baseThrower",
+                AUTOFIRE: true,
+                SYNCS_SKILLS: true,
+                STAT_CALCULATOR: "drone",
+                MAX_CHILDREN: 4,
+            },
+        },
+    ],
+    TURRETS: [{
+        POSITION: [34, 0, 0, 0, 360, 0],
+        TYPE: "turretBaseKiva",
+    }],
+}
 
 Class.utilities = {
     PARENT: "genericTank",
@@ -4320,7 +4394,7 @@ Class.developer.UPGRADES_TIER_0 = ["basic", "tanks", "AIT", "utilities", "addons
         Class.devBosses.UPGRADES_TIER_0 = ["bosses", "taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss", "toothlessBoss"]
 
         Class.features.UPGRADES_TIER_0 = ["tanks", "diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "propTest", "weaponArrayTest", "radialAutoTest", "makeAutoTest", "imageShapeTest", "turretStatScaleTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "gunBenchmark", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]
-        Class.overpowered.UPGRADES_TIER_0 = ["tanks", "goofytanks", "armyOfOne", "godbasic", "maximumOverdrive", "oppenheimer", "homingdev", ["maxStatTank", "basic"], "quiteliterallyAMachineGun", "speedoflight", "rayofdeath"]
+        Class.overpowered.UPGRADES_TIER_0 = ["tanks", "goofytanks", "armyOfOne", "godbasic", "maximumOverdrive", "oppenheimer", "homingdev", ["maxStatTank", "basic"], "quiteliterallyAMachineGun", "speedoflight", "rayofdeath", "biggerCheese", "kivaship"]
         Class.goofytanks.UPGRADES_TIER_0 = ["overpowered", "pisseroo", "papyrus", "Trapper_guy", "watertank", "piszerbeam", "baseThrowerDelta", "pouner", "adsfoipuasdfiopu", "goofywhirlwind", "gettingoverit", "alchem"]
 
         //the "winsor" tank needs this to function, it worked before the "ON" thing was added
