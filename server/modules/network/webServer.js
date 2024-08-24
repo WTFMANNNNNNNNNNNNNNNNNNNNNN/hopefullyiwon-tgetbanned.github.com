@@ -1,5 +1,6 @@
 let fs = require('fs'),
     path = require('path'),
+    ips = require("./discoverability.js"),
     publicRoot = path.join(__dirname, "../../../public"),
     sharedRoot = path.join(__dirname, "../../../shared"),
     normalRoot = path.join(__dirname, "../../.."),
@@ -12,8 +13,8 @@ let fs = require('fs'),
         "png": "image/png",
         "ico": "image/x-icon"
     },
-    DEFAULT_FILE = "index.html",
     wsServer;
+
 try {
     wsServer = new (require('../../lib/ws/index.js').WebSocketServer)({ noServer: true });
 } catch (err) {
@@ -27,6 +28,7 @@ if (Config.host === 'localhost') {
 if (Config.host.match(/localhost:(\d)/) && Config.host !== 'localhost:' + Config.port) {
     util.warn('[WEB SERVER] config.host is a localhost domain but its port is different to config.port!');
 }
+ips.push([ Config.host, Config.location, Config.https ]);
 
 server = require('http').createServer((req, res) => {
     let resStr = "";
@@ -35,9 +37,9 @@ server = require('http').createServer((req, res) => {
 
         //if this file does not exist, return the default;
         if (!fs.existsSync(fileToGet)) {
-            fileToGet = path.join(sharedRoot, DEFAULT_FILE);
+            fileToGet = path.join(sharedRoot, Config.DEFAULT_FILE);
         } else if (!fs.lstatSync(fileToGet).isFile()) {
-            fileToGet = path.join(sharedRoot, DEFAULT_FILE);
+            fileToGet = path.join(sharedRoot, Config.DEFAULT_FILE);
         }
 
         //return the file
@@ -47,35 +49,32 @@ server = require('http').createServer((req, res) => {
         case "/lib/json/mockups.json":
             resStr = mockupJsonData;
             break;
-        case "/lib/json/gamemodeData.json":
+        case "/serverData.json":
             resStr = JSON.stringify({ gameMode: Config.gameModeName, players: views.length });
             break;
-        case "/serverData.json":
-            resStr = JSON.stringify({ ip: Config.host, gameMode: Config.gameModeName, players: views.length, region: Config.region, name: Config.serverName });
+        case "/browserData.json":
+            resStr = JSON.stringify(ips);
             break;
         default:
-            if (Config.COMBINED) {
-                let fileToGet = path.join(publicRoot, req.url);
+            let fileToGet = path.join(publicRoot, req.url);
 
-                //if this file does not exist, return the default;
-                if (!fs.existsSync(fileToGet)) {
-                  if (req.url.includes("/file/")) {
-                    fileToGet = path.join(normalRoot, req.url.replace("/file", ""));
-                } else {
-                    fileToGet = path.join(publicRoot, DEFAULT_FILE);
-                }
-                } else if (!fs.lstatSync(fileToGet).isFile()) {
-                    fileToGet = path.join(publicRoot, DEFAULT_FILE);
-                }
-
-                //return the file
-                res.writeHead(200, { 'Content-Type': mimeSet[ fileToGet.split('.').pop() ] || 'text/html' });
-                return fs.createReadStream(fileToGet).pipe(res);
+            //if this file does not exist, return the default;
+            if (!fs.existsSync(fileToGet)) {
+              if (req.url.includes("/file/")) {
+                fileToGet = path.join(normalRoot, req.url.replace("/file", ""));
+              } else {
+                fileToGet = path.join(publicRoot, Config.DEFAULT_FILE);
+              }
+            } else if (!fs.lstatSync(fileToGet).isFile()) {
+                fileToGet = path.join(publicRoot, Config.DEFAULT_FILE);
             }
-    }
 
+            //return the file
+            res.writeHead(200, { 'Content-Type': mimeSet[ fileToGet.split('.').pop() ] || 'text/html' });
+            return fs.createReadStream(fileToGet).pipe(res);
+    }
     // CORS?
-        res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', '*');
 
     res.writeHead(200);
     res.end(resStr);

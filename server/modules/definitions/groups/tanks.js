@@ -3097,7 +3097,7 @@ Class.sidewinder = {
         {
             POSITION: [20, 8, -4/3, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.sidewinder]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.sidewinder2]),
                 TYPE: ["bullet", {CONTROLLERS: ['snake']}]
             },
         },
@@ -3271,14 +3271,14 @@ Class.coil = {
         {
             POSITION: [20, 8, 0.75, 0, -5, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.sidewinder]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.sidewinder2]),
                 TYPE: ["bullet", {CONTROLLERS: ['snake']}]
             },
         },
         {
             POSITION: [20, 8, 0.75, 0, 5, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.sidewinder]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.twin, g.sidewinder2]),
                 TYPE: ["bullet", {CONTROLLERS: [['snake', {invert: true}]]}]
             },
         },
@@ -3321,7 +3321,7 @@ Class.ranch = {
             POSITION: [1, 12, 1, 15, 0, 0, 0],
             PROPERTIES: {
                 MAX_CHILDREN: 3,
-                SHOOT_SETTINGS: combineStats([g.factory, g.babyfactory, g.sidewinder]),
+                SHOOT_SETTINGS: combineStats([g.factory, g.babyfactory, g.sidewinder2]),
                 TYPE: ["minion", {CONTROLLERS: ['snake']}],
                 STAT_CALCULATOR: "drone",
                 AUTOFIRE: true,
@@ -3352,7 +3352,7 @@ Class.oroboros = {
         {
             POSITION: [20, 10, 0.8, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.sidewinder, { speed: 3 }]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.sidewinder2, { speed: 3 }]),
                 TYPE: ["bullet", {CONTROLLERS: ['snake']}]
             },
         },
@@ -3369,6 +3369,7 @@ Class.cocciPart1 = {
     LABEL: "",
     BODY: {
       REGEN: 999999,
+      HEALTH: 99999,
       PENETRATION: 999
     },
     TURRETS: [
@@ -3388,6 +3389,7 @@ Class.cocciPart2 = {
     LABEL: "",
     BODY: {
       REGEN: 999999,
+      HEALTH: 99999,
       PENETRATION: 999
     },
     TURRETS: [
@@ -3407,6 +3409,7 @@ Class.cocciPart3 = {
     LABEL: "",
     BODY: {
       REGEN: 999999,
+      HEALTH: 99999,
       PENETRATION: 999,
     },
     TURRETS: [
@@ -4335,7 +4338,7 @@ Class.hivemind = {
     {
       POSITION: [0, 20, 1, 0, 0, 90, 3],
       PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.basic, g.slow, { reload: 2 }]),
+        SHOOT_SETTINGS: combineStats([g.basic, g.slow, { reload: 5 }]),
         TYPE: "hiveprobe",
         MAX_CHILDREN: 1,
         WAIT_TO_CYCLE: true
@@ -4344,7 +4347,7 @@ Class.hivemind = {
     {
       POSITION: [0, 20, 1, 0, 0, 270, 3.5],
       PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.basic, g.slow, { reload: 2 }]),
+        SHOOT_SETTINGS: combineStats([g.basic, g.slow, { reload: 5 }]),
         TYPE: "hiveprobe",
         MAX_CHILDREN: 1,
         WAIT_TO_CYCLE: true
@@ -4375,7 +4378,7 @@ Class.cloner = {
     {
       POSITION: [0, 20, 1, 0, 0, 180, 3],
       PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.basic, g.slow, { reload: 2 }]),
+        SHOOT_SETTINGS: combineStats([g.basic, g.slow, { reload: 5 }]),
         TYPE: "clonerprobe",
         MAX_CHILDREN: 1,
         WAIT_TO_CYCLE: true
@@ -5985,6 +5988,27 @@ Class.knight = {
     },
   ]
 }
+Class.saturn = {
+    PARENT: "genericSmasher",
+    LABEL: "Saturn",
+    BODY: {
+        DENSITY: 2 * base.DENSITY
+    },
+    TURRETS: [
+        {
+            POSITION: [21.5, 0, 0, 0, 360, 0],
+            TYPE: "smasherBody"
+        },
+        {
+            POSITION: [3, 0, 0, 0, 360, 1],
+            TYPE: "saturnDeco"
+        },
+        {
+            POSITION: [34, 0, 0, 0, 360, 0],
+            TYPE: "saturnturretBase"
+        }
+    ],
+}
 
 // Auto tanks
 Class.autoBasic = makeAuto("basic", "Auto-Basic");
@@ -6404,7 +6428,7 @@ Class.auraJouster = makeAura(Class.jouster);
 // TANK UPGRADE PATHS
 Class.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "director", "pounder", "trapper", "autoBasic", "desmos", "bascrid", "littleHunter", "inception", "propel", "lancer", "auto2", "auraBasic", "whirlwind"]
     Class.basic.UPGRADES_TIER_2 = ["smasher", "cloner"]
-        Class.smasher.UPGRADES_TIER_3 = ["megaSmasher", "spike", "landmine", "cocci", "pion", "trackerSmasher", "skater", "acidsmasher", "flail", "autoSmasher", "auraSmasher", "jumpSmasher"]
+        Class.smasher.UPGRADES_TIER_3 = ["megaSmasher", "spike", "landmine", "cocci", "pion", "trackerSmasher", "saturn", "skater", "acidsmasher", "flail", "autoSmasher", "auraSmasher", "jumpSmasher"]
         Class.healer.UPGRADES_TIER_3 = ["medic", "ambulance", "surgeon", "paramedic"]
         Class.cloner.UPGRADES_TIER_3 = ["hivemind", "autoCloner"]
 

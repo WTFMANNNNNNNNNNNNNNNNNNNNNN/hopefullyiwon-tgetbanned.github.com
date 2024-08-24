@@ -181,34 +181,6 @@ fovwall = new Tile({
     }
 }),
 
-bigsizewall = new Tile({
-    color: 30,
-    init: tile => {
-	    let o = new Entity(tile.loc);
-	    o.define("bigsizewall");
-      o.team = TEAM_ROOM;
-	    o.SIZE = room.tileWidth / 1.82;
-	    o.protect();
-	    o.life();
-      makeHitbox(o);
-      walls.push(o);
-    }
-}),
-
-smallsizewall = new Tile({
-    color: 31,
-    init: tile => {
-	    let o = new Entity(tile.loc);
-	    o.define("smallsizewall");
-      o.team = TEAM_ROOM;
-	    o.SIZE = room.tileWidth / 1.82;
-	    o.protect();
-	    o.life();
-      makeHitbox(o);
-      walls.push(o);
-    }
-}),
-
 hookpoint = new Tile({
     color: "cyan",
     init: tile => {
@@ -221,4 +193,4 @@ hookpoint = new Tile({
     }
 });
 
-module.exports = { normal, normalNoFood, nest, nestNoFood, wall, nestNoBoss, blacktile, dancefloor, dancefloor1, dancefloor2, dancefloor3, dancefloor4, dancefloor5, dfxwall, hookpoint, fovwall, bigsizewall, smallsizewall };
+module.exports = { normal, normalNoFood, nest, nestNoFood, wall, nestNoBoss, blacktile, dancefloor, dancefloor1, dancefloor2, dancefloor3, dancefloor4, dancefloor5, dfxwall, hookpoint, fovwall };

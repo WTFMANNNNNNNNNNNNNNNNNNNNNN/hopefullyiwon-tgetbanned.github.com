@@ -28,6 +28,7 @@ Class.developer = {
     INVISIBLE: [0, 0],
     ALPHA: [0, 1],
     HITS_OWN_TYPE: "hardOnlyTanks",
+    NECRO: false,
     SHAPE: [
         [-1, -0.8],
         [-0.8, -1],
@@ -707,7 +708,7 @@ Class.turretStatScaleTest = {
     }))
 }
 
-Class.auraBasicGen = addAura(5, 1.3);
+Class.auraBasicGen = addAura(4.3, 1.3);
 Class.auraHealerGen = addAura(-1);
 Class.auraHealer = {
     PARENT: "genericTank",
@@ -1204,43 +1205,6 @@ Class.sidewinderOld = {
             },
         },
     ],
-}
-
-Class.whirlwindDeco = makeDeco(6)
-Class.whirlwindDeco.CONTROLLERS = [["spin", { independent: true, speed: 0.128 }]]
-Class.whirlwind = {
-    PARENT: "genericTank",
-    LABEL: "Whirlwind",
-    ANGLE: 60,
-    CONTROLLERS: ["whirlwind"],
-    HAS_NO_RECOIL: true,
-    STAT_NAMES: statnames.whirlwind,
-    TURRETS: [
-        {
-            POSITION: [8, 0, 0, 0, 360, 1],
-            TYPE: "whirlwindDeco"
-        }
-    ],
-    AI: {
-        SPEED: 2, 
-    }, 
-    GUNS: (() => { 
-        let output = []
-        for (let i = 0; i < 6; i++) { 
-            output.push({ 
-                POSITION: {WIDTH: 8, LENGTH: 1, DELAY: i * 0.25},
-                PROPERTIES: {
-                    SHOOT_SETTINGS: combineStats([g.satellite]), 
-                    TYPE: ["satellite", {ANGLE: i * 60}], 
-                    MAX_CHILDREN: 1,   
-                    AUTOFIRE: true,  
-                    SYNCS_SKILLS: false,
-                    WAIT_TO_CYCLE: true
-                }
-            }) 
-        }
-        return output
-    })()
 }
 
 // Whirlwind
@@ -4360,6 +4324,16 @@ Class.utilities = {
     LABEL: "Utilities",
     SHAPE: 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Gear-icon-transparent-background.png?v=1705579178381'
 };
+Class.stupidpony = {
+    PARENT: "developer",
+    LABEL: "Big long pink thing",
+    SHAPE: "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/IMG_1942.png?v=1723341388613"
+}
+Class.billcipher = {
+    PARENT: "developer",
+    LABEL: "Bill",
+    SHAPE: "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/52459e59-5ff9-4646-9949-a2a1461c7202.image.png?v=1724373801016"
+}
 Class.AIT = menu("AIT")
 
 Class.developer.UPGRADES_TIER_0 = ["basic", "tanks", "AIT", "utilities", "addons"]
@@ -4395,7 +4369,7 @@ Class.developer.UPGRADES_TIER_0 = ["basic", "tanks", "AIT", "utilities", "addons
 
         Class.features.UPGRADES_TIER_0 = ["tanks", "diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "propTest", "weaponArrayTest", "radialAutoTest", "makeAutoTest", "imageShapeTest", "turretStatScaleTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "gunBenchmark", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]
         Class.overpowered.UPGRADES_TIER_0 = ["tanks", "goofytanks", "armyOfOne", "godbasic", "maximumOverdrive", "oppenheimer", "homingdev", ["maxStatTank", "basic"], "quiteliterallyAMachineGun", "speedoflight", "rayofdeath", "biggerCheese", "kivaship"]
-        Class.goofytanks.UPGRADES_TIER_0 = ["overpowered", "pisseroo", "papyrus", "Trapper_guy", "watertank", "piszerbeam", "baseThrowerDelta", "pouner", "adsfoipuasdfiopu", "goofywhirlwind", "gettingoverit", "alchem"]
+        Class.goofytanks.UPGRADES_TIER_0 = ["overpowered", "pisseroo", "papyrus", "Trapper_guy", "watertank", "piszerbeam", "baseThrowerDelta", "pouner", "adsfoipuasdfiopu", "goofywhirlwind", "gettingoverit", "alchem", "stupidpony", "billcipher"]
 
         //the "winsor" tank needs this to function, it worked before the "ON" thing was added
               Class.winsor0.UPGRADES_TIER_0 = ["winsor1", "winsor2", "winsor3", "winsor4"]

@@ -5,12 +5,15 @@ module.exports = {
     // If 'localhost:NUMBER', the port must equal the port setting.
     host: "neroio2.glitch.me",
 
+    // Behind https proxy
+    https: true,
+
+    // World-wide location
+    // Leave empty to show host name instead
+    location: "USA",
+
     // Which port to run the web server on.
     port: 3000,
-  
-    // Region/Location the server is in
-    // For glitch its US West
-    region: "US West",
   
     // name of the server ex. main server, beta server, etc
     serverName: "Beta",
@@ -28,7 +31,7 @@ module.exports = {
     // Log speed loop warnings
     LOGS: false,
   
-      // If there's only one server
+    // If there's only one server
     COMBINED: true,
 
     // The \modules\setup\gamemodeconfigs\ files to load.
@@ -54,6 +57,9 @@ module.exports = {
     // If you don't want your players to color their messages.
     // They get sanitized after addons interpret them, but before they're added to the chat message dictionary.
     SANITIZE_CHAT_MESSAGE_COLORS: false,
+
+    // If someone tries to get a file that does not exist, send them this instead.
+    DEFAULT_FILE: 'index.html',
 
     // Window name of the server terminal.
     WINDOW_NAME: 'Nero Game Server Instance',
@@ -105,6 +111,8 @@ module.exports = {
         if (level <= 45 && level & 1 == 1) return 1;
         return 0;
     },
+    // Show the health bar text or not.
+    SHOW_HEALTHBAR_TEXT: false,
 
     // Default skill caps.
     MAX_SKILL: 9,
@@ -137,7 +145,7 @@ module.exports = {
     BOT_CLASS_UPGRADE_CHANCES: [ 1, 5, 20, 37, 37],
   
     // The prefix of the bot's name.
-    BOT_NAME_PREFIX: "[AI] ",
+    BOT_NAME_PREFIX: '§#888§[AI]§reset§ ',
 
     // The class that players and player-bots spawn as.
     SPAWN_CLASS: "basic",
@@ -151,6 +159,12 @@ module.exports = {
 
 
   // Natural Spawns
+
+    // Allow foods to be spawned or not.
+    FOOD_SPAWN_CHANCE: 0.05, // Likeliness of normal food spawn attempts succeedingg. 0.875
+    // NOTE: Disabling it decreases lagness, also very useful if you don't need foods to be spawned.
+    FOOD_SPAWN_COOLDOWN: 100, // Cooldown (in game ticks) of food spawn attempts being made. 30
+    ENABLE_FOOD: true,
 
     FOOD_CAP: 1, // Max normal food per normal tile. 3
     FOOD_SPAWN_CHANCE: 0.05, // Likeliness of normal food spawn attempts succeedingg. 0.875

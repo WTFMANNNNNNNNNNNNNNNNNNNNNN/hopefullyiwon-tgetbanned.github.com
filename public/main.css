@@ -178,8 +178,8 @@ input {
     border-radius: 5px;
     -moz-border-radius: 5px;
     -webkit-border-radius: 5px;
-    margin-top: 5px;
-    margin-bottom: 5px;
+    margin-top: 10px;
+    margin-bottom: -10px;
     outline: none;
 }
 
@@ -252,11 +252,11 @@ div.optionsHeader {
 }
 
 .serverSelector {
-    height: 65px;
+    height: 75px;
     text-align: center;
     font-size: 14px;
     font-weight: bold;
-    line-height: 13px;
+    line-height: 14px;
     padding-left: 10px;
     overflow-y: scroll;
     scroll-behavior: smooth;
@@ -274,6 +274,15 @@ div.optionsHeader {
     /*color: #8ABC3F;*/
     cursor: default;
 }
+
+.serverSelector tr:hover {
+    color: #8ABC3F;
+}
+.serverSelector tr.selected:hover {
+    color: #1B3353;
+    cursor: default;
+}
+
 
 #startMenu {
     position: relative;
@@ -1472,14 +1481,15 @@ body.mobile #skinpdiv {
 #eventtitle {
   position: absolute;
   float: center;
-  top: 10%;
-  left: 50%;
+  top: 600px;
+  width: 70%;
+  left: 15%;
   color: white;
   outline: #000000 solid;
   z-index: 0;
   cursor: pointer;
   text-shadow: -1px -1px 0 #000000, 1px -1px 0 #000000, -1px 1px 0 #000000, 1px 1px 0 #000000;
-  background: #202020 url("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/channels4_profile.jpg?v=1709324207088") 0px 0px/100px repeat;
+  background: #202020 url("https://yt3.googleusercontent.com/yDCc9Bsxd-JFacxEfYiO_Nz_B3ZbqJBYazWi8ltyHMOHA_k2t-1zSPSC58u9ZxG9ByurM2cZag=s900-c-k-c0x00ffffff-no-rj") 0px 0px/100px repeat;
 }
 #controls {
   height: 200px;
@@ -1967,6 +1977,13 @@ td b {
     cursor: pointer;
     text-align: right;
     vertical-align: bottom;
+}
+
+.tdLeft {
+    width: 25%;
+}
+.tdCenter {
+    width: 350px;
 }
 
 *:focus {

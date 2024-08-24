@@ -98,7 +98,7 @@ let generateLabyrinth = (size) => {
     for (let x = padding; x < size + padding; x++) {
         for (let y = padding; y < size + padding; y++) {
             // Find spawn location and size
-            if (!maze[x - 1][y - 1]) continue;
+            if (!maze[y - 1][x - 1]) continue;
 
             let d = {
                 x: x * mazeWallScale + mazeWallScale / 2,
@@ -118,7 +118,7 @@ let generateLabyrinth = (size) => {
             o.life();
             makeHitbox(o);
             walls.push(o);
-            validPositions[x][y] = false;
+            validPositions[y][x] = false;
         }
     }
 
@@ -133,17 +133,17 @@ let generateLabyrinth = (size) => {
         }
     }
     validPositions = truePositions;
-}
 
-// Big food
-// Class.sphere.SIZE = 17;
-// Class.cube.SIZE = 22;
-// Class.tetrahedron.SIZE = 27;
-// Class.octahedron.SIZE = 28;
-// Class.dodecahedron.SIZE = 30;
-// Class.icosahedron.SIZE = 32;
-// Class.tesseract.SIZE = 39;
-delete Class.food.LEVEL_CAP;
+    // Big food
+    // Class.sphere.SIZE = 17;
+    // Class.cube.SIZE = 22;
+    // Class.tetrahedron.SIZE = 27;
+    // Class.octahedron.SIZE = 28;
+    // Class.dodecahedron.SIZE = 30;
+    // Class.icosahedron.SIZE = 32;
+    // Class.tesseract.SIZE = 39;
+    delete Class.food.LEVEL_CAP;
+}
 
 // Portal loop
 class PortalLoop {
@@ -178,7 +178,14 @@ class PortalLoop {
                         type: "spikyPortalOfficialV1",
                         destination: this.openBounds,
                         buffer: 1500,
-                        spawnArray: validPositions
+                        spawnArray: validPositions,
+                        handler: (entity) => {
+                            // Spawn in default spawnable area if on a tank team
+                            if (entity.team == TEAM_DREADNOUGHTS) return;
+                            let {x, y} = getSpawnableArea(entity.team);
+                            entity.x = x;
+                            entity.y = y;
+                        }
                     },
                     {
                         type: "bluePortalOfficialV1",
@@ -196,7 +203,7 @@ class PortalLoop {
                             entity.destroyAllChildren();
                             entity.upgrades = [];
                             entity.define('dreadOfficialV1');
-                            entity.team = 10;
+                            entity.team = TEAM_DREADNOUGHTS;
                         },
                         entryBarrier: (entity) => {
                             return entity.skill.level >= 150;
@@ -255,7 +262,7 @@ class PortalLoop {
                     // Validity checking
                     if (other.type != 'tank') {
                         if (
-                            other.type != "miniboss" && other.type != "food" && other.type != "aura" && other.type != "wall" && other.type != "unknown" &&
+                            other.type != "miniboss" && other.type != "food" && other.type != "crasher" && other.type != "aura" && other.type != "wall" && other.type != "unknown" &&
                             (other.x - entity.x) ** 2 + (other.y - entity.y) ** 2 <= 625
                         ) {
                             other.kill();

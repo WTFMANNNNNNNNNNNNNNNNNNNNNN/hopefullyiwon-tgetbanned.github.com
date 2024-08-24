@@ -758,7 +758,7 @@ const protocols = {
 };
 const socketInit = port => {
     window.resizeEvent();
-    let socket = new WebSocket(protocols[location.protocol] + window.serverAdd);
+    let socket = new WebSocket(protocols[window.connectionAdd] + window.serverAdd);
     // Set up our socket
     socket.binaryType = 'arraybuffer';
     socket.open = false;
@@ -862,7 +862,7 @@ const socketInit = port => {
                 global.player.name = m[0];
                 break;
           case "achieve":
-                const achievementTable = ['killachievement', 'killachievement2', 'tokenachievement'] // lookup table of achievements and their ids
+                const achievementTable = ['killachievement', 'killachievement2', 'tokenachievement', 'bossachivement'] // lookup table of achievements and their ids
                 util.submitAchievementToLocalStorage(achievementTable[m[0]]) // whatever code to actually give the player the achievement
                 break;
           case "menu":

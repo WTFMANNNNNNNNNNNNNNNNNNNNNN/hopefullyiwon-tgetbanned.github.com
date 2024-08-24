@@ -268,6 +268,9 @@ class Gun extends EventEmitter {
         bullet.team = this.body.team;
     }
     defineBullet(bullet) {
+        // Set bullet source
+        bullet.source = this.body;
+        
         // Define bullet based on natural properties and skills
         this.bulletType.SIZE = (this.body.size * this.width * this.shootSettings.size) / 2;
         bullet.define(this.bulletType);
@@ -287,7 +290,6 @@ class Gun extends EventEmitter {
             this.body.children.push(bullet);
             this.children.push(bullet);
         }
-        bullet.source = this.body;
         bullet.facing = bullet.velocity.direction;
 
         if (!bullet.settings.necroTypes) {
@@ -323,7 +325,8 @@ class Gun extends EventEmitter {
     setBulletType(type, clearChildren = false) {
         // Pre-flatten bullet types to save on doing the same define() sequence a million times
         this.bulletType = Array.isArray(type) ? type : [type];
-        let flattenedType = {};
+        // Preset BODY because not all definitions have BODY defined when flattened
+        let flattenedType = {BODY: {}};
         for (let type of this.bulletType) {
             type = ensureIsClass(type);
             util.flattenDefinition(flattenedType, type);
@@ -375,7 +378,7 @@ class Gun extends EventEmitter {
             RANGE: shoot.range / Math.sqrt(this.bulletSkills.spd),
             DENSITY: (shoot.density * this.bulletSkills.pen * this.bulletSkills.pen) / sizeFactor,
             PUSHABILITY: 1 / this.bulletSkills.pen,
-            HETERO: 3 - 2.8 * this.bulletSkills.ghost,
+            HETERO: Math.max(0, 3 - 1.2 * this.bulletSkills.ghost),
         };
         this.reloadRateFactor = this.bulletSkills.rld;
         // Special cases
@@ -408,8 +411,7 @@ class Gun extends EventEmitter {
                 out.PUSHABILITY = 1;
                 out.PENETRATION = Math.max(1, shoot.pen * (0.5 * (this.bulletSkills.pen - 1) + 1));
                 out.HEALTH = (shoot.health * this.bulletSkills.str + sizeFactor) / Math.pow(this.bulletSkills.pen, 0.8);
-                out.DAMAGE = shoot.damage * this.bulletSkills.dam * Math.sqrt(sizeFactor) * shoot.pen * this.bulletSkills.pen;
-                out.RANGE = shoot.range * Math.sqrt(sizeFactor);
+                out.DAMAGE = shoot.damage * this.bulletSkills.dam * Math.sqrt(sizeFactor) * Math.sqrt(shoot.pen * this.bulletSkills.pen);
                 break;
         }
         if (this.independentChildren) return;
@@ -1204,27 +1206,26 @@ class Entity extends EventEmitter {
             this.settings.necroDefineGuns = {};
             for (let shape of this.settings.necroTypes) {
                 // Pick the first gun with the right necroType to use for stats and use its defineBullet function
-                this.settings.necroDefineGuns[shape] = this.guns.filter((gun) => gun.bulletType.NECRO === shape || (gun.bulletType.NECRO === true && gun.bulletType.SHAPE === this.shape) || gun.bulletType.NECRO.includes(shape))[0];
+                this.settings.necroDefineGuns[shape] = this.guns.filter((gun) => gun.bulletType.NECRO && (gun.bulletType.NECRO === shape || (gun.bulletType.NECRO === true && gun.bulletType.SHAPE === this.shape) || gun.bulletType.NECRO.includes(shape)))[0];
             }
 
             this.necro = (host) => {
                 let gun = this.settings.necroDefineGuns[host.shape];
-                if (gun.checkShootPermission()) {
-                    let save = {
-                        facing: host.facing,
-                        size: host.SIZE,
-                    };
-                    host.define("genericEntity");
-                    gun.defineBullet(host);
-                    host.team = this.master.master.team;
-                    host.master = this.master;
-                    host.color.base = this.color.base;
-                    host.facing = save.facing;
-                    host.SIZE = save.size;
-                    host.health.amount = host.health.max;
-                    return true;
-                }
-                return false;
+                if (!gun || !gun.checkShootPermission()) return false;
+
+                let savedFacing = host.facing;
+                let savedSize = host.SIZE;
+                
+                host.controllers = [];
+                host.define("genericEntity");
+                gun.defineBullet(host);
+                host.team = this.master.master.team;
+                host.master = this.master;
+                host.color.base = this.color.base;
+                host.facing = savedFacing;
+                host.SIZE = savedSize;
+                host.health.amount = host.health.max;
+                return true;
             }
         }
         if (set.MAX_CHILDREN != null) this.maxChildren = set.MAX_CHILDREN;
@@ -1608,7 +1609,7 @@ class Entity extends EventEmitter {
         return (this.velocity.y + this.accel.y) / Config.runSpeed;
     }
     set gunStatScale(gunStatScale) {
-        if (typeof gunStatScale == "object") {
+        if (!Array.isArray(gunStatScale)) {
             gunStatScale = [gunStatScale];
         }
         for (let gun of this.guns) {
@@ -2226,6 +2227,7 @@ class Entity extends EventEmitter {
                     
                     case "miniboss": 
                         instance.killCount.bosses++;
+                        if (instance.socket) instance.socket.talk("achieve", 3);
                         break;
                 }
 

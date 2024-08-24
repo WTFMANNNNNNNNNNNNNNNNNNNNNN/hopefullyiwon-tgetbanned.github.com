@@ -62,38 +62,6 @@ Class.fovwall = {
         other.addStatusEffect(biggerfov)
     }}]
 }
-let biggersize = new StatusEffect(1, {size: 2});
-Class.bigsizewall = {
-    PARENT: "wall",
-    GLOW: {
-        RADIUS: 30,
-        COLOR: 30,
-        ALPHA: 1,
-        RECURSION: 5
-    },
-    COLOR: 30,
-    ON: [{
-        event: "collide",
-        handler: ({ body, other }) => {
-        if (other.type != "wall") other.addStatusEffect(biggersize)
-    }}]
-}
-let smallersize = new StatusEffect(1, {size: 0.5});
-Class.smallsizewall = {
-    PARENT: "wall",
-    GLOW: {
-        RADIUS: 30,
-        COLOR: 31,
-        ALPHA: 1,
-        RECURSION: 5
-    },
-    COLOR: 31,
-    ON: [{
-        event: "collide",
-        handler: ({ body, other }) => {
-        if (other.type != "wall") other.addStatusEffect(smallersize)
-    }}]
-}
 Class.dfxwall = {
     PARENT: "wall",
     TURRETS: [{
@@ -355,37 +323,6 @@ Class.crasher = {
     HITS_OWN_TYPE: "hard",
     HAS_NO_MASTER: true,
     DRAW_HEALTH: true,
-};
-Class.crasherSpawner = {
-    PARENT: "genericTank",
-    LABEL: "Spawned",
-    STAT_NAMES: statnames.drone,
-    CONTROLLERS: ["nearestDifferentMaster"],
-    COLOR: "pink",
-    INDEPENDENT: true,
-    AI: {
-        chase: true,
-    },
-    MAX_CHILDREN: 4,
-    GUNS: [
-        {
-            POSITION: [6, 12, 1.2, 8, 0, 0, 0],
-            PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.drone, g.weak, g.weak]),
-                TYPE: [
-                    "drone",
-                    {
-                        LABEL: "Crasher",
-                        VARIES_IN_SIZE: true,
-                        DRAW_HEALTH: true,
-                    },
-                ],
-                SYNCS_SKILLS: true,
-                AUTOFIRE: true,
-                STAT_CALCULATOR: "drone",
-            },
-        },
-    ],
 };
 
 // SENTRIES

@@ -306,7 +306,7 @@ if (localStorage.getItem("jitt3rs" + 'Checked')) pmusic.push("https://cdn.glitch
   let selectimage = document.querySelector("#selectskin");
 
   $("#rightarrowbutton").on("click", function() {
-      if (global.skinpage === 16) {
+      if (global.skinpage === 17) {
           global.skinpage = 0;  
       } else {
           global.skinpage += 1;
@@ -315,7 +315,7 @@ if (localStorage.getItem("jitt3rs" + 'Checked')) pmusic.push("https://cdn.glitch
   });
   $("#leftarrowbutton").on("click", function() {
       if (global.skinpage === 0) {
-          global.skinpage = 16;  
+          global.skinpage = 17;  
       } else {
           global.skinpage -= 1;
       };                 
@@ -379,124 +379,132 @@ if (localStorage.getItem("jitt3rs" + 'Checked')) pmusic.push("https://cdn.glitch
 
   function changeskinpreview() {
     if (global.skinpage === 0) {
-    counterthing.textContent = "◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "";
     skinnamedisplay.textContent = "Default";
     checkifachieve("", "");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/onetransparentsingulardamnfuckingpixel.png?v=1708568179353";
     }
     if (global.skinpage === 1) {
-    counterthing.textContent = "○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "bsignalskin";
     skinnamedisplay.textContent = "Broken Signal";
     checkifachieve("disconnectachievement", "black");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/tv.png?v=1708615075011"
     }
     if (global.skinpage === 2) {
-    counterthing.textContent = "○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "tankcharmskin";
     skinnamedisplay.textContent = "Tank Charm";
     checkifachieve("25killsachievement", "dgrey");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/2024_01_29_0ry_Kleki.png?v=1708536680813";
     }
     if (global.skinpage === 3) {
-    counterthing.textContent = "○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "dfxskin";
     skinnamedisplay.textContent = "Deltafyrex";
     checkifachieve("50killsachievement", "grey");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/MOSHED-2023-12-14-17-8-14.gif?v=1708618924966";
     }
     if (global.skinpage === 4) {
-    counterthing.textContent = "○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "primalskin";
     skinnamedisplay.textContent = "Ultimate Primal";
     checkifachieve("100killsachievement", "white");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/primal.webp?v=1708602763032";
     }
     if (global.skinpage === 5) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "kangarooskin";
     skinnamedisplay.textContent = "Kangaroo";
     checkifachieve("killachievement", "black");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/image.webp?v=1708623596560";
     }
     if (global.skinpage === 6) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "cswmskin";
     skinnamedisplay.textContent = "ChickenSandwhichMan";
     checkifachieve("killachievement2", "grey");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Untitled%20Project%20(22).jpg?v=1708356424097"
     }
     if (global.skinpage === 7) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "cogskin";
     skinnamedisplay.textContent = "Cogwheel";
     checkifachieve("lagachievement", "black");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Gear-icon-transparent-background.png?v=1705579178381";
     }
     if (global.skinpage === 8) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "eggskin";
     skinnamedisplay.textContent = "Eggbert";
     checkifachieve("100shapesachievement", "black");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/1165825970528325682l.webp?v=1714156807621";
     }
     if (global.skinpage === 9) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "squareskin";
     skinnamedisplay.textContent = "Squarey";
     checkifachieve("250shapesachievement", "dgrey");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/1165934167280848969.webp?v=1714156773284";
     }
     if (global.skinpage === 10) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "triangleskin";
     skinnamedisplay.textContent = "Triangleton";
     checkifachieve("500shapesachievement", "dgrey");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/1165934432608321546.webp?v=1714156768932";
     }
     if (global.skinpage === 11) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "pentagonskin";
     skinnamedisplay.textContent = "Pentogan";
     checkifachieve("750shapesachievement", "white");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/1165825970528325682.webp?v=1714156764280";
     }
     if (global.skinpage === 12) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○";
     global.selectedskin = "gemskin";
     skinnamedisplay.textContent = "Gemy";
     checkifachieve("1000shapesachievement", "grey");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/1165826077843796018.webp?v=1714156778841";
     }
     if (global.skinpage === 13) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○";
     global.selectedskin = "coinskin";
     skinnamedisplay.textContent = "Coined";
     checkifachieve("tokenachievement", "black");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/2e2ccc30-5baf-41a2-aceb-c5456a1cc6dc.image.png?v=1708619146196";
     }
     if (global.skinpage === 14) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○";
     global.selectedskin = "discordskin";
     skinnamedisplay.textContent = "Sex Update";
     checkifachieve("Getbacktowoooak", "dgrey");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/2023_12_06_0yl_Kleki.png?v=1701908710293";
     }
     if (global.skinpage === 15) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○";
     global.selectedskin = "deltaDecoskin";
     skinnamedisplay.textContent = "Cat-Code";
     checkifachieve("creditsachievement", "grey");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/2024_01_15_05q_Kleki.png?v=1705301828958";
     }
     if (global.skinpage === 16) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○";
     global.selectedskin = "incomskin";
     skinnamedisplay.textContent = "Very Much Incommodiousness";
     checkifachieve("pissio", "grey");
     myImg.style.filter = 'blur(10px)';
     myImg.src = "https://cdn.glitch.global/68f0db33-c86d-4aa5-9a35-a6750a92eae7/1200px-Icon-round-Question_mark.svg.png?v=1699273933044";
+    }
+    if (global.skinpage === 17) {
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉";
+    global.selectedskin = "tokayskin";
+    skinnamedisplay.textContent = "Swaggity Waggity";
+    checkifachieve("bossachivement", "white");
+    myImg.style.filter = 'blur(10px)';
+    myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/spider_2.png?v=1722633319003";
     }
   };
     let tanktype = "unfinished",
@@ -947,96 +955,79 @@ function getElements(kb, storeInDefault) {
     }
 }
 window.onload = async () => {
-    let serverSelector = document.getElementById("serverSelector"),
+    let servers = await (await fetch("/browserData.json")).json(),
+        serverSelector = document.getElementById("serverSelector"),
         tbody = document.createElement("tbody"),
-        servers = [],
         myServer = {
             classList: {
-                contains: () => "selected",
+                contains: () => false,
             },
-        };
+        },
+        ping = 0;
 
-    const serverNames = await (await fetch("/servers.json")).json();
-    for (let i = 0; i < serverNames.length; i++) {
-        serverName = serverNames[i];
-        try {
-            if (typeof serverName != "string") throw 0;
+    serverSelector.style.display = "block";
+    document.getElementById("serverName").remove();
+    serverSelector.classList.add("serverSelector");
+    serverSelector.classList.add("shadowscroll");
+    serverSelector.appendChild(tbody);
 
-            let now = Date.now();
-            await fetch(`${serverName}/serverData.json`).then(x => x.json()).then(fetchedServer => {
-                servers.push({ server: fetchedServer, ping: Date.now() - now });
-            });
-        } catch (e) {
-            switch (e) {
-                case 0:
-                    console.log(`${serverName} is not a string`);
-                    break;
-                default:
-                    console.log(`Failed to fetch ${serverName}/serverData.json`);
-            }
+    for (let server of servers) {
+        let protocol = server[2] ? "https:" : "http:",
+            location = server[1],
+            ip = server[0],
+            minPing,
+            time;
+
+        if (Array.isArray(server)) {
+            if (!server.length) continue;
+            time = Date.now();
+            server = await (await fetch(`${protocol}//${ip}/serverData.json`)).json();
+            minPing = Date.now() - time;
+        } else {
+            console.log(server);
+            throw new Error("Invalid server browser data");
         }
-    }
-
-    window.isMultiserver = true;
-
-    if (servers.length) {
-        document.getElementById("serverName").remove();
-
-        window.serverAdd = servers[0].server.ip;
-        serverSelector.style.display = "block";
-        serverSelector.classList.add("serverSelector");
-        serverSelector.classList.add("shadowscroll");
-        serverSelector.appendChild(tbody);
-    } else {
-        document.getElementById("serverName").innerHTML = "<h4 class='nopadding'>No servers found</h4>";
-    }
-
-    let _ping = Number.MAX_SAFE_INTEGER;
-    const select = (tr, ip) => {
-        if (myServer.classList.contains("selected")) {
-            myServer.classList.remove("selected");
+        if (typeof server != "object") {
+            console.log(server);
+            throw new Error("Invalid server data");
         }
-        tr.classList.add("selected");
-        window.serverAdd = ip;
-        getMockups();
-    };
-    for (let { server, ping } of servers) {
         try {
-            let tr = document.createElement("tr"),
-                td1 = document.createElement("td"),
-                td2 = document.createElement("td"),
-                td3 = document.createElement("td"),
-                td4 = document.createElement("td");
-          
-            td1.style.width = "25%";
-            td2.style.width = "25%";
-            td1.textContent = `${server.name}`;
-            td2.textContent = `${server.region}`;
-            td3.textContent = `${server.gameMode}`;
-            td4.textContent = `${server.players}`;
+            let tdPlayers = document.createElement("td"),
+                tdMode = document.createElement("td"),
+                tdIp = document.createElement("td"),
+                tr = document.createElement("tr");
 
-            tr.appendChild(td1);
-            tr.appendChild(td2);
-            tr.appendChild(td3);
-            tr.appendChild(td4);
-            tr.title = server.ip;
-
+            tdPlayers.textContent = `${server.players} Players`;
+            tdPlayers.classList.add("tdLeft");
+            tdMode.textContent = server.gameMode;
+            tdMode.classList.add("tdCenter");
+            tdIp.textContent = location == "" ? ip : location;
+            tdIp.classList.add("tdLeft");
+            tr.appendChild(tdIp);
+            tr.appendChild(tdMode);
+            tr.appendChild(tdPlayers);
             tr.onclick = () => {
-                select(tr, server.ip);
+                if (myServer.classList.contains("selected")) {
+                    myServer.classList.remove("selected");
+                }
+                tr.classList.add("selected");
                 myServer = tr;
+                window.connectionAdd = protocol;
+                window.serverAdd = ip;
+                getMockups();
             };
-
-            if (_ping > ping) {
-                myServer = tr;
-                select(tr, server.ip);
-                _ping = ping;
-            }
-
             tbody.appendChild(tr);
-            myServer = tr;
+            if (!ping || ping > minPing) {
+                ping = minPing;
+                myServer = tr;
+                serverSelector.scrollTop = tr.offsetTop;
+            }
         } catch (e) {
             console.log(e);
         }
+    }
+    if (myServer.onclick) {
+        myServer.onclick();
     }
 
     // Save forms
@@ -1502,14 +1493,14 @@ function startGame() {
     settings.graphical.lowResolution = document.getElementById("optLowResolution").checked;
     settings.graphical.showGrid = !document.getElementById("optNoGrid").checked;
     // GUI
-    global.GUIStatus.renderGUI = !document.getElementById("optRenderGui").checked;
-    global.GUIStatus.renderLeaderboard = !document.getElementById("optRenderLeaderboard").checked;
-    global.GUIStatus.renderPlayerNames = !document.getElementById("optRenderNames").checked;
-    global.GUIStatus.renderPlayerScores = !document.getElementById("optRenderScores").checked;
-    global.GUIStatus.renderhealth = !document.getElementById("optRenderHealth").checked;
+    global.GUIStatus.renderGUI = document.getElementById("optRenderGui").checked;
+    global.GUIStatus.renderLeaderboard = document.getElementById("optRenderLeaderboard").checked;
+    global.GUIStatus.renderPlayerNames = document.getElementById("optRenderNames").checked;
+    global.GUIStatus.renderPlayerScores = document.getElementById("optRenderScores").checked;
+    global.GUIStatus.renderhealth = document.getElementById("optRenderHealth").checked;
     global.GUIStatus.minimapReducedInfo = document.getElementById("optReducedInfo").checked;
-    global.mobileStatus.enableCrosshair = !document.getElementById("showCrosshair").checked;
-    global.mobileStatus.showJoysticks = !document.getElementById("showJoystick").checked;
+    global.mobileStatus.enableCrosshair = document.getElementById("showCrosshair").checked;
+    global.mobileStatus.showJoysticks = document.getElementById("showJoystick").checked;
     const pmusic = [];
     if (document.getElementById("oioioi").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/oioioi.mp3?v=1705286830033");
     if (document.getElementById("dejected").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Dejected.mp3?v=1705287022417");
@@ -1609,12 +1600,11 @@ function startGame() {
     // Other more important stuff
     let playerNameInput = document.getElementById("playerNameInput");
     let playerKeyInput = document.getElementById("playerKeyInput");
-    let autolevelUpInput = !document.getElementById("autoLevelUp").checked;
+    let autolevelUpInput = document.getElementById("autoLevelUp").checked;
     global.autolvlUp = autolevelUpInput;
     // Name and keys
     util.submitToLocalStorage("playerNameInput");
     util.submitToLocalStorage("playerKeyInput");
-    util.submitToLocalStorage("optMobile");
     global.playerName = global.player.name = playerNameInput.value;
     global.playerKey = playerKeyInput.value.replace(/(<([^>]+)>)/gi, "").substring(0, 64);
     // Change the screen
@@ -1651,14 +1641,12 @@ function startGame() {
       trollface = new Image(); // Create new img element
     }
 }
-// Background clearing
 function clearScreen(clearColor, alpha) {
     ctx.fillStyle = clearColor;
     ctx.globalAlpha = alpha;
     ctx.fillRect(0, 0, global.screenWidth, global.screenHeight);
     ctx.globalAlpha = 1;
 }
-// Text functions
 function arrayifyText(rawText) {
     //we want people to be able to use the section sign in writing too
     // string with double §           txt   col   txt                      txt

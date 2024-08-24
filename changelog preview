@@ -1,4 +1,17 @@
 <div class="slider2">
+    <h1 class="slider2">Update 3.3</h1>
+    <date class="slider2">[2024]</date>
+    <ul class="slider2">
+        <li>Added new server</li>
+        <li>changed menu layout</li>
+        <li>updated gamemodes</li>
+        <li>small fixes im too lazy to write</li>
+        <li>changed server box</li>
+        <li>small minion bugfixes</li>
+        <p style="color:red;" class="vsaucereference" onclick="PlaySoundpianioio()" >RANDOM BULLSHIT, GO!</p>
+    </ul>
+</div>
+<div class="slider2">
     <h1 class="slider2">Update 3.2</h1>
     <date class="slider2">[2024]</date>
     <ul class="slider2">
@@ -42,6 +55,12 @@
         <li>added keybinds and mobile crosshair</li>
         <li>nerfed cloner clone spawn time and added cockatiel</li>
         <li>balanced propel stuff</li>
+        <li>added new server</li>
+        <li>boss stuff</li>
+        <li>tokay event + skin</li>
+        <li>finished solario boss</li>
+        <li>updated checkboxes</li>
+        <li>nerfed auras</li>
         <p style="color:red;" class="vsaucereference" onclick="PlaySoundpianioio()" >RANDOM BULLSHIT, GO!</p>
     </ul>
 </div>

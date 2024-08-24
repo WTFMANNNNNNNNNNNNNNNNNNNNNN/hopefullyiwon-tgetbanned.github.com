@@ -11,7 +11,6 @@ global.protocol = require(".././lib/fasttalk.js");
 
 // Global Variables (These must come before we import from the modules folder.)
 global.fps = "Unknown";
-global.playerskin = "";
 global.minimap = [];
 global.entities = [];
 global.walls = [];
@@ -21,9 +20,6 @@ global.entitiesToAvoid = [];
 global.grid = new hshg.HSHG();
 global.arenaClosed = false;
 global.mockupsLoaded = false;
-const d = new Date();
-global.dayofweek = d.getUTCDay();
-global.cangrappleonceagain = "yes"
 
 global.loadedAddons = [];
 global.TEAM_BLUE = -1;
@@ -34,6 +30,7 @@ global.TEAM_YELLOW = -5;
 global.TEAM_ORANGE = -6;
 global.TEAM_BROWN = -7;
 global.TEAM_CYAN = -8;
+global.TEAM_DREADNOUGHTS = -10;
 global.TEAM_ROOM = -100;
 global.TEAM_ENEMIES = -101;
 global.getSpawnableArea = team => ran.choose((team in room.spawnable && room.spawnable[team].length) ? room.spawnable[team] : room.spawnableDefault).randomInside();
@@ -56,7 +53,7 @@ global.getWeakestTeam = () => {
     teamcounts = Object.entries(teamcounts).map(([teamId, amount]) => {
         let weight = teamId in Config.TEAM_WEIGHTS ? Config.TEAM_WEIGHTS[teamId] : 1;
         return [teamId, amount / weight];
-    });    
+    });
     let lowestTeamCount = Math.min(...teamcounts.map(x => x[1])),
         entries = teamcounts.filter(a => a[1] == lowestTeamCount);
     return parseInt(!entries.length ? -Math.ceil(Math.random() * Config.TEAMS) : ran.choose(entries)[0]);
@@ -90,12 +87,13 @@ global.tickEvents = new EventEmitter();
 global.syncedDelaysLoop = () => tickEvents.emit(tickIndex++);
 global.setSyncedTimeout = (callback, ticks = 0, ...args) => tickEvents.once(tickIndex + Math.round(ticks), () => callback(...args));
 
+const lowercaseRegex = /[a-z]/,
+    uppercaseRegexG = /[A-Z]/g;
 function TO_SCREAMING_SNAKE_CASE(TEXT) {
-    if (/^[A-Z_]*[A-Z]$/.test(TEXT)) {
-        return TEXT;
-    } else if (/[a-zA-Z]+/.test(TEXT)) {
-        return TEXT.replace(/[A-Z]/g, _ => '_' + _).toUpperCase();
+    if (lowercaseRegex.test(TEXT)) {
+        return TEXT.replace(uppercaseRegexG, _ => '_' + _).toUpperCase();
     }
+    return TEXT;
 }
 
 global.Config = new Proxy(new EventEmitter(), {
@@ -150,6 +148,7 @@ global.makeHitbox = wall => {
             Math.atan2(    _size, 0 - _size) + wall.angle
         ],
         distance = Math.sqrt(_size ** 2 + _size ** 2);
+
     //convert 4 corners into 4 lines
     for (let i = 0; i < 4; i++) {
         relativeCorners[i] = {
@@ -157,6 +156,7 @@ global.makeHitbox = wall => {
             y: distance * Math.cos(relativeCorners[i])
         };
     }
+
     wall.hitbox = [
         [relativeCorners[0], relativeCorners[1]],
         [relativeCorners[1], relativeCorners[2]],
@@ -188,7 +188,6 @@ const requires = [
     "./gamemodes/manhunt.js", // The Manhunt mode
     "./gamemodes/trainwars.js", // The Train Wars mode
     "./gamemodes/moon.js", // The Space mode
-    "./gamemodes/risk.js", // Risk
     "./gamemodes/gamemodeLoop.js", // The gamemode loop.
     "./gamemodes/groups.js", // Duos/Trios/Squads
     "./gamemodes/tag.js", // Tag

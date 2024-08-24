@@ -392,31 +392,30 @@ class io_onlyAcceptInArc extends IO {
 class io_stackGuns extends IO {
     constructor(body, opts = {}) {
         super(body);
-        this.timeUntilFire = opts.timeUntilFire || 0;
+        this.stackAtTime = opts.stackAtTime || 0.2;
     }
     think ({ target }) {
-
         //why even bother?
         if (!target) {
             return;
         }
 
         //find gun that is about to shoot
-        let lowestReadiness = Infinity,
+        let lowestTimeToFire = Infinity,
             readiestGun;
         for (let i = 0; i < this.body.guns.length; i++) {
             let gun = this.body.guns[i];
             if (!gun.canShoot || !gun.stack) continue;
-            let reloadStat = (gun.calculator == "necro" || gun.calculator == "fixed reload") ? 1 : gun.bulletSkills.rld,
-                readiness = (1 - gun.cycle) / (gun.shootSettings.reload * reloadStat);
-            if (lowestReadiness > readiness) {
-                lowestReadiness = readiness;
+            
+            let timeToFire = (1 - gun.cycleTimer) / (gun.shootSettings.reload * gun.reloadRateFactor * Config.runSpeed);
+            if (lowestTimeToFire > timeToFire) {
+                lowestTimeToFire = timeToFire;
                 readiestGun = gun;
             }
         }
 
         //if we aren't ready, don't spin yet
-        if (!readiestGun || (this.timeUntilFire && this.timeUntilFire > lowestReadiness)) {
+        if (!readiestGun || (this.stackAtTime && lowestTimeToFire > this.stackAtTime)) {
             return;
         }
 
@@ -682,7 +681,7 @@ class io_hangOutNearMaster extends IO {
     }
     think(input) {
         if (this.body.invisible[1]) return {}
-        if (this.body.source !== this.body) {
+        if (this.body.source.id !== this.body.id) {
             let bound1 = this.orbit * 0.8 + this.body.source.size + this.body.size
             let bound2 = this.orbit * 1.5 + this.body.source.size + this.body.size
             let dist = util.getDistance(this.body, this.body.source) + Math.PI / 8;
