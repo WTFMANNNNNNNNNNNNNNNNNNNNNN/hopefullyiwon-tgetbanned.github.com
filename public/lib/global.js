@@ -195,7 +195,7 @@ const global = {
         minimapReducedInfo: false,
     },
     emojiloaded: false,
-    wikidisplaytank: 999,
+    wikidisplaytank: 17,
     ISTHEGODAMNFUCKINGGAMEON: "no",
     killsoundready: true,
     skin: "",
@@ -217,6 +217,6 @@ const global = {
       songname: "",
     },
     stopthefuckingkillsoundyouprick: false,
-
+    blackhole: false
 };
 export { global }

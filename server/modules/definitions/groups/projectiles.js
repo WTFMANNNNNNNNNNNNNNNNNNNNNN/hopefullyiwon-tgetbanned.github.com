@@ -70,6 +70,36 @@ Class.casing = {
     LABEL: "Shell",
     TYPE: "swarm",
 }
+Class.forkSplitterBullet = {
+    PARENT: "bullet",
+    INDEPENDENT: true,
+    GUNS: [
+        {
+            POSITION: [8, 8, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, { damage: 0.65, size: 2.4 }]),
+                TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
+                SHOOT_ON_DEATH: true,
+            }
+        },
+        {
+            POSITION: [8, 8, 1, 0, 0, 30, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, { damage: 0.65, size: 2.4 } ]),
+                TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
+                SHOOT_ON_DEATH: true,
+            }
+        },
+        {
+            POSITION: [8, 8, 1, 0, 0, -30, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, { damage: 0.65, size: 2.4 }]),
+                TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
+                SHOOT_ON_DEATH: true,
+            }
+        },
+    ]
+}
 
 // Missiles
 Class.missile = {
@@ -598,7 +628,6 @@ Class.shotTrapBox = {
 Class.pillbox = {
     PARENT: "setTrap",
     LABEL: "Pillbox",
-    CONTROLLERS: ["nearestDifferentMaster"],
     INDEPENDENT: true,
     DIE_AT_RANGE: true,
     TURRETS: [
@@ -611,7 +640,6 @@ Class.pillbox = {
 Class.unsetPillbox = {
     PARENT: "unsetTrap",
     LABEL: "Pillbox",
-    CONTROLLERS: ["nearestDifferentMaster"],
     INDEPENDENT: true,
     DIE_AT_RANGE: true,
     TURRETS: [
@@ -753,6 +781,19 @@ Class.grenade = {
     }
   ]
 }
+Class.blasterbullet = {
+    PARENT: "bullet",
+    INDEPENDENT: true,
+    GUNS: [{
+            POSITION: [1, 8, 1, 0, 0, 180, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, { range: 0.1, size: 10, damage: 1.5, maxSpeed: 0.01, speed: 0.01 }]),
+                TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true, TYPE: "shield" }],
+                SHOOT_ON_DEATH: true,
+        }
+      }
+    ]
+}
 Class.firecrackerbomb = {
     PARENT: "bullet",
     INDEPENDENT: true,
@@ -817,6 +858,9 @@ Class.brellaShield = {
   //SHAPE: 'M 1 3.5 L 2 2 L 2 0 L 1 -1.5 L 0 -1.8 L 0 -1 L 2 0.5 L 0 -1 L 0 0 L 2 0.85 L 0 0 L 0 1 L 2 1 L 0 1 L 0 1 L 0 2 L 2 1.15 L 0 2 L 0 3 L 2 1.5 L 0 3 L 0 3.8 L 1 3.5',
     SHAPE: 'M -0 2.2587 L 0.9 0.905 L 0.9 -0.9 L -0 -2.2537 L -0.9 -2.5245 L -0.9 2.5295 L -0 2.2587',
     INDEPENDENT: true,
+    BODY: {
+        PENETRATION: 0.01
+    },
     COLOR: "grey",
     GUNS: [
         {
@@ -1030,6 +1074,29 @@ Class.icebullet = {
         }
     }]
 }
+Class.poisonicebullet = {
+    PARENT: "bullet",
+    GLOW: {
+        RADIUS: 2,
+        COLOR: "#28dead",
+        ALPHA: 1,
+        RECURSION: 4,
+    },
+    TURRETS: [{
+        POSITION: [5, 0, 0, 0, 0, 2],
+        TYPE: ["effectBulletDeco", { color: "#28B1DE" }]
+    }, {
+        POSITION: [7, 0, 0, 0, 0, 1],
+        TYPE: ["effectBulletDeco", { color: "green" }]
+    }],
+    ON: [{
+        event: "damage",
+        handler: ({ body, damageTool }) => {
+            damageOnTick(body, damageTool[0], 2, 1, 1, false);
+            iceOnTick(body, damageTool[0], 1, 1, true);
+        }
+    }]
+}
 Class.empBullet = {
     PARENT: "bullet",
     ON: [{
@@ -1075,40 +1142,6 @@ Class.denseasfbullet = {
       SPEED: 12
     }
 }
-Class.undertowbullet = {
-  PARENT: "bullet",
-  GUNS: [{
-      POSITION: [4, 4, 1, 0, 0, 0, 0],
-      PROPERTIES: {
-          SHOOT_SETTINGS: combineStats([g.basic, g.magnet]),
-          TYPE: ["bullet", { SIZE: 5, ALPHA: 0.5 }],
-          AUTOFIRE: true
-      },
-  }],
-  ON: [{
-        event: "tick",
-        handler: ({ body }) => {
-          for (let instance of entities) {
-                if (instance.team != body.team && (instance.isPlayer || instance.master.isPlayer || instance.type == "food")) {
-                let diffX = instance.x - body.x,
-                    diffY = instance.y - body.y,
-                    dist2 = diffX ** 2 + diffY ** 2,
-                    number1 = 1,
-                    number2 = 1,
-                    number3 = 1/7,
-                    number4 = 1,
-                    number5 = 1,
-                    forceMulti = (((((body.size / 14)*150) ** 2)** number1) * number2) / dist2;
-                if (dist2 <= (((body.size / 14)*150) ** 2) * 2) {
-                    instance.velocity.x += util.clamp(body.x - instance.x, -90, 90) * instance.damp * ((number5 - (number5/((forceMulti ** number3)* number4)))+ 0.001);//0.05
-                    instance.velocity.y += util.clamp(body.y - instance.y, -90, 90) * instance.damp * ((number5 - (number5/((forceMulti ** number3)* number4)))+ 0.001);//0.05
-        }
-        }
-        }
-        }
-    },
-    ],
-}
 Class.surgeempBullet = {
     PARENT: "bullet",
     HITS_OWN_TYPE: "never",
@@ -1150,7 +1183,8 @@ Class.stickyTrap = {
   TYPE: "popup",
   HITS_OWN_TYPE: "hard",
   LABEL: "Sticky Trap",
-  SHAPE: -5,
+  SHAPE: -8,
+  COLOR: "white",
   GUNS: [{
       POSITION: [4, 4, 1, 0, 0, 0, 0],
       PROPERTIES: {
@@ -1162,12 +1196,14 @@ Class.stickyTrap = {
   ON: [{
       event: "collide",
       handler: ({ body, other }) => {
+          if ((other.team != body.team || other.master.id != body.master.id) && other.type != "wall" && other.isTurret != true) {
           body.velocity.x = 0;
           body.velocity.y = 0;
           let amount = util.getDistance(body, other),
               angle = Math.atan2(body.y - other.y, body.x - other.x);
           other.velocity.x += amount * Math.cos(angle);
           other.velocity.y += amount * Math.sin(angle);
+          }
       }
   }],
 }

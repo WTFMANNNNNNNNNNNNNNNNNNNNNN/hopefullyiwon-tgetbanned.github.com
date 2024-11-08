@@ -134,7 +134,7 @@ Class.genericTank = {
 }
 Class.genericLancer = {
     PARENT: "genericTank",
-    DANGER: 6,
+    DANGER: 5,
     SKILL_CAP: [dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl, dfltskl],
     STAT_NAMES: statnames.lancer,
 }
@@ -146,7 +146,12 @@ Class.genericSmasher = {
     STAT_NAMES: statnames.smasher,
     BODY: {
         FOV: 1.05 * base.FOV,
-        DENSITY: 2 * base.DENSITY
+        SPEED: 1.3 * base.SPEED,
+        DENSITY: 2 * base.DENSITY,
+        HEALTH: 2 * base.HEALTH,
+        PUSHABILITY: 0,
+        ACCELERATION: 1.3 * base.ACCEL,
+        DAMAGE: 1.5 * base.DAMAGE
     }
 }
 Class.genericBoss = {

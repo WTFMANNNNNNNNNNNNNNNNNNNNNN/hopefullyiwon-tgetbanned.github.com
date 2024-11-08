@@ -19,7 +19,7 @@ module.exports = {
     triplet: { reload: 1.2, recoil: 2/3, shudder: 0.9, health: 0.85, damage: 0.85, pen: 0.9, density: 1.1, spray: 0.9, resist: 0.95 },
     turret: { reload: 2, health: 0.8, damage: 0.6, pen: 0.7, density: 0.1 },
     autoTurret: { reload: 0.9, recoil: 0.75, shudder: 0.5, size: 0.8, health: 0.9, damage: 0.6, pen: 1.2, speed: 1.1, range: 0.8, density: 1.3, resist: 1.25 },
-    littleHunter: { recoil: 0.9, shudder: 0.9, health: 0.9, damage: 0.7, pen: 0.9 },
+    littleHunter: { recoil: 0.9, shudder: 0.9, health: 0.9, damage: 0.7, pen: 0.9, reload: 0.9 },
 
 // Snipers
     sniper: { reload: 1.35, shudder: 0.25, damage: 0.8, pen: 1.1, speed: 1.5, maxSpeed: 1.5, density: 1.5, spray: 0.2, resist: 1.15 },
@@ -148,18 +148,19 @@ module.exports = {
 
     // Misc 2
     fakewithrecoil: { recoil: 1, size: 0.00001, health: 0.0001, speed: 0.00001, maxSpeed: 2, range: 0 },
-    kiva: { damage: 0.7, pen: 0, health: 4, range: 1.5, speed: 1, maxSpeed: 1.4 },
+    kiva: { damage: 0.3, pen: 0.2, health: 4, range: 1.5, speed: 1, maxSpeed: 1.4 },
     xxtrahealth: { health: 999 },
     lance: { reload: 0.4, speed: 0.18, maxSpeed: 0.18, range: 0.07, pen: 3, health: 0.8, recoil: 0 },
+    chasseur: { reload: 0.4, speed: 0.28, maxSpeed: 0.28, range: 0.07, pen: 3, health: 0.8, recoil: 0 },
     lesspower: { health: 0.9, damage: 0.9, pen: 0.9 },
     grenade_explosion: { reload: 8, recoil: 0, shudder: 4.25, size: 2, health: 2.25, damage: 1.75, pen: 1.5, speed: 1.35, spray: 4 },
     literallyamachinegun: { reload: 0.2, speed: 5, maxSpeed: 5, spray: 0.3, shudder: 0.6 },
-    rainmaker: { speed: 0.03, maxSpeed: 0.5, health: 0.9, damage: 0.85 },
+    rainmaker: { speed: 0.03, maxSpeed: 0.5, health: 0.9, damage: 0.85, range: 0.25 },
     acceltospeedoflight: { speed: 0.001, maxSpeed: 1000 },
     explosion: { speed: 0.01, maxSpeed: 0.01, health: 5, damage: 4, pen: 5, density: 3.7, resist: 3 },
     brella: { reload: 2.5, health: 35, pen: 0, damage: 0.2, maxSpeed: 0.8, spray: 0, range: 2.25, size: 2.4, shudder: 0.1 },
     magnet: { damage: 0, health: 0.8, spray: 45, range: 0.08, recoil: 0, speed: 0.8, pen: 0 },
-    solarioblast: { reload: 0.05, health: 5, pen: 100, speed: 14, maxSpeed: 14, spread: 4, size: 2, range: 0.12 },
+    solarioblast: { reload: 0.05, health: 5, pen: 100, speed: 14, maxSpeed: 14, spread: 4, size: 2, range: 0.6 },
     emplaser: { reload: 1.25, recoil: 0, size: 1.7 },
     empbullet: { reload: 1.25, recoil: 0, size: 2.5, speed: 1.1, maxSpeed: 1.1, spray: 0.2 },
     cloner: { damage: 0.78, pen: 0.85 },

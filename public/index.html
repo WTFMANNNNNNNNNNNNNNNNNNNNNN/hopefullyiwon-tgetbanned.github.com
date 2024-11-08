@@ -12,7 +12,7 @@
     <meta property="og:image:width" content="54">
     <meta property="og:image:height" content="54">
     <meta property="og:type" content="games">
-    <title>Nero.io 3.2</title>
+    <title>Nero.io 3.3</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:400,700">
     <link rel="stylesheet" href="/main.css" />
     <!-- Favicons -->
@@ -23,7 +23,7 @@
     <!-- Apple Web App stuff -->
     <link rel="apple-touch-icon" href="https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/2023_12_06_0za_Kleki.png?v=1701910145704">
     <link rel="apple-touch-startup-image" media="(device-width: 768px)" href="https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/2024_01_15_05q_Kleki.png?v=1705301828958">
-    <meta name="apple-mobile-web-app-capable" content="no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <link href="https://cdn.glitch.global/f80d3eec-1e99-4b8c-b120-79a55addacf9/2023_02_09_0sv_Kleki.png?v=1675981194335" media="(device-width: 375px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
     <!-- Windows App Pin -->
     <meta name="theme-color" content="#26284a">
@@ -154,7 +154,7 @@ function PlaySound2() {
   </div>
     <div id="gameAreaWrapper">
         <canvas id="gameCanvas" tabindex="1"></canvas>
-        <input id="chatInput" type="text" maxlength="256" hidden=true>
+        <input id="chatInput" type="text" maxlength="256" hidden="true">
     </div>
     <div id="mainWrapper">
         <div id="startMenuWrapper">
@@ -198,7 +198,7 @@ function PlaySound2() {
  image[12] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/fb286e65-331c-42ff-b226-ac5bfc7418b7.image.png?v=1705266607867' //oldnerologo
  image[13] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/freddy.gif?v=1698336453397' //freddy default dance
  image[14] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/asda.gif?v=1698336433205' //synthwave
- image[15] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Screen_Shot_2021-06-25_at_8.06.28_PM_1400x.webp?v=1701104133660' //avacado
+ image[15] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/eb38cb57-74b4-4965-b9b5-f4b83bd80de3.image.png?v=1726371143116' //avacado
  image[16] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/poop-emoji.jpg?v=1701104126682' //shart
  image[17] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/videoplayback%20(6).mp4?v=1701691279895' //i beleive i made myself clear
  image[18] = 'https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/nero%20shitpost.png?v=1705290370363' //shitpost
@@ -237,10 +237,10 @@ popup = ' onclick="openPopup()"'
  }
 //-->
 </script>         
-                  <div id="startMenuSlidingTrigger3">
+                <div id="startMenuSlidingTrigger3">
                     <h3 class="nopadding">view notes ▸</h3>
-                  </div>
-                  <hr>
+                </div>
+                <hr>
                     <script>
                     document.write('<center>Made With Love By Deltafyrex <3</center>');
                     </script>
@@ -272,7 +272,7 @@ popup = ' onclick="openPopup()"'
                         </div>
                         <div class="slider startMenuSlidingContent">
                             <br>
-                            <div class="horizontalSelector" id="optionMenuTabs"><span class="active">Appearance</span><span>Options</span><span class="desktopControlTab">Controls</span><span>Links</span></div>
+                            <div class="horizontalSelector" id="optionMenuTabs"><span class="active">Appearance</span><span>Options</span><span class="desktopControlTab">Controls</span><span>Misc</span></div>
                             <div id="tabAppearance">
                                 <div class="optionsHeader">Themes</div>
                             <select id="optColors" tabindex="-1">
@@ -374,7 +374,7 @@ popup = ' onclick="openPopup()"'
                                 <div class="optionsHeader">Miscellaneous</div>
                                 <table>
                                     <tr>
-                                        <td><div><label class="container"><input id="autoLevelUp" tabindex="-1" class="checkbox" type="checkbox"><span class="checkmark" checked></span>Auto-Level Up</label></div></td>
+                                        <td><div><label class="container"><input id="autoLevelUp" tabindex="-1" class="checkbox" type="checkbox"><span class="checkmark" checked></span>Manual-Level Up</label></div></td>
                                         <td><div><label class="container"><input id="centerTank" tabindex="-1" class="checkbox" type="checkbox"><span class="checkmark" checked></span>Center Camera</label></div></td>
                                     </tr>
                                 </table>
@@ -457,13 +457,13 @@ popup = ' onclick="openPopup()"'
                                   <li><input id="oioioi" type="checkbox" class="checkbox" /> Oi Oi Oi</li>
                                   <li><input id="dejected" type="checkbox" class="checkbox" /> Dejected</li>
                                   <li><input id="worldsend" type="checkbox" class="checkbox" /> World's End</li>
-                                  <li><input id="depredation" type="checkbox" class="checkbox" /> Depredation</li>
-                                  <li><input id="anybody" type="checkbox" class="checkbox" /> Anybody</li>
+                                  <li><input id="nerosong" type="checkbox" class="checkbox" /> Nero</li>
+                                  <!-- <li><input id="anybody" type="checkbox" class="checkbox" /> Anybody</li>
                                   <li><input id="resurgam" type="checkbox" class="checkbox" /> Resurgam</li>
-                                  <li><input id="longing" type="checkbox" class="checkbox" /> Longing</li>
+                                  <li><input id="longing" type="checkbox" class="checkbox" /> Longing</li> -->
                                   <li><input id="apotheosis" type="checkbox" class="checkbox" /> Apotheosis</li>
                                   <li><input id="killa" type="checkbox" class="checkbox" /> Killa</li>
-                                  <li><input id="melancholy" type="checkbox" class="checkbox" /> Melancholy</li>
+                                  <!-- <li><input id="melancholy" type="checkbox" class="checkbox" /> Melancholy</li>
                                   <li><input id="demol1sh" type="checkbox" class="checkbox" /> Demol1sh</li>
                                   <li><input id="demoli2h" type="checkbox" class="checkbox" /> Demoli2h</li>
                                   <li><input id="d3molish" type="checkbox" class="checkbox" /> D3molish</li>
@@ -471,7 +471,13 @@ popup = ' onclick="openPopup()"'
                                   <li><input id="2ouvenir" type="checkbox" class="checkbox" /> 2ouvenir</li>
                                   <li><input id="routine2" type="checkbox" class="checkbox" /> Routine2</li>
                                   <li><input id="routin3s" type="checkbox" class="checkbox" /> Routin3s</li>
-                                  <li><input id="jitt3rs" type="checkbox" class="checkbox" /> Jitt3rs</li>
+                                  <li><input id="jitt3rs" type="checkbox" class="checkbox" /> Jitt3rs</li> -->
+                                  <li><input id="atomic" type="checkbox" class="checkbox" /> Atomic</li>
+                                  <li><input id="failedconnection" type="checkbox" class="checkbox" /> Failed Connection</li>
+                                  <li><input id="ascension" type="checkbox" class="checkbox" /> Ascension</li>
+                                  <li><input id="nadir" type="checkbox" class="checkbox" /> Nadir</li>
+                                  <li><input id="phacktomine" type="checkbox" class="checkbox" /> Phacktomine</li>
+                                  <li><input id="polychromatism" type="checkbox" class="checkbox" /> Polychromatism</li>
                                 </ul>
                               </div>
                           </div>

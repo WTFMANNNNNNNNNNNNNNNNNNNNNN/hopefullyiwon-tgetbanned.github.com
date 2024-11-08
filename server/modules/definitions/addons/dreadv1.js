@@ -2,10 +2,9 @@ const { combineStats, makeAuto, weaponArray, makeTurret } = require('../facilita
 const { smshskl, base, basePolygonDamage, basePolygonHealth } = require('../constants.js');
 const g = require('../gunvals.js');
 const dreadnoughtBody = {
-    SPEED: base.SPEED * 0.5,
-    HEALTH: base.HEALTH * 7,
-    DAMAGE: base.DAMAGE * 3.5,
-    PENETRATION: base.PENETRATION * 2,
+    SPEED: base.SPEED * 0.6,
+    HEALTH: base.HEALTH * 4,
+    DAMAGE: base.DAMAGE * 2.5,
     SHIELD: base.SHIELD * 2.5,
     FOV: base.FOV * 1.25,
     DENSITY: base.DENSITY * 6,
@@ -36,16 +35,16 @@ g.dreadv1Slow = {
 }
 g.dreadv1Drone = {
 	health: 1.1,
-	speed: 0.68,
-	maxSpeed: 0.68,
-	reload: 1.2,
+	speed: 0.77,
+	maxSpeed: 0.77,
+	reload: 1.65,
 	size: 1.2,
 	recoil: 0,
 }
 g.dreadv1Trap = {
 	range: 1.3,
 	shudder: 0.2,
-	speed: 1.05,
+	speed: 0.95,
 	reload: 2.8,
 	damage: 1.45,
 	health: 1.35,
@@ -272,7 +271,7 @@ Class.dreadv1BodyTurret = makeTurret({
 	GUNS: [{
 		POSITION: [22, 10, 1, 0, 0, 0, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, { recoil: 0.7 }, g.turret, { size: 0.8, health: 0.75, speed: 0.4, maxSpeed: 0.4, reload: 0.7 }]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.power, { recoil: 0.7 }, g.turret, { size: 0.8, damage: 1.05, speed: 0.4, maxSpeed: 0.4, reload: 0.7 }]),
 			TYPE: "bullet"
 		}
 	}]
@@ -499,7 +498,7 @@ Class.peacekeeperOfficialV1 = {
 	GUNS: weaponArray({
 		POSITION: [17.5, 9, 1, 0, 0, 0, 0],
 		PROPERTIES: {
-			SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, g.dreadv1Generic, g.dreadv1Slow, {reload: 1.3, health: 1.3, range: 1.1}]),
+			SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, g.dreadv1Generic, g.dreadv1Slow, {reload: 1.3, health: 1.2, range: 1.1}]),
 			TYPE: "bullet",
 		}
 	}, 3)

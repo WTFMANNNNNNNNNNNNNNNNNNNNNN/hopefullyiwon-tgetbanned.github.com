@@ -809,6 +809,7 @@ const socketInit = port => {
         });
     };
       var KillSound = new Audio();
+      KillSound.volume = 0.5;
       function PlaySoundKS() {
       KillSound.src = ("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Voicy_Slap%20Battles%20Killstreak%20Kill.mp3?v=1714045643190");
       KillSound.play();
@@ -884,6 +885,9 @@ const socketInit = port => {
           case "killstreakreset":
                 global.metrics.killcount = 0;
                 break;
+          case "blackhole":
+                m[0] ? global.blackhole = true : global.blackhole = false;
+                break
             case 'c': // force camera move
                 global.player.renderx = global.player.cx = m[0];
                 global.player.rendery = global.player.cy = m[1];
@@ -931,7 +935,6 @@ const socketInit = port => {
                         global.entities = [];
                         global.message = '';
                         global.canThrowClosedMessage = true;
-                        global.stopthefuckingkillsoundyouprick = true;
                 }
                 break;
             case 'm': // message

@@ -342,10 +342,10 @@ Class.solariobase = {
     LABEL: "Solario",
     SHAPE: 0,
     BODY: {
-        HEALTH: 1000,
+        HEALTH: 8000,
     },
     SIZE: 15,
-    DANGER: 10,
+    DANGER: 15,
 }
 Class.solario = {
     PARENT: "solariobase",
@@ -394,7 +394,7 @@ Class.solario = {
             POSITION: [1, 10, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.xxtrahealth, {speed: 0.01, maxSpeed: 0.01, health: 99999, pen: 99, density: 38281381283, resist: 421848412}]),
-                TYPE: "blackholeondeath",
+                TYPE: ["blackholeondeath", { PERSISTS_AFTER_DEATH: true }],
                 SHOOT_ON_DEATH: true,
                 ALT_FIRE: true
             }
@@ -428,7 +428,6 @@ Class.solario = {
                     switch(attack) {
                         case 0:
                             body.guns[4].fire();
-                            setTimeout(() => { if (body != null) body.guns[4].fire(); }, 6000);
                             setTimeout(() => { if (body != null) body.guns[4].fire(); }, 12000);
                         break;
                         case 1:
@@ -466,7 +465,7 @@ Class.solariolaser = {
         POSITION: [15, 10, 1, 0, 0, 0, 5],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast]),
-            TYPE: ["laser", {ARENA_CLOSER: true}],
+            TYPE: "laser",
             AUTOFIRE: true,
             COLOR: "red",
         },
@@ -474,7 +473,7 @@ Class.solariolaser = {
         POSITION: [15, 10, 1, 0, 0, 180, 5],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast]),
-            TYPE: ["laser", {ARENA_CLOSER: true}],
+            TYPE: "laser",
             AUTOFIRE: true,
             COLOR: "red",
         },
@@ -577,7 +576,7 @@ Class.solariophase2 = {
         }, {
             POSITION: [1, 10, 1, 0, 0, 0, 1],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.fake, { reload: 2 }]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.fake, { reload: 75 }]),
                 TYPE: "bullet",
                 AUTOFIRE: true,
                 IDENTIFIER: "solarioAttack"
@@ -641,8 +640,7 @@ Class.solariophase2 = {
                     switch(attack) {
                         case 0:
                             body.guns[6].fire();
-                            setTimeout(() => { if (body != null) body.guns[6].fire(); }, 4000);
-                            setTimeout(() => { if (body != null) body.guns[6].fire(); }, 8000);
+                            setTimeout(() => { if (body != null) body.guns[6].fire(); }, 6000);
                             setTimeout(() => { if (body != null) body.guns[6].fire(); }, 12000);
                         break;
                         case 1:
@@ -653,8 +651,6 @@ Class.solariophase2 = {
                             setTimeout(() => { if (body != null) body.guns[8].fire(); }, 500);
                             setTimeout(() => { if (body != null) body.guns[8].fire(); }, 1000);
                             setTimeout(() => { if (body != null) body.guns[8].fire(); }, 1500);
-                            setTimeout(() => { if (body != null) body.guns[8].fire(); }, 2000);
-                            setTimeout(() => { if (body != null) body.guns[8].fire(); }, 2500);
                         break;
                     }
                 }
@@ -681,7 +677,7 @@ Class.solariolaserphase2 = {
         POSITION: [15, 10, 1, 0, 0, 0, 5],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast]),
-            TYPE: ["laser", {ARENA_CLOSER: true}],
+            TYPE: "laser",
             AUTOFIRE: true,
             COLOR: "red",
         },
@@ -689,7 +685,7 @@ Class.solariolaserphase2 = {
         POSITION: [15, 10, 1, 0, 0, 90, 5],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast]),
-            TYPE: ["laser", {ARENA_CLOSER: true}],
+            TYPE: "laser",
             AUTOFIRE: true,
             COLOR: "red",
         },
@@ -697,7 +693,7 @@ Class.solariolaserphase2 = {
         POSITION: [15, 10, 1, 0, 0, 180, 5],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast]),
-            TYPE: ["laser", {ARENA_CLOSER: true}],
+            TYPE: "laser",
             AUTOFIRE: true,
             COLOR: "red",
         },
@@ -705,7 +701,7 @@ Class.solariolaserphase2 = {
         POSITION: [15, 10, 1, 0, 0, 270, 5],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast]),
-            TYPE: ["laser", {ARENA_CLOSER: true}],
+            TYPE: "laser",
             AUTOFIRE: true,
             COLOR: "red",
         },
@@ -840,10 +836,10 @@ Class.solariophase3 = {
            }, {
             POSITION: [1, 10, 1, 0, 0, 0, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic, g.xxtrahealth, {speed: 0.01, maxSpeed: 0.01, health: 99999, pen: 99, density: 38281381283, resist: 421848412}]),
-                TYPE: "blackholeondeath",
-                SHOOT_ON_DEATH: true,
-                ALT_FIRE: true
+                SHOOT_SETTINGS: combineStats([g.basic, g.xxtrahealth, {speed: 0.01, range: 7, maxSpeed: 0.01, health: 99999, pen: 99, density: 38281381283, resist: 421848412}]),
+                TYPE: ["blackholeondeath", { PERSISTS_AFTER_DEATH: true }],
+                ALT_FIRE: true,
+                SHOOT_ON_DEATH: true
             }
         },
         ],
@@ -881,9 +877,8 @@ Class.solariophase3 = {
                     switch(attack) {
                         case 0:
                             body.guns[8].fire();
-                            setTimeout(() => { if (body != null) body.guns[8].fire(); }, 3000);
-                            setTimeout(() => { if (body != null) body.guns[8].fire(); }, 6000);
-                            setTimeout(() => { if (body != null) body.guns[8].fire(); }, 9000);
+                            setTimeout(() => { if (body != null) body.guns[8].fire(); }, 4000);
+                            setTimeout(() => { if (body != null) body.guns[8].fire(); }, 8000);
                             setTimeout(() => { if (body != null) body.guns[8].fire(); }, 12000);
                         break;
                         case 1:
@@ -898,10 +893,6 @@ Class.solariophase3 = {
                             setTimeout(() => { if (body != null) body.guns[10].fire(); }, 2000);
                             setTimeout(() => { if (body != null) body.guns[10].fire(); }, 2500);
                             setTimeout(() => { if (body != null) body.guns[10].fire(); }, 3000);
-                            setTimeout(() => { if (body != null) body.guns[10].fire(); }, 3500);
-                            setTimeout(() => { if (body != null) body.guns[10].fire(); }, 4000);
-                            setTimeout(() => { if (body != null) body.guns[10].fire(); }, 4500);
-                            setTimeout(() => { if (body != null) body.guns[10].fire(); }, 5000);
                         break;
                     }
                 }
@@ -909,7 +900,8 @@ Class.solariophase3 = {
         }, {
             event: "death",
             handler: ({ body }) => {
-                sockets.broadcast('NOOOOOOO!')
+                sockets.broadcast('NOOOOOOO!');
+                let o = new Entity(body).define("blackholeondeath")
             }
         }, 
     ],
@@ -920,7 +912,7 @@ Class.solariolaserphase3 = {
         POSITION: [15, 20, 1, 0, 0, 0, 5],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast, { spread: 0, size: 0.6 }]),
-            TYPE: ["hyperlaser", {ARENA_CLOSER: true}],
+            TYPE: "hyperlaser",
             AUTOFIRE: true,
             COLOR: "red",
         },
@@ -928,7 +920,7 @@ Class.solariolaserphase3 = {
         POSITION: [15, 10, 1, 0, 0, 60, 5],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast]),
-            TYPE: ["laser", {ARENA_CLOSER: true}],
+            TYPE: "laser",
             AUTOFIRE: true,
             COLOR: "red",
         },
@@ -936,7 +928,7 @@ Class.solariolaserphase3 = {
         POSITION: [15, 10, 1, 0, 0, 120, 5],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast]),
-            TYPE: ["laser", {ARENA_CLOSER: true}],
+            TYPE: "laser",
             AUTOFIRE: true,
             COLOR: "red",
         },
@@ -944,7 +936,7 @@ Class.solariolaserphase3 = {
         POSITION: [15, 20, 1, 0, 0, 180, 5],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast, { spread: 0, size: 0.6 }]),
-            TYPE: ["hyperlaser", {ARENA_CLOSER: true}],
+            TYPE: "hyperlaser",
             AUTOFIRE: true,
             COLOR: "red",
         }
@@ -952,7 +944,7 @@ Class.solariolaserphase3 = {
         POSITION: [15, 10, 1, 0, 0, 240, 5],
         PROPERTIES: {
             SHOOT_SETTINGS: combineStats([g.basic, g.solarioblast]),
-            TYPE: ["laser", {ARENA_CLOSER: true}],
+            TYPE: "laser",
             AUTOFIRE: true,
             COLOR: "red",
         },
@@ -1012,9 +1004,9 @@ Class.solariolaserphase3 = {
             POSITION: [1, 10, 1, 0, 0, 0, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.xxtrahealth, {speed: 0.01, range: 7, maxSpeed: 0.01, health: 99999, pen: 99, density: 38281381283, resist: 421848412}]),
-                TYPE: "blackholeondeath",
+                TYPE: ["blackholeondeath", { PERSISTS_AFTER_DEATH: true }],
+                ALT_FIRE: true,
                 SHOOT_ON_DEATH: true,
-                ALT_FIRE: true
             }
         },
   ],
@@ -1030,17 +1022,32 @@ Class.solariolaserphase3 = {
         }, {
             event: "death",
             handler: ({ body }) => {
-                sockets.broadcast('NOOOOOOO!')
+                sockets.broadcast('NOOOOOOO!');
+                let o = new Entity(body).define("blackholeondeath")
             }
-        }
+        }, 
     ],
 }
 Class.blackholeondeath = {
-  PARENT: "bullet",
   PERSISTS_AFTER_DEATH: true,
   COLOR: "black",
   MOTION_TYPE: ["grow", { growSpeed: 1.4 }],
   ARENA_CLOSER: true,
+    TYPE: "bullet",
+    ACCEPTS_SCORE: false,
+    BODY: {
+        PENETRATION: 99,
+        SPEED: 1,
+        RANGE: 200,
+        DENSITY: 38281381283,
+        RESIST: 38281381283,
+        HEALTH: 124124,
+        DAMAGE: 124124,
+    },
+    FACING_TYPE: "smoothWithMotion",
+    CAN_GO_OUTSIDE_ROOM: true,
+    HITS_OWN_TYPE: "never",
+    DIE_AT_RANGE: true,
   GUNS: [{
       POSITION: [4, 4, 1, 0, 0, 0, 0],
       PROPERTIES: {
@@ -1084,7 +1091,11 @@ Class.blackholeondeath = {
         }
         }
         }
-    },
+    },  {
+            event: "death",
+            handler: ({ body }) => {
+            }
+        }, 
     ],
 }
 Class.devBosses.UPGRADES_TIER_0.push('solario', 'solariophase2', 'solariophase3')

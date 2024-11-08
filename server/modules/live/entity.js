@@ -175,6 +175,10 @@ class Gun extends EventEmitter {
         } else {
             this.defineBullet(bullet);
         }
+        // Set confinement
+        for (let k in this.master.confinement) {
+            bullet.confinement[k] = this.master.confinement[k];
+        }
         bullet.life();
 
         // Emit fire event
@@ -1374,6 +1378,7 @@ class Entity extends EventEmitter {
                     for (let j = 0; j < type.length; j++) {
                         o.define(type[j]);
                         if (type.TURRET_DANGER) turretDanger = true;
+                        o.isTurret = true;
                     }
                     if (!turretDanger) o.define({ DANGER: 0 });
                     o.bindToMaster(def.POSITION, this);
@@ -1808,10 +1813,10 @@ class Entity extends EventEmitter {
             case "accelerate":
                     this.velocity.x = this.velocity.x + (4.5 * Math.cos(this.facing))
                     this.velocity.y = this.velocity.y + (4.5 * Math.sin(this.facing))
-                    this.topSpeed += 10;
-                    this.maxSpeed += 10;
+                    this.topSpeed += 30;
+                    this.maxSpeed += 30;
                     this.damp = -0.0125;
-                    this.damage += 1
+                    this.damage += 1.3
                     break;
             case "acceleratetothespeedoflight":
                     this.velocity.x = this.velocity.x + ((1 * this.maxSpeed + 0.5) * Math.cos(this.facing))
@@ -1889,7 +1894,7 @@ class Entity extends EventEmitter {
                 this.firingArc = [ref.facing + bound.angle, bound.arc / 2];
                 this.accel.null();
                 this.blend = ref.blend;
-                if (this.bond.syncTurretSkills) this.skill.set(this.bond.skill.raw);
+                if (this.bond.syncTurretSkills) this.skill.set(this.bond.master.skill.raw);
                 break;
             case "withMaster":
                 this.x = this.source.x;

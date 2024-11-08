@@ -226,6 +226,7 @@ const util = {
             layer: mainMockup.layer,
             position: util.sizeMultipleMockups(positionData),
             rerootUpgradeTree,
+            trueupgrades: mainMockup.trueupgrades,
             guns: {
                 length: guns.length,
                 getPositions: () => Array(guns.length).fill(0),

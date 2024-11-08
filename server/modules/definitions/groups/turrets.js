@@ -584,10 +584,11 @@ Class.pillboxTurret = makeTurret({
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, g.minionGun, g.turret, g.power, g.autoTurret, { density: 0.1 }]),
                 TYPE: "bullet",
+                WAIT_TO_CYCLE: true
             },
         },
     ],
-}, {extraStats: []})
+}, {independent: true, extraStats: []})
 Class.autoSmasherMissileTurret = makeTurret({
     HAS_NO_RECOIL: true,
     GUNS: [
@@ -978,9 +979,8 @@ Class.protonturretBase = {
 Class.pionturretBase = {
     LABEL: "Base",
     SHAPE: 'M 0 -1 A 1 1 0 0 0 0 1 A 1 1 0 0 0 0 -1 Z M 0 -1 A 0.001 0.001 0 0 1 0 1 A 0.001 0.001 0 0 1 0 -1',
-    COLOR: 9,
-    CONTROLLERS: [["spin", { independent: true }]],
-    INDEPENDENT: true,
+    COLOR: 'red',
+    CONTROLLERS: ["hadron"],
     TURRETS: [{
         POSITION: [5, 10.5, 0, 90, 220, 1],
         TYPE: ["revosheild", { SHAPE: 12 }],
@@ -1102,7 +1102,7 @@ Class.revosheild = {
   SHAPE: 0,
   INDEPENDENT: true,
   BODY: {
-        PUSHABILITY: 0,
+        PUSHABILITY: 1,
         HEALTH: 10000,
         SHIELD: 10000,
         REGEN: 1000,
@@ -1110,6 +1110,7 @@ Class.revosheild = {
         RESIST: 100,
         STEALTH: 1,
         DENSITY: 10000,
+        PENETRATION: 0.01
     },
 }
 Class.backshieldturret = {
@@ -1123,6 +1124,7 @@ Class.backshieldturret = {
         HEALTH: 10000,
         SHIELD: 10000,
         REGEN: 1000,
+        PENETRATION: 0.01
   },
 }
 Class.mirrorDeco = makeDeco("M 0 -1.1 A 1 1 0 0 0 0 1.1 A 1 1 0 0 0 0 -1.1 Z M 0 -0.9 A 0.001 0.001 0 0 1 0 0.9 A 0.001 0.001 0 0 1 0 -0.9")
@@ -1134,6 +1136,7 @@ Class.mirrorbackshieldturret = {
     HEALTH: 10000,
     SHIELD: 10000,
     REGEN: 1000,
+    PENETRATION: 0.01
   },
   SHAPE: "m -0.7020 -0.8099 c 0.2987 0.4922 0.4276 1.0098 0 1.6105 c 0.4606 -0.1615 0.9233 -0.3735 1.3947 -0.8052 C 0.2005 -0.4442 -0.2526 -0.6387 -0.702 -0.8099",
   COLOR: "#FF7F00",
@@ -1187,7 +1190,6 @@ Class.droneturretBase = {
     SHAPE: 'M 0 -1 A 1 1 0 0 0 0 1 A 1 1 0 0 0 0 -1 Z M 0 -1 A 0.001 0.001 0 0 1 0 1 A 0.001 0.001 0 0 1 0 -1',
     COLOR: 9,
     CONTROLLERS: [["spin", { independent: true }]],
-    INDEPENDENT: true,
     SYNC_TURRET_SKILLS: true,
     TURRETS: [{
         POSITION: [4.65, 10.5, 0, 90, 220, 1],
@@ -1252,11 +1254,12 @@ Class.skaterDeco.STROKE_WIDTH = 2;
 Class.switcherDeco = makeDeco('M 0 0 M 2 -1 L -2 -1 L -2 8 L -1 8 L 1 8 L 2 8')
 Class.effectBulletDeco = makeDeco(0)
 Class.firecrackerDeco = makeDeco(-6)
-Class.auraDamageGen = addAura(7.5, 1.3, 0.3, "red");
-Class.auraRangeGen = addAura(4.3, 1.8, 0.3, "teal", "rangeAuraSymbol");
-Class.auraDamageRangeGen = addAura(7, 1.8, 0.3, "red", "rangeAuraSymbol");
-Class.auraMoreDamageGen = addAura(9, 1.3, 0.3, "orange");
-Class.auraMoreRangeGen = addAura(4.3, 2.3, 0.3, "aqua", "rangeAuraSymbol");
+Class.auraDamageGen = addAura(2, 1.3, 0.3, "red");
+Class.auraRangeGen = addAura(2, 1.8, 0.3, "teal", "rangeAuraSymbol");
+Class.auraDamageRangeGen = addAura(2, 1.8, 0.3, "red", "rangeAuraSymbol");
+Class.auraMoreDamageGen = addAura(3, 1.3, 0.3, "orange");
+Class.auraMoreRangeGen = addAura(1, 2.3, 0.3, "aqua", "rangeAuraSymbol");
 Class.auraSmasherGen = addAura(11, 1.3);
 Class.surgeDeco = makeDeco(-1, "spaceGem");
 Class.katanaDeco = makeDeco('M 0 2 L 0 -1 L 1 0 L 0 -1 L -1 0 L 0 -1', "#add6f7");
+Class.brellaDeco = makeDeco('M -0 2.2587 L 0.9 0.905 L 0.9 -0.9 L -0 -2.2537 L -0.9 -2.5245 L -0.9 2.5295 L -0 2.2587', "gray")

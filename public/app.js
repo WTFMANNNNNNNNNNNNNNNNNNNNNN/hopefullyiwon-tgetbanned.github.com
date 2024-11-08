@@ -185,21 +185,26 @@ var pmusic = new Array();
 if (localStorage.getItem("oioioi" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/oioioi.mp3?v=1705286830033");
 if (localStorage.getItem("dejected" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Dejected.mp3?v=1705287022417");
 if (localStorage.getItem("worldsend" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/WorldsEnd.mp3?v=1714399132177");
-if (localStorage.getItem("depredation" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Depredation%20V2.mp3?v=1713525132474");
-if (localStorage.getItem("anybody" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/anybody.mp3?v=1705807057028");
-if (localStorage.getItem("resurgam" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/resurgam.mp3?v=1708218475743");
-if (localStorage.getItem("longing" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/longing.mp3?v=1708218464295");
+if (localStorage.getItem("nerosong" + 'Checked')) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Nero.wav?v=1727644028814");
+//if (localStorage.getItem("anybody" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/anybody.mp3?v=1705807057028");
+//if (localStorage.getItem("resurgam" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/resurgam.mp3?v=1708218475743");
+//if (localStorage.getItem("longing" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/longing.mp3?v=1708218464295");
 if (localStorage.getItem("apotheosis" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Apotheosis.mp3?v=1713525419376");
 if (localStorage.getItem("killa" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Action%20Agenda%20-%20Killa%20DFX%20Edit.mp3?v=1713352244240");
-//if (localStorage.getItem("melancholy" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Meloncholy.mp3?v=1675465750213");
-if (localStorage.getItem("demol1sh" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/demol1sh.mp3?v=1714414557787");
-if (localStorage.getItem("demoli2h" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/demoli2h.mp3?v=1714414714759");
-if (localStorage.getItem("d3molish" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/d3molish.mp3?v=1714414706958");
-if (localStorage.getItem("souven1r" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/souven1r.mp3?v=1714414684036");
-if (localStorage.getItem("2ouvenir" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/2ouvenir.mp3?v=1714414700719");
-if (localStorage.getItem("routine2" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/routine2.mp3?v=1714414889291");
-if (localStorage.getItem("routin3s" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/routin3s.mp3?v=1714414850230");
-if (localStorage.getItem("jitt3rs" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/jitt3rs.mp3?v=1714414684287");
+if (localStorage.getItem("failedconnection" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Failed%20Connection.mp3?v=1727645304666");
+//if (localStorage.getItem("demol1sh" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/demol1sh.mp3?v=1714414557787");
+//if (localStorage.getItem("demoli2h" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/demoli2h.mp3?v=1714414714759");
+//if (localStorage.getItem("d3molish" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/d3molish.mp3?v=1714414706958");
+//if (localStorage.getItem("souven1r" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/souven1r.mp3?v=1714414684036");
+//if (localStorage.getItem("2ouvenir" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/2ouvenir.mp3?v=1714414700719");
+//if (localStorage.getItem("routine2" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/routine2.mp3?v=1714414889291");
+//if (localStorage.getItem("routin3s" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/routin3s.mp3?v=1714414850230");
+//if (localStorage.getItem("jitt3rs" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/jitt3rs.mp3?v=1714414684287");
+if (localStorage.getItem("atomic" + 'Checked')) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Atomic.wav?v=1727644048951");
+if (localStorage.getItem("ascension" + 'Checked')) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Acension%20(Apotheosis%202).wav?v=1729515166145");
+if (localStorage.getItem("nadir" + 'Checked')) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Nadir%20(Apotheosis%203).wav?v=1729515170342");
+if (localStorage.getItem("phacktomine" + 'Checked')) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Methemphetaphacktomine.wav?v=1729515173719");
+if (localStorage.getItem("polychromatism" + 'Checked')) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Polychromatism.wav?v=1729515177274");
   
 //Music functions:
   //decide the music
@@ -534,8 +539,8 @@ if (global.music2.src === "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-669
 if (global.music2.src === "https://cdn.glitch.global/f80d3eec-1e99-4b8c-b120-79a55addacf9/Meloncholy.mp3?v=1675465750213") {
   global.music2.songname = "Melancholy --- Deltafyrex";
 }
-if (global.music2.src === "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Depredation%20V2.mp3?v=1713525132474") {
-  global.music2.songname = "Depredation Remastered V2--- Deltafyrex";
+if (global.music2.src === "https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Nero.wav?v=1727644028814") {
+  global.music2.songname = "Nero --- Deltafyrex";
 }
 if (global.music2.src === "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/anybody.mp3?v=1705807057028") {
   global.music2.songname = "Anybody can find Love (except You.) --- hkmori"
@@ -575,6 +580,24 @@ if (global.music2.src === "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-669
 }
 if (global.music2.src === "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/jitt3rs.mp3?v=1714414684287") {
   global.music2.songname = "Jitt3rs --- Nintendo"
+}
+if (global.music2.src === "https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Atomic.wav?v=1727644048951") {
+  global.music2.songname = "Atomic --- Deltafyrex"
+}
+if (global.music2.src === "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Failed%20Connection.mp3?v=1727645304666") {
+  global.music2.songname = "Failed Connection --- Deltafyrex"
+}
+if (global.music2.src === "https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Acension%20(Apotheosis%202).wav?v=1729515166145") {
+  global.music2.songname = "Ascension --- Deltafyrex"
+}
+if (global.music2.src === "https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Nadir%20(Apotheosis%203).wav?v=1729515170342") {
+  global.music2.songname = "Nadir --- Deltafyrex"
+}
+if (global.music2.src === "https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Methemphetaphacktomine.wav?v=1729515173719") {
+  global.music2.songname = "Phacktomine --- Deltafyrex"
+}
+if (global.music2.src === "https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Polychromatism.wav?v=1729515177274") {
+  global.music2.songname = "Polychromatism --- Deltafyrex"
 }
 }
 function lagachloop() {
@@ -1069,21 +1092,26 @@ window.onload = async () => {
     util.retrieveFromLocalStorageCheckDefault("oioioi");
     util.retrieveFromLocalStorageCheckDefault("dejected");
     util.retrieveFromLocalStorageCheckDefault("worldsend");
-    util.retrieveFromLocalStorageCheckDefault("depredation");
-    util.retrieveFromLocalStorage("anybody");
+    util.retrieveFromLocalStorageCheckDefault("nerosong");
+    /*util.retrieveFromLocalStorage("anybody");
     util.retrieveFromLocalStorageCheckDefault("resurgam");
-    util.retrieveFromLocalStorageCheckDefault("longing");
+    util.retrieveFromLocalStorageCheckDefault("longing");*/
     util.retrieveFromLocalStorageCheckDefault("apotheosis");
     util.retrieveFromLocalStorageCheckDefault("killa");
-    util.retrieveFromLocalStorageCheckDefault("melancholy");
-    util.retrieveFromLocalStorageCheckDefault("demol1sh");
+    util.retrieveFromLocalStorageCheckDefault("failedconnection");
+/*    util.retrieveFromLocalStorageCheckDefault("demol1sh");
     util.retrieveFromLocalStorageCheckDefault("demoli2h");
     util.retrieveFromLocalStorage("d3molish");
     util.retrieveFromLocalStorageCheckDefault("souven1r");
     util.retrieveFromLocalStorageCheckDefault("2ouvenir");
     util.retrieveFromLocalStorage("routine2");
     util.retrieveFromLocalStorage("routin3s");
-    util.retrieveFromLocalStorage("jitt3rs");
+    util.retrieveFromLocalStorage("jitt3rs");*/
+    util.retrieveFromLocalStorageCheckDefault("atomic");
+    util.retrieveFromLocalStorageCheckDefault("ascension");
+    util.retrieveFromLocalStorageCheckDefault("nadir");
+    util.retrieveFromLocalStorage("phacktomine");
+    util.retrieveFromLocalStorageCheckDefault("polychromatism");
     // Set default theme
     if (document.getElementById("optColors").value === "") {
         document.getElementById("optColors").value = "nero";
@@ -1453,21 +1481,26 @@ function startGame() {
     util.submitToLocalStorage("oioioi");
     util.submitToLocalStorage("dejected");
     util.submitToLocalStorage("worldsend");
-    util.submitToLocalStorage("depredation");
-    util.submitToLocalStorage("anybody");
+    util.submitToLocalStorage("nerosong");
+    /*util.submitToLocalStorage("anybody");
     util.submitToLocalStorage("resurgam");
-    util.submitToLocalStorage("longing");
+    util.submitToLocalStorage("longing");*/
     util.submitToLocalStorage("apotheosis");
     util.submitToLocalStorage("killa");
-    util.submitToLocalStorage("melancholy");
-    util.submitToLocalStorage("demol1sh");
+    util.submitToLocalStorage("failedconnection");
+    util.submitToLocalStorage("ascension");
+    util.submitToLocalStorage("nadir");
+    util.submitToLocalStorage("phacktomine");
+    util.submitToLocalStorage("polychromatism");
+/*    util.submitToLocalStorage("demol1sh");
     util.submitToLocalStorage("demoli2h");
     util.submitToLocalStorage("d3molish");
     util.submitToLocalStorage("souven1r");
     util.submitToLocalStorage("2ouvenir");
     util.submitToLocalStorage("routine2");
     util.submitToLocalStorage("routin3s");
-    util.submitToLocalStorage("jitt3rs");
+    util.submitToLocalStorage("jitt3rs");*/
+    util.submitToLocalStorage("atomic");
     util.submitToLocalStorage("optNoGrid");
     // GUI
     util.submitToLocalStorage("optRenderGui");
@@ -1505,21 +1538,26 @@ function startGame() {
     if (document.getElementById("oioioi").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/oioioi.mp3?v=1705286830033");
     if (document.getElementById("dejected").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Dejected.mp3?v=1705287022417");
     if (document.getElementById("worldsend").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/WorldsEnd.mp3?v=1714399132177");
-    if (document.getElementById("depredation").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Depredation%20V2.mp3?v=1713525132474");
-    if (document.getElementById("anybody").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/anybody.mp3?v=1705807057028");
+    if (document.getElementById("nerosong").checked) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Nero.wav?v=1727644028814");
+    /*if (document.getElementById("anybody").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/anybody.mp3?v=1705807057028");
     if (document.getElementById("resurgam").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/resurgam.mp3?v=1708218475743");
-    if (document.getElementById("longing").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/longing.mp3?v=1708218464295");
+    if (document.getElementById("longing").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/longing.mp3?v=1708218464295");*/
     if (document.getElementById("apotheosis").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Apotheosis.mp3?v=1713525419376");
     if (document.getElementById("killa").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Action%20Agenda%20-%20Killa%20DFX%20Edit.mp3?v=1713352244240");
-    if (document.getElementById("melancholy").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Meloncholy.mp3?v=1675465750213");
-    if (document.getElementById("demol1sh").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/demol1sh.mp3?v=1714414557787");
+    if (document.getElementById("failedconnection").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Failed%20Connection.mp3?v=1727645304666");
+/*  if (document.getElementById("demol1sh").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/demol1sh.mp3?v=1714414557787");
     if (document.getElementById("demoli2h").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/demoli2h.mp3?v=1714414714759");
     if (document.getElementById("d3molish").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/d3molish.mp3?v=1714414706958");
     if (document.getElementById("souven1r").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/souven1r.mp3?v=1714414684036");
     if (document.getElementById("2ouvenir").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/2ouvenir.mp3?v=1714414700719");
     if (document.getElementById("routine2").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/routine2.mp3?v=1714414889291");
     if (document.getElementById("routin3s").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/routin3s.mp3?v=1714414850230");
-    if (document.getElementById("jitt3rs").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/jitt3rs.mp3?v=1714414684287");
+    if (document.getElementById("jitt3rs").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/jitt3rs.mp3?v=1714414684287");*/
+    if (document.getElementById("atomic").checked) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Atomic.wav?v=1727644048951");
+    if (document.getElementById("ascension").checked) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Acension%20(Apotheosis%202).wav?v=1729515166145");
+    if (document.getElementById("nadir").checked) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Nadir%20(Apotheosis%203).wav?v=1729515170342");
+    if (document.getElementById("phacktomine").checked) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Methemphetaphacktomine.wav?v=1729515173719");
+    if (document.getElementById("polychromatism").checked) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Polychromatism.wav?v=1729515177274");
 
     switch (document.getElementById("optBorders").value) {
         case "normal":
@@ -2626,7 +2664,7 @@ function drawFloor(px, py, ratio) {
             if (settings.graphical.quality === "trippy") {
                 ctx.fillStyle = gameDraw.getColor("animatedepilepsy")
             } else {
-                ctx.fillStyle = settings.graphical.screenshotMode ? color.guiwhite : gameDraw.modifyColor(tile);
+                ctx.fillStyle = settings.graphical.screenshotMode ? color.guiwhite : global.blackhole ? color.guiblack : gameDraw.modifyColor(tile);
             }
             ctx.fillRect(left, top, right - left, bottom - top);
             if (settings.graphical.quality == "cod") {
@@ -3215,20 +3253,19 @@ function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
     if (global.metrics.rendertime < 10) orangeColor = true;
     // Text
     if (global.showDebug) {
-        drawText("Nero Engine v3.2", x + len, y - 50 - 8 * 14 - 2, 15, "#6a36e3", "right");
+        drawText("Nero Engine v3.3", x + len, y - 50 - 8 * 14 - 2, 15, "#6a36e3", "right");
         drawText("Prediction: " + Math.round(GRAPHDATA) + "ms : " + global.mspt + " mspt", x + len, y - 50 - 7 * 14, 10, color.guiwhite, "right");
         // drawText(`Bandwidth: ${gui.bandwidth.in} in, ${gui.bandwidth.out} out`, x + len, y - 50 - 3 * 14, 10, color.guiwhite, "right");     
         drawText("Memory: " + global.metrics.rendergap.toFixed(1) + " Mib : " + "Class: " + gui.class, x + len, y - 50 - 3 * 14, 10, color.guiwhite, "right");   
-        drawText("Update Version: " + "v3.206", x + len, y - 50 - 6 * 14, 10, color.guiwhite, "right");
+        drawText("Update Version: " + "v3.3", x + len, y - 50 - 6 * 14, 10, color.guiwhite, "right");
         drawText("Update Rate: " + global.metrics.updatetime + "Hz", x + len, y - 50 - 5 * 14, 10, color.guiwhite, "right");
-        drawText("Client Speed: " + global.metrics.rendertime + " FPS", x + len, y - 50 - 4 * 14, 10, global.metrics.rendertime > 10 ? color.guiwhite : color.orange, "right");
-        drawText("Server Speed: " + (100 * gui.fps).toFixed(2) + "% : Client Speed: " + global.metrics.rendertime + " FPS", x + len, y - 50 - 1 * 14, 10, orangeColor ? color.orange : color.guiwhite, "right");
+        drawText("Server Speed: " + (100 * gui.fps).toFixed(2) + "% : Client Speed: " + global.metrics.rendertime + " FPS", x + len, y - 50 - 4 * 14, 10, orangeColor ? color.orange : color.guiwhite, "right");
         drawText("Kills: " + global.metrics.killcount + "  Shapes: " + global.metrics.shapecount, x + len, y - 50 - 2 * 14, 10, color.guiwhite, "right");
         drawText("Song: " + global.music2.songname, x + len, y - 50 - 1 * 14, 10, color.guiwhite, "right");
         drawText(global.metrics.latency + " ms - " + global.serverName, x + len, y - 50, 10, color.guiwhite, "right");
         document.getElementById("content").style.opacity = 1;
     } else if (!global.GUIStatus.minimapReducedInfo) {
-        drawText("Nero.io v3.2", x + len, y - 50 - 2 * 14 - 2, 15, "#2eabe6", "right");
+        drawText("Nero.io v3.3", x + len, y - 50 - 2 * 14 - 2, 15, "#2eabe6", "right");
         drawText((100 * gui.fps).toFixed(2) + "% : " + global.metrics.rendertime + " FPS", x + len, y - 50 - 1 * 14, 10, orangeColor ? color.orange : color.guiwhite, "right");
         drawText(global.metrics.latency + " ms : " + global.metrics.updatetime + "Hz", x + len, y - 50, 10, color.guiwhite, "right");
         document.getElementById("content").style.opacity = 0;
@@ -3678,8 +3715,7 @@ const gameDrawDead = () => {
     drawText(getDeath(), x - 170, y + 99, 16, color.guiwhite);
     drawText(getTips(), x - 170, y + 122, 16, color.guiwhite);
     drawText("🦆 The server was " + +(100 * gui.fps).toFixed(0) + "%" + " active", x - 170, y + 144, 16, color.guiwhite);
-    drawText(global.cannotRespawn ? global.respawnTimeout ? "(" + global.respawnTimeout + " Secon" + `${global.respawnTimeout <= 1 ? 'd' : 'ds'} ` + "left to respawn)" : "(You cannot respawn)" : global.mobile ? "(Tap to respawn)" : "(Press enter to respawn)", x, y + 189, 16, color.guiwhite, "center");
-    ctx.translate(0, shift * global.screenHeight);
+    drawText(global.cannotRespawn ? global.respawnTimeout ? "(" + global.respawnTimeout + " Secon" + `${global.respawnTimeout <= 1 ? 'd' : 'ds'} ` + "left to respawn)" : "(you cannot respawn!)" : global.mobile ? "(tap to respawn)" : "(press enter to respawn)", x, y + 189, 16, color.guiwhite, "center");    ctx.translate(0, shift * global.screenHeight);
 };
 const gameDrawOldDead = () => {
     clearScreen(color.black, 0.25);
@@ -3842,11 +3878,13 @@ function animloop() {
               PlaySound420();
             }
             global.metrics.killcount = 0;
+            global.metrics.shapecount = 0;
         } else {
         if (global.stopthefuckingkillsoundyouprick) {
             metalpipe.pause();
             metalpipe.currentTime = 0;
             global.stopthefuckingkillsoundyouprick = false;
+            console.log("Respawned")
       }
         }
         if (global.disconnected) { // Draw disconnection screen if the client lost connection to the server.

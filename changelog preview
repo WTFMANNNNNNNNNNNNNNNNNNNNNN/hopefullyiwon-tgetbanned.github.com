@@ -8,7 +8,57 @@
         <li>small fixes im too lazy to write</li>
         <li>changed server box</li>
         <li>small minion bugfixes</li>
-        <p style="color:red;" class="vsaucereference" onclick="PlaySoundpianioio()" >RANDOM BULLSHIT, GO!</p>
+        <li>forgot to remove mace</li>
+        <li>dreads update</li>
+        <li>got rid of trilancer branch</li>
+        <li>dreadv1 changes</li>
+        <li>undertow update</li>
+        <li>removed a bunch of songs from ost</li>
+        <li>removed european server</li>
+        <li>updated credits</li>
+        <li>buffed albequerqe</li>
+        <li>fixed a bug where cloner hybrid did not show up when upgrading from cloner (dunno how i missed that)</li>
+        <li>removed ranch, marksman and cocci</li>
+        <li>fixed a bug where autocloner and cloner hybrid having instant clone respawn time</li>
+        <li>added visualizer to Nero brella</li>
+        <li>removed sidewinder</li>
+        <li>removed ceptions</li>
+        <li>nerfed auras (-100 aura points)</li>
+        <li>buffed surges emp attack</li>
+        <li>added choker</li>
+        <li>added X-Pathogen</li>
+        <li>added wyrm</li>
+        <li>added noble branch</li>
+        <li>added more descriptions</li>
+        <li>added gatling gun</li>
+        <li>removed more ceptions</li>
+        <li>removed aura branch from tier 1</li>
+        <li>removed auto branch from tier 1</li>
+        <li>removed hybrid branch from tier 1</li>
+        <li>removed flankinception branch</li>
+        <li>added more machceptioner upgrades</li>
+        <li>added 4 new ost tracks</li>
+        <li>fixed debug menu</li>
+        <li>makes shapes killed on run in debug menu reset on death</li>
+        <li>fixed solario bossfight</li>
+        <li>fixed bug where recoil doesnt work when upgrading from lancer tree</li>
+        <li>added charger</li>
+        <li>revolutionist now upgrades from whirlwind</li>
+        <li>saturn now upgrades from revolutionist</li>
+        <li>added formal dehyde and frostbite</li>
+        <li>buffed smashers</li>
+        <li>buffed skaters movement speed</li>
+        <li>gave pion the hadron ability and changed ring color to red</li>
+        <li>changed bayonet to tier 3</li>
+        <li>added icegun, fencer arisaka, wakazashi and fireblanket</li>
+        <li>removed mirror backshield</li>
+        <li>fixed death sounds</li>
+        <li>added wark branch</li>
+        <li>fixed auto2brid not having its main autocannon</li>
+        <li>fixed bug where scowerer and swivel2brid did not upgrade from its intended branches</li>
+        <li>fixed grazerbrid not having its autocannon</li>
+        <li>fixed the skype achievement</li>
+        <p style="color:red;" >Big ass update :blehh:</p>
     </ul>
 </div>
 <div class="slider2">
@@ -578,4 +628,4 @@
 <p style="color:red;">Bwomp</p>
     </ul>
 </div>
-You've Reached The End <a class="menuTab ???" onclick="PlaySound68()" onmouseover="PlaySound68()" title=":{]4*($812904sdfas0fasdfasdfasdfhsdfonaen*&$#(*nhH*)($H0::{}|;..0$*((*)$afds&!@)(*#$@&2)fhea)}" href="https://msfart.glitch.me/popup.html" target="_blank" rel="noopener noreferrer">?̵̛̤̱̯͕̠̘̬̦̟̼̏͆̍̋̀̃͋͑̈́̂̎̉͒́̇̋͗̆͗̿́́̃́͗̉̈́̓̓͒̑̌͊̎͗̕̚̕͜͠͠͝͠͠?̵̧̢̨͉̹̥̩͕͙̦̞̹͙̣̱̪̫͚͚̋͐̒͐̈́͠?̶̡̢͈̮͉͕̩̣̘͚̳̳̺̹̜̺̹͙̼̤̼̱̣̭̪̘̖̊̅̽̃̎͋̽̇͂͆̽̃̇̏͒͋͗̾̀̉̐͘͜͠?̷̧̧̨̡̛̛̪̠̝̖̪̖͓̝̖̣͖͚̖̗̼̬̯̦̹̯͖̮̥͚͓̙͇̥̼͍̠̟̙̫̫̞̆̔́̊̆̓̿́̑̇̅̄̀̑̄̇̆̀̓͐̾̄̽̒̃͝͝ͅ?̶̢̧̢̢̧̧̛̣̳̮̝̳̞̞̙̟͓̝̬̤͎̂͛͆̓͑̌͌̂̽</a>
+You've Reached The End <a class="menuTab ???" onclick="goofyahh()" onmouseover="PlaySound68()" title=":{]4*($812904sdfas0fasdfasdfasdfhsdfonaen*&$#(*nhH*)($H0::{}|;..0$*((*)$afds&!@)(*#$@&2)fhea)}" href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" rel="noopener noreferrer">?̵̛̤̱̯͕̠̘̬̦̟̼̏͆̍̋̀̃͋͑̈́̂̎̉͒́̇̋͗̆͗̿́́̃́͗̉̈́̓̓͒̑̌͊̎͗̕̚̕͜͠͠͝͠͠?̵̧̢̨͉̹̥̩͕͙̦̞̹͙̣̱̪̫͚͚̋͐̒͐̈́͠?̶̡̢͈̮͉͕̩̣̘͚̳̳̺̹̜̺̹͙̼̤̼̱̣̭̪̘̖̊̅̽̃̎͋̽̇͂͆̽̃̇̏͒͋͗̾̀̉̐͘͜͠?̷̧̧̨̡̛̛̪̠̝̖̪̖͓̝̖̣͖͚̖̗̼̬̯̦̹̯͖̮̥͚͓̙͇̥̼͍̠̟̙̫̫̞̆̔́̊̆̓̿́̑̇̅̄̀̑̄̇̆̀̓͐̾̄̽̒̃͝͝ͅ?̶̢̧̢̢̧̧̛̣̳̮̝̳̞̞̙̟͓̝̬̤͎̂͛͆̓͑̌͌̂̽</a>

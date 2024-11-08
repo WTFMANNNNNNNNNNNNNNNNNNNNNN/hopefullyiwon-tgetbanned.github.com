@@ -26,7 +26,7 @@ Class.bsignalskin = {
     SKILL_CAP: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
     SKILL: Array(10).fill(12),
     TURRETS: [{
-        POSITION: [18, 0, 0, 0, 360, 3],
+        POSITION: [18, 0, 0, 0, 360, -2],
         TYPE: "bsignalcharm"
     }]
 };
@@ -44,7 +44,7 @@ Class.dfxskin = {
     SKILL_CAP: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
     SKILL: Array(10).fill(12),
     TURRETS: [{
-        POSITION: [18, 0, 0, 0, 360, 3],
+        POSITION: [10, 6, 5.5, 0, 360, 3],
         TYPE: "dfxcharm"
     }]
 };
@@ -53,7 +53,7 @@ Class.primalskin = {
     SKILL_CAP: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
     SKILL: Array(10).fill(12),
     TURRETS: [{
-        POSITION: [20, 0, 0, 0, 360, 3],
+        POSITION: [10, 6, 5.5, 0, 360, 3],
         TYPE: "primalcharm"
     }]
 };
@@ -62,7 +62,7 @@ Class.kangarooskin = {
     SKILL_CAP: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
     SKILL: Array(10).fill(12),
     TURRETS: [{
-        POSITION: [18, 0, 0, 0, 360, 3],
+        POSITION: [10, 6, 5.5, 0, 360, 3],
         TYPE: "kangaroocharm"
     }]
 };
@@ -71,7 +71,7 @@ Class.cswmskin = {
     SKILL_CAP: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
     SKILL: Array(10).fill(12),
     TURRETS: [{
-        POSITION: [18, 0, 0, 0, 360, 0.5],
+        POSITION: [10, 6, 5.5, 0, 360, 3],
         TYPE: "sandwichdeco"
     }]
 };
@@ -89,7 +89,7 @@ Class.skypeskin = {
     SKILL_CAP: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
     SKILL: Array(10).fill(12),
     TURRETS: [{
-        POSITION: [18, 0, 0, 0, 360, 3],
+        POSITION: [10, 6, 5.5, 0, 360, 3],
         TYPE: "skypecharm"
     }]
 };
@@ -98,7 +98,7 @@ Class.coinskin = {
     SKILL_CAP: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
     SKILL: Array(10).fill(12),
     TURRETS: [{
-        POSITION: [18, 0, 0, 0, 360, 3],
+        POSITION: [10, 6, 5.5, 0, 360, 3],
         TYPE: "coincharm"
     }]
 };
@@ -107,7 +107,7 @@ Class.discordskin = {
     SKILL_CAP: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
     SKILL: Array(10).fill(12),
     TURRETS: [{
-        POSITION: [34, 0, 0, 0, 360, 3],
+        POSITION: [15, -5, 5.5, 0, 360, 3],
         TYPE: "discordcharm"
     }]
 };

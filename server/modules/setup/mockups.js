@@ -29,6 +29,7 @@ function getMockup(e, positionInfo) {
             tier: r.tier,
             index: r.index
         })),
+        trueupgrades: [e.UPGRADES_TIER_2, e.UPGRADES_TIER_3, e.UPGRADES_TIER_4, e.UPGRADES_TIER_0 + e.UPGRADES_TIER_1],
         guns: e.guns.map(function(gun) {
             return {
                 offset: util.rounder(gun.offset),
