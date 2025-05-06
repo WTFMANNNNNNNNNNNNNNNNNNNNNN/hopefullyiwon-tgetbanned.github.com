@@ -20,6 +20,7 @@ Class.trianglecharm = makeDeco("https://cdn.glitch.global/5fc7dcb6-aada-495b-828
 Class.pentagoncharm = makeDeco("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/1165825970528325682.webp?v=1714156764280", "purple")
 Class.gemcharm = makeDeco("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/1165826077843796018.webp?v=1714156778841", "aqua")
 Class.tokaycharm = makeDeco("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/spider_2.png?v=1722633319003")
+Class.minoscharm = makeDeco("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/06f19349-48de-46ec-9877-6ea585848961.image.png?v=1739043712157")
 
 Class.bsignalskin = {
     MAX_CHILDREN: 0,
@@ -181,5 +182,14 @@ Class.tokayskin = {
     TURRETS: [{
         POSITION: [10, -6, 5.5, 0, 360, 3],
         TYPE: "tokaycharm"
+    }]
+};
+Class.minosskin = {
+    MAX_CHILDREN: 0,
+    SKILL_CAP: [12, 12, 12, 12, 12, 12, 12, 12, 12, 12],
+    SKILL: Array(10).fill(12),
+    TURRETS: [{
+        POSITION: [10, -6, 5.5, 0, 360, 3],
+        TYPE: "minoscharm"
     }]
 };

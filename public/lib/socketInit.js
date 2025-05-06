@@ -514,6 +514,7 @@ const process = (z = {}) => {
             z.render = {
                 draws: false,
                 expandsWithDeath: z.drawsHealth,
+                dontDeathAnim: z.name,
                 lastRender: global.player.time,
                 x: z.x,
                 y: z.y,
@@ -811,8 +812,14 @@ const socketInit = port => {
       var KillSound = new Audio();
       KillSound.volume = 0.5;
       function PlaySoundKS() {
-      KillSound.src = ("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Voicy_Slap%20Battles%20Killstreak%20Kill.mp3?v=1714045643190");
+      KillSound.src = ("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/untitled.wav?v=1733614029212");
       KillSound.play();
+      }
+      var NotifSound = new Audio();
+      NotifSound.volume = 0.5;
+      function PlaySoundNotif() {
+      NotifSound.src = ("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/123123.wav?v=1734187686345");
+      NotifSound.play();
       }
     // Handle incoming messages
     socket.onmessage = async function socketMessage(message) {
@@ -863,7 +870,7 @@ const socketInit = port => {
                 global.player.name = m[0];
                 break;
           case "achieve":
-                const achievementTable = ['killachievement', 'killachievement2', 'tokenachievement', 'bossachivement'] // lookup table of achievements and their ids
+                const achievementTable = ['killachievement', 'killachievement2', 'tokenachievement', 'bossachivement', 'deathachievement'] // lookup table of achievements and their ids
                 util.submitAchievementToLocalStorage(achievementTable[m[0]]) // whatever code to actually give the player the achievement
                 break;
           case "menu":

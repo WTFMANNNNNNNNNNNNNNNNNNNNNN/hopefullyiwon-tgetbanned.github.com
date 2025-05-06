@@ -15,8 +15,8 @@ module.exports = {
     // Which port to run the web server on.
     port: 3000,
   
-    // name of the server ex. main server, beta server, etc
-    serverName: "Beta",
+ // name of the server ex. main server, beta server, etc
+    serverName: "Main",
   
     // How often to update the list of the entities that players can see.
     // Has effects of when entities are activated.
@@ -31,18 +31,18 @@ module.exports = {
     // Log speed loop warnings
     LOGS: false,
   
-    // If there's only one server
+      // If there's only one server
     COMBINED: true,
 
     // The \modules\setup\gamemodeconfigs\ files to load.
     // To change specific things about specific gamemodes (such as team count for tdm), edit their config file in \modules\setup\gamemodeconfigs\.
-    GAME_MODES: ['ffa'],
+    GAME_MODES: ['sandbox'],
 
     // The room files to load in the setup/rooms folder.
     // NOTE: If a /gamemodeconfig/ file "replaces" the value of ROOM_SETUP, it just adds its own ROOM_SETUP's content to this array.
     // NOTE: Files starting with `map_` are maps. files starting with `overlay_` are overlays that get added on.
     // NOTE: These prefixes are only for categorisation, a room file would work the same regardless of its prefix. APS++ does nothing based on file name prefixes.
-    ROOM_SETUP: ['map_neroio_mazearena'],
+    ROOM_SETUP: ['map_neroio_mazearena2'],
 
     // The dimensions of a single tile on the map.
     TILE_WIDTH: 200, //400
@@ -111,8 +111,6 @@ module.exports = {
         if (level <= 45 && level & 1 == 1) return 1;
         return 0;
     },
-    // Show the health bar text or not.
-    SHOW_HEALTHBAR_TEXT: false,
 
     // Default skill caps.
     MAX_SKILL: 9,
@@ -130,7 +128,7 @@ module.exports = {
     LEVEL_CHEAT_CAP: 45,
 
     // Amount of player-bots to spawn.
-    BOTS: 2,
+    BOTS: 0,
 
     // How much XP player-bots get per second until they reach LEVEL_CAP.
     BOT_XP: 125,
@@ -145,7 +143,7 @@ module.exports = {
     BOT_CLASS_UPGRADE_CHANCES: [ 1, 5, 20, 37, 37],
   
     // The prefix of the bot's name.
-    BOT_NAME_PREFIX: '§#888§[AI]§reset§ ',
+    BOT_NAME_PREFIX: "[AI] ",
 
     // The class that players and player-bots spawn as.
     SPAWN_CLASS: "basic",

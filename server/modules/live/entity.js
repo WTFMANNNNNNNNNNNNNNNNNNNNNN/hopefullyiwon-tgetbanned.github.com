@@ -1811,12 +1811,12 @@ class Entity extends EventEmitter {
                 this.damp = this.motionTypeArgs.damp ?? -0.025;
                 break;
             case "accelerate":
-                    this.velocity.x = this.velocity.x + (4.5 * Math.cos(this.facing))
-                    this.velocity.y = this.velocity.y + (4.5 * Math.sin(this.facing))
+                    this.velocity.x += 4.5 * Math.cos(this.facing)
+                    this.velocity.y += 4.5 * Math.sin(this.facing)
                     this.topSpeed += 30;
                     this.maxSpeed += 30;
                     this.damp = -0.0125;
-                    this.damage += 1.3
+                    //this.damage += 0.45 for now...
                     break;
             case "acceleratetothespeedoflight":
                     this.velocity.x = this.velocity.x + ((1 * this.maxSpeed + 0.5) * Math.cos(this.facing))

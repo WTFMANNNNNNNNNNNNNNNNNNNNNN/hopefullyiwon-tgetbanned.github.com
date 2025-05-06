@@ -39,6 +39,24 @@ normalNoFood = new Tile({
     },
     init: tile => room.spawnableDefault.push(tile),
 }),
+    
+water = new Tile({
+    color: "aqua",
+    data: {
+        allowMazeWallSpawn: true,
+    },
+    init: tile => room.spawnableDefault.push(tile),
+    tick: tile => {
+        for (let i = 0; i < tile.entities.length; i++) {
+            let entity = tile.entities[i];
+            if (entity.pushability && !entity.immuneToTiles && !entity.master.immuneToTiles) {
+                let dirToCenter = Math.atan2(room.center.y - entity.y, room.center.x - entity.x);
+                entity.velocity.x /= 1.05;
+                entity.velocity.y /= 1.05;
+            }
+        } 
+    }
+}),
 
 dancefloor = new Tile({
     color: "rainbow",
@@ -49,35 +67,35 @@ dancefloor = new Tile({
 }),
     
 dancefloor1 = new Tile({
-    color: 20,
+    color: "flashBlueRed",
     data: {
         allowMazeWallSpawn: false,
     },
     init: tile => room.spawnableDefault.push(tile),
 }),
 dancefloor2 = new Tile({
-    color: 21,
+    color: "flashBlueGray",
     data: {
         allowMazeWallSpawn: false,
     },
     init: tile => room.spawnableDefault.push(tile),
 }),
 dancefloor3 = new Tile({
-    color: 22,
+    color: "flashGreyBlue",
     data: {
         allowMazeWallSpawn: false,
     },
     init: tile => room.spawnableDefault.push(tile),
 }),
 dancefloor4 = new Tile({
-    color: 23,
+    color: "flashRedGrey",
     data: {
         allowMazeWallSpawn: false,
     },
     init: tile => room.spawnableDefault.push(tile),
 }),
 dancefloor5 = new Tile({
-    color: 24,
+    color: "flashGreyRed",
     data: {
         allowMazeWallSpawn: false,
     },
@@ -193,4 +211,4 @@ hookpoint = new Tile({
     }
 });
 
-module.exports = { normal, normalNoFood, nest, nestNoFood, wall, nestNoBoss, blacktile, dancefloor, dancefloor1, dancefloor2, dancefloor3, dancefloor4, dancefloor5, dfxwall, hookpoint, fovwall };
+module.exports = { normal, normalNoFood, nest, nestNoFood, wall, nestNoBoss, blacktile, dancefloor, dancefloor1, dancefloor2, dancefloor3, dancefloor4, dancefloor5, dfxwall, hookpoint, fovwall, water };

@@ -201,7 +201,12 @@ class Canvas {
                 this.socket.talk("0");
                 break;
             case global.KEY_BECOME:
-                this.socket.talk("H");
+                if (global.wiki && global.gameStart) {
+                        this.socket.talk("setclass", global.wikiclassname);
+                        console.log("set class!")
+                } else {
+                    this.socket.talk("H");
+                }
                 break;
             case global.KEY_MAX_STAT:
                 global.statMaxing = true;
@@ -243,7 +248,7 @@ class Canvas {
                 this.socket.talk("drag");
                 break;
             case global.KEY_SPAWN_WALL:
-                if (global.KEY_SHIFT) { this.socket.talk("randomTestKey"); } else { this.socket.talk("spawnWall"); };
+                if (shifted) { this.socket.talk("randomTestKey"); } else { this.socket.talk("spawnWall"); };
                 break;
             case global.KEY_ABILITY:
                 this.socket.cmd.set(7, true);

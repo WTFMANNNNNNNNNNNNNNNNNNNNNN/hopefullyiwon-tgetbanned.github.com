@@ -1,4 +1,4 @@
-const { skillSet } = require('../facilitators.js');
+const { skillSet, addAura } = require('../facilitators.js');
 const { base, statnames, dfltskl, smshskl } = require('../constants.js');
 
 Class.genericEntity = {
@@ -372,6 +372,14 @@ Class.healAura = {
         DAMAGE: 0.4 / 3,
     },
 };
+Class.auraBasicGen = addAura(1, 1.3);
+Class.auraHealerGen = addAura(-1);
+Class.auraDamageGen = addAura(2, 1.3, 0.3, "red");
+Class.auraRangeGen = addAura(2, 1.8, 0.3, "teal", "rangeAuraSymbol");
+Class.auraDamageRangeGen = addAura(2, 1.8, 0.3, "red", "rangeAuraSymbol");
+Class.auraMoreDamageGen = addAura(3, 1.3, 0.3, "orange");
+Class.auraMoreRangeGen = addAura(1, 2.3, 0.3, "aqua", "rangeAuraSymbol");
+Class.auraSmasherGen = addAura(11, 1.3);
 Class.auraSymbol = {
     PARENT: "genericTank",
     CONTROLLERS: [["spin", {speed: -0.04}]],

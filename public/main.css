@@ -1487,9 +1487,10 @@ body.mobile #skinpdiv {
   color: white;
   outline: #000000 solid;
   z-index: 0;
+  text-align: center;
   cursor: pointer;
   text-shadow: -1px -1px 0 #000000, 1px -1px 0 #000000, -1px 1px 0 #000000, 1px 1px 0 #000000;
-  background: #202020 url("https://yt3.googleusercontent.com/yDCc9Bsxd-JFacxEfYiO_Nz_B3ZbqJBYazWi8ltyHMOHA_k2t-1zSPSC58u9ZxG9ByurM2cZag=s900-c-k-c0x00ffffff-no-rj") 0px 0px/100px repeat;
+  background: #202020 url("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/2024_04_22_0fb_Kleki.png?v=1713786234204") 0px 0px/100px repeat;
 }
 #controls {
   height: 200px;
@@ -2142,4 +2143,7 @@ body.mobile .controlTable {
 }
 .controlTable td.editing span {
     visibility: hidden;
+}
+.asdfasfsfaf {
+    width: 40%;
 }

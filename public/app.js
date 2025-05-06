@@ -8,6 +8,7 @@ import { color } from "./lib/color.js";
 import { gameDraw } from "./lib/gameDraw.js";
 import { tankdescs } from "./lib/tankdesc.js";
 import * as socketStuff from "./lib/socketInit.js";
+
 (async function (util, global, settings, Canvas, color, gameDraw, socketStuff) {
 
 let { socketInit, gui, leaderboard, minimap, moveCompensation, lag, getNow } = socketStuff;
@@ -97,7 +98,16 @@ let { socketInit, gui, leaderboard, minimap, moveCompensation, lag, getNow } = s
       function PlaySoundnfl() {
       nfl.play();
       }
-
+var open = new Audio();
+open.src = ("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/close.wav?v=1733614044438");
+function PlaySoundOpen() {
+    open.play();
+}
+var close = new Audio();
+close.src = ("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/open.wav?v=1733614039155");
+function PlaySoundClose() {
+    close.play();
+}
       function doSomething() {
         if (clicked) {
           var optionclicksound = new Audio();
@@ -182,16 +192,16 @@ checkList.getElementsByClassName('anchor')[0].onclick = function(evt) {
 }
 
 var pmusic = new Array();
-if (localStorage.getItem("oioioi" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/oioioi.mp3?v=1705286830033");
-if (localStorage.getItem("dejected" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Dejected.mp3?v=1705287022417");
-if (localStorage.getItem("worldsend" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/WorldsEnd.mp3?v=1714399132177");
-if (localStorage.getItem("nerosong" + 'Checked')) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Nero.wav?v=1727644028814");
+pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/oioioi.mp3?v=1705286830033");
+pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Dejected.mp3?v=1705287022417");
+pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/WorldsEnd.mp3?v=1714399132177");
+pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Nero.wav?v=1727644028814");
 //if (localStorage.getItem("anybody" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/anybody.mp3?v=1705807057028");
 //if (localStorage.getItem("resurgam" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/resurgam.mp3?v=1708218475743");
 //if (localStorage.getItem("longing" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/longing.mp3?v=1708218464295");
-if (localStorage.getItem("apotheosis" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Apotheosis.mp3?v=1713525419376");
-if (localStorage.getItem("killa" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Action%20Agenda%20-%20Killa%20DFX%20Edit.mp3?v=1713352244240");
-if (localStorage.getItem("failedconnection" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Failed%20Connection.mp3?v=1727645304666");
+pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Apotheosis.mp3?v=1713525419376");
+pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Action%20Agenda%20-%20Killa%20DFX%20Edit.mp3?v=1713352244240");
+pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Failed%20Connection.mp3?v=1727645304666");
 //if (localStorage.getItem("demol1sh" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/demol1sh.mp3?v=1714414557787");
 //if (localStorage.getItem("demoli2h" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/demoli2h.mp3?v=1714414714759");
 //if (localStorage.getItem("d3molish" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/d3molish.mp3?v=1714414706958");
@@ -200,11 +210,14 @@ if (localStorage.getItem("failedconnection" + 'Checked')) pmusic.push("https://c
 //if (localStorage.getItem("routine2" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/routine2.mp3?v=1714414889291");
 //if (localStorage.getItem("routin3s" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/routin3s.mp3?v=1714414850230");
 //if (localStorage.getItem("jitt3rs" + 'Checked')) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/jitt3rs.mp3?v=1714414684287");
-if (localStorage.getItem("atomic" + 'Checked')) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Atomic.wav?v=1727644048951");
-if (localStorage.getItem("ascension" + 'Checked')) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Acension%20(Apotheosis%202).wav?v=1729515166145");
-if (localStorage.getItem("nadir" + 'Checked')) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Nadir%20(Apotheosis%203).wav?v=1729515170342");
-if (localStorage.getItem("phacktomine" + 'Checked')) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Methemphetaphacktomine.wav?v=1729515173719");
-if (localStorage.getItem("polychromatism" + 'Checked')) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Polychromatism.wav?v=1729515177274");
+pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Atomic.wav?v=1727644048951");
+pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Acension%20(Apotheosis%202).wav?v=1729515166145");
+pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Nadir%20(Apotheosis%203).wav?v=1729515170342");
+pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Methemphetaphacktomine.wav?v=1729515173719");
+pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Polychromatism.wav?v=1729515177274");
+pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Wednesday%2C%20Friday%20(1).wav?v=1736978399984");
+pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Heresy.wav?v=1736979337244");
+pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Reconstructed.wav?v=1736979424454");
   
 //Music functions:
   //decide the music
@@ -231,7 +244,11 @@ if (localStorage.getItem("polychromatism" + 'Checked')) pmusic.push("https://cdn
     //audio.play();
     var musiccontext = new AudioContext();
     var musicsrc = musiccontext.createMediaElementSource(global.music2);
+   // var filter = musiccontext.createBiquadFilter();
+  //  musicsrc.connect(filter);
+  //  filter.connect(musiccontext.destination);
     var analyser = musiccontext.createAnalyser();
+//    global.blackhole ? filter.type = "lowpass" : filter.type = "allpass";
 
     let musiccanvas = document.getElementById("canvas");
     musiccanvas.width = window.innerWidth * 1.3;
@@ -311,7 +328,7 @@ if (localStorage.getItem("polychromatism" + 'Checked')) pmusic.push("https://cdn
   let selectimage = document.querySelector("#selectskin");
 
   $("#rightarrowbutton").on("click", function() {
-      if (global.skinpage === 17) {
+      if (global.skinpage === 18) {
           global.skinpage = 0;  
       } else {
           global.skinpage += 1;
@@ -320,7 +337,7 @@ if (localStorage.getItem("polychromatism" + 'Checked')) pmusic.push("https://cdn
   });
   $("#leftarrowbutton").on("click", function() {
       if (global.skinpage === 0) {
-          global.skinpage = 17;  
+          global.skinpage = 18;  
       } else {
           global.skinpage -= 1;
       };                 
@@ -384,119 +401,119 @@ if (localStorage.getItem("polychromatism" + 'Checked')) pmusic.push("https://cdn
 
   function changeskinpreview() {
     if (global.skinpage === 0) {
-    counterthing.textContent = "◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "";
     skinnamedisplay.textContent = "Default";
     checkifachieve("", "");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/onetransparentsingulardamnfuckingpixel.png?v=1708568179353";
     }
     if (global.skinpage === 1) {
-    counterthing.textContent = "○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "bsignalskin";
     skinnamedisplay.textContent = "Broken Signal";
     checkifachieve("disconnectachievement", "black");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/tv.png?v=1708615075011"
     }
     if (global.skinpage === 2) {
-    counterthing.textContent = "○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "tankcharmskin";
     skinnamedisplay.textContent = "Tank Charm";
     checkifachieve("25killsachievement", "dgrey");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/2024_01_29_0ry_Kleki.png?v=1708536680813";
     }
     if (global.skinpage === 3) {
-    counterthing.textContent = "○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "dfxskin";
     skinnamedisplay.textContent = "Deltafyrex";
     checkifachieve("50killsachievement", "grey");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/MOSHED-2023-12-14-17-8-14.gif?v=1708618924966";
     }
     if (global.skinpage === 4) {
-    counterthing.textContent = "○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "primalskin";
     skinnamedisplay.textContent = "Ultimate Primal";
     checkifachieve("100killsachievement", "white");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/primal.webp?v=1708602763032";
     }
     if (global.skinpage === 5) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "kangarooskin";
     skinnamedisplay.textContent = "Kangaroo";
     checkifachieve("killachievement", "black");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/image.webp?v=1708623596560";
     }
     if (global.skinpage === 6) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "cswmskin";
     skinnamedisplay.textContent = "ChickenSandwhichMan";
     checkifachieve("killachievement2", "grey");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Untitled%20Project%20(22).jpg?v=1708356424097"
     }
     if (global.skinpage === 7) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "cogskin";
     skinnamedisplay.textContent = "Cogwheel";
     checkifachieve("lagachievement", "black");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Gear-icon-transparent-background.png?v=1705579178381";
     }
     if (global.skinpage === 8) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "eggskin";
     skinnamedisplay.textContent = "Eggbert";
     checkifachieve("100shapesachievement", "black");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/1165825970528325682l.webp?v=1714156807621";
     }
     if (global.skinpage === 9) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "squareskin";
     skinnamedisplay.textContent = "Squarey";
     checkifachieve("250shapesachievement", "dgrey");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/1165934167280848969.webp?v=1714156773284";
     }
     if (global.skinpage === 10) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "triangleskin";
     skinnamedisplay.textContent = "Triangleton";
     checkifachieve("500shapesachievement", "dgrey");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/1165934432608321546.webp?v=1714156768932";
     }
     if (global.skinpage === 11) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "pentagonskin";
     skinnamedisplay.textContent = "Pentogan";
     checkifachieve("750shapesachievement", "white");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/1165825970528325682.webp?v=1714156764280";
     }
     if (global.skinpage === 12) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○ ○";
     global.selectedskin = "gemskin";
     skinnamedisplay.textContent = "Gemy";
     checkifachieve("1000shapesachievement", "grey");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/1165826077843796018.webp?v=1714156778841";
     }
     if (global.skinpage === 13) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○ ○";
     global.selectedskin = "coinskin";
     skinnamedisplay.textContent = "Coined";
     checkifachieve("tokenachievement", "black");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/2e2ccc30-5baf-41a2-aceb-c5456a1cc6dc.image.png?v=1708619146196";
     }
     if (global.skinpage === 14) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○ ○";
     global.selectedskin = "discordskin";
     skinnamedisplay.textContent = "Sex Update";
     checkifachieve("Getbacktowoooak", "dgrey");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/2023_12_06_0yl_Kleki.png?v=1701908710293";
     }
     if (global.skinpage === 15) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○ ○";
     global.selectedskin = "deltaDecoskin";
     skinnamedisplay.textContent = "Cat-Code";
     checkifachieve("creditsachievement", "grey");
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/2024_01_15_05q_Kleki.png?v=1705301828958";
     }
     if (global.skinpage === 16) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○ ○";
     global.selectedskin = "incomskin";
     skinnamedisplay.textContent = "Very Much Incommodiousness";
     checkifachieve("pissio", "grey");
@@ -504,12 +521,18 @@ if (localStorage.getItem("polychromatism" + 'Checked')) pmusic.push("https://cdn
     myImg.src = "https://cdn.glitch.global/68f0db33-c86d-4aa5-9a35-a6750a92eae7/1200px-Icon-round-Question_mark.svg.png?v=1699273933044";
     }
     if (global.skinpage === 17) {
-    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉";
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉ ○";
     global.selectedskin = "tokayskin";
     skinnamedisplay.textContent = "Swaggity Waggity";
     checkifachieve("bossachivement", "white");
-    myImg.style.filter = 'blur(10px)';
     myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/spider_2.png?v=1722633319003";
+    }
+    if (global.skinpage === 18) {
+    counterthing.textContent = "○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ○ ◉";
+    global.selectedskin = "minosskin";
+    skinnamedisplay.textContent = "THY END IS NOW!";
+    checkifachieve("75killsachievement", "dgrey");
+    myImg.src = "https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/06f19349-48de-46ec-9877-6ea585848961.image.png?v=1739043712157";
     }
   };
     let tanktype = "unfinished",
@@ -599,6 +622,15 @@ if (global.music2.src === "https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a4
 if (global.music2.src === "https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Polychromatism.wav?v=1729515177274") {
   global.music2.songname = "Polychromatism --- Deltafyrex"
 }
+if (global.music2.src === "https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Wednesday%2C%20Friday%20(1).wav?v=1736978399984") {
+  global.music2.songname = "Wednesday, Friday --- Deltafyrex"
+}
+if (global.music2.src === "https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Heresy.wav?v=1736979337244") {
+  global.music2.songname = "Heresy --- Deltafyrex"
+}
+if (global.music2.src === "https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Reconstructed.wav?v=1736979424454") {
+  global.music2.songname = "Reconstructed --- Deltafyrex"
+}
 }
 function lagachloop() {
     if (global.metrics.rendertime <= 45 && global.metrics.rendertime >= 15) {
@@ -606,6 +638,9 @@ function lagachloop() {
     }
     if (global.savedkillcount >= 100) {
         util.submitAchievementToLocalStorage("100killsachievement");
+    }
+    if (global.savedkillcount >= 75) {
+        util.submitAchievementToLocalStorage("75killsachievement");
     }
     if (global.savedkillcount >= 50) {
         util.submitAchievementToLocalStorage("50killsachievement");
@@ -735,7 +770,7 @@ function resetAllAchievements() {
                     month = (date.getMonth() + 11) - 15
                   }
                 };
-                  if (date.getMonth() > 2) {
+                  if (date.getMonth() > 2 & date.getDate() > 23) {
                     year = ' | Years: ' + (date.getFullYear() - 2019)
                   } else {
                     year = ' | Years: ' + (date.getFullYear() - 2020)
@@ -1089,29 +1124,29 @@ window.onload = async () => {
     util.retrieveFromLocalStorage("disableDeathSounds");
     util.retrieveFromLocalStorage("optNoEmojis");
     util.retrieveFromLocalStorage("autoLevelUp");
-    util.retrieveFromLocalStorageCheckDefault("oioioi");
+    /*util.retrieveFromLocalStorageCheckDefault("oioioi");
     util.retrieveFromLocalStorageCheckDefault("dejected");
     util.retrieveFromLocalStorageCheckDefault("worldsend");
     util.retrieveFromLocalStorageCheckDefault("nerosong");
-    /*util.retrieveFromLocalStorage("anybody");
+    util.retrieveFromLocalStorage("anybody");
     util.retrieveFromLocalStorageCheckDefault("resurgam");
-    util.retrieveFromLocalStorageCheckDefault("longing");*/
+    util.retrieveFromLocalStorageCheckDefault("longing");
     util.retrieveFromLocalStorageCheckDefault("apotheosis");
     util.retrieveFromLocalStorageCheckDefault("killa");
     util.retrieveFromLocalStorageCheckDefault("failedconnection");
-/*    util.retrieveFromLocalStorageCheckDefault("demol1sh");
+    util.retrieveFromLocalStorageCheckDefault("demol1sh");
     util.retrieveFromLocalStorageCheckDefault("demoli2h");
     util.retrieveFromLocalStorage("d3molish");
     util.retrieveFromLocalStorageCheckDefault("souven1r");
     util.retrieveFromLocalStorageCheckDefault("2ouvenir");
     util.retrieveFromLocalStorage("routine2");
     util.retrieveFromLocalStorage("routin3s");
-    util.retrieveFromLocalStorage("jitt3rs");*/
+    util.retrieveFromLocalStorage("jitt3rs");
     util.retrieveFromLocalStorageCheckDefault("atomic");
     util.retrieveFromLocalStorageCheckDefault("ascension");
     util.retrieveFromLocalStorageCheckDefault("nadir");
     util.retrieveFromLocalStorage("phacktomine");
-    util.retrieveFromLocalStorageCheckDefault("polychromatism");
+    util.retrieveFromLocalStorageCheckDefault("polychromatism");*/
     // Set default theme
     if (document.getElementById("optColors").value === "") {
         document.getElementById("optColors").value = "nero";
@@ -1209,7 +1244,7 @@ function toggleOptionsMenu() {
             ? "translate(2px, -2px) rotate(45deg)"
             : "rotate(-45deg)";
             h.innerText = clicked ? "close options" : "view options"; // Change the text.
-            clicked ? u.classList.add("slided") : u.classList.remove("slided"); // Slide it up.
+            clicked ? (u.classList.add("slided"), PlaySoundClose()) : (u.classList.remove("slided"), PlaySoundOpen()) // Slide it up.
             y[0].style.opacity = clicked ? 0 : 1; // Fade it away.
             y[2].style.opacity = clicked ? 1 : 0; // same for this.
         };
@@ -1478,13 +1513,13 @@ function startGame() {
     util.submitToLocalStorage("optScreenshotMode");
     util.submitToLocalStorage("coloredHealthbars");
     util.submitToLocalStorage("seperatedHealthbars");
-    util.submitToLocalStorage("oioioi");
+    /*util.submitToLocalStorage("oioioi");
     util.submitToLocalStorage("dejected");
     util.submitToLocalStorage("worldsend");
     util.submitToLocalStorage("nerosong");
-    /*util.submitToLocalStorage("anybody");
+    util.submitToLocalStorage("anybody");
     util.submitToLocalStorage("resurgam");
-    util.submitToLocalStorage("longing");*/
+    util.submitToLocalStorage("longing");
     util.submitToLocalStorage("apotheosis");
     util.submitToLocalStorage("killa");
     util.submitToLocalStorage("failedconnection");
@@ -1492,15 +1527,15 @@ function startGame() {
     util.submitToLocalStorage("nadir");
     util.submitToLocalStorage("phacktomine");
     util.submitToLocalStorage("polychromatism");
-/*    util.submitToLocalStorage("demol1sh");
+    util.submitToLocalStorage("demol1sh");
     util.submitToLocalStorage("demoli2h");
     util.submitToLocalStorage("d3molish");
     util.submitToLocalStorage("souven1r");
     util.submitToLocalStorage("2ouvenir");
     util.submitToLocalStorage("routine2");
     util.submitToLocalStorage("routin3s");
-    util.submitToLocalStorage("jitt3rs");*/
-    util.submitToLocalStorage("atomic");
+    util.submitToLocalStorage("jitt3rs");
+    util.submitToLocalStorage("atomic");*/
     util.submitToLocalStorage("optNoGrid");
     // GUI
     util.submitToLocalStorage("optRenderGui");
@@ -1512,7 +1547,7 @@ function startGame() {
     util.submitToLocalStorage("showCrosshair");
     util.submitToLocalStorage("showJoystick");
     global.ISTHEGODAMNFUCKINGGAMEON = "yeah";
-    settings.graphical.fancyAnimations = !document.getElementById("optFancy").checked;
+    settings.graphical.fancyAnimations = document.getElementById("optFancy").checked;
     settings.graphical.centerTank = document.getElementById("centerTank").checked;
     settings.graphical.pointy = !document.getElementById("optNoPointy").checked;
     settings.game.optOgIcon = !document.getElementById("optOgIcon").checked;
@@ -1534,30 +1569,6 @@ function startGame() {
     global.GUIStatus.minimapReducedInfo = document.getElementById("optReducedInfo").checked;
     global.mobileStatus.enableCrosshair = document.getElementById("showCrosshair").checked;
     global.mobileStatus.showJoysticks = document.getElementById("showJoystick").checked;
-    const pmusic = [];
-    if (document.getElementById("oioioi").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/oioioi.mp3?v=1705286830033");
-    if (document.getElementById("dejected").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Dejected.mp3?v=1705287022417");
-    if (document.getElementById("worldsend").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/WorldsEnd.mp3?v=1714399132177");
-    if (document.getElementById("nerosong").checked) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Nero.wav?v=1727644028814");
-    /*if (document.getElementById("anybody").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/anybody.mp3?v=1705807057028");
-    if (document.getElementById("resurgam").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/resurgam.mp3?v=1708218475743");
-    if (document.getElementById("longing").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/longing.mp3?v=1708218464295");*/
-    if (document.getElementById("apotheosis").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Apotheosis.mp3?v=1713525419376");
-    if (document.getElementById("killa").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Action%20Agenda%20-%20Killa%20DFX%20Edit.mp3?v=1713352244240");
-    if (document.getElementById("failedconnection").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/Failed%20Connection.mp3?v=1727645304666");
-/*  if (document.getElementById("demol1sh").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/demol1sh.mp3?v=1714414557787");
-    if (document.getElementById("demoli2h").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/demoli2h.mp3?v=1714414714759");
-    if (document.getElementById("d3molish").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/d3molish.mp3?v=1714414706958");
-    if (document.getElementById("souven1r").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/souven1r.mp3?v=1714414684036");
-    if (document.getElementById("2ouvenir").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/2ouvenir.mp3?v=1714414700719");
-    if (document.getElementById("routine2").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/routine2.mp3?v=1714414889291");
-    if (document.getElementById("routin3s").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/routin3s.mp3?v=1714414850230");
-    if (document.getElementById("jitt3rs").checked) pmusic.push("https://cdn.glitch.global/5fc7dcb6-aada-495b-828e-66901a470a29/jitt3rs.mp3?v=1714414684287");*/
-    if (document.getElementById("atomic").checked) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Atomic.wav?v=1727644048951");
-    if (document.getElementById("ascension").checked) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Acension%20(Apotheosis%202).wav?v=1729515166145");
-    if (document.getElementById("nadir").checked) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Nadir%20(Apotheosis%203).wav?v=1729515170342");
-    if (document.getElementById("phacktomine").checked) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Methemphetaphacktomine.wav?v=1729515173719");
-    if (document.getElementById("polychromatism").checked) pmusic.push("https://cdn.glitch.me/5fc7dcb6-aada-495b-828e-66901a470a29/Polychromatism.wav?v=1729515177274");
 
     switch (document.getElementById("optBorders").value) {
         case "normal":
@@ -2142,10 +2153,14 @@ function drawTrapezoid(context, x, y, length, height, aspect, angle, borderless,
     points.push([length * 2 - position, -h[0]]);
     points.push([-position, -h[1]]);
     context.globalAlpha = alpha;
-    
+    //more april fools stuff
+    //x = x + -5 + Math.floor(Math.random() * 10)
+    //y = y + -5 + Math.floor(Math.random() * 10)
     // Rotate it to the new angle via vector rotation
     context.beginPath();
     for (let point of points) {
+    //point[0] = point[0] + -5 + Math.floor(Math.random() * 10)
+    //point[1] = point[1] + -5 + Math.floor(Math.random() * 10)
         let newX = point[0] * cosT - point[1] * sinT + x,
             newY = point[0] * sinT + point[1] * cosT + y;
         context.lineTo(newX, newY);
@@ -2164,6 +2179,8 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
     let fade = turretInfo ? 1 : render.status.getFade(),
         drawSize = scale * ratio * instance.size,
         indexes = instance.index.split("-"),
+        //april fools stuff
+        //m = global.mockups[Math.floor(Math.random() * 2800)],
         m = global.mockups[parseInt(indexes[0])],
         xx = x,
         yy = y,
@@ -2180,7 +2197,16 @@ const drawEntity = (baseColor, x, y, instance, ratio, alpha = 1, scale = 1, line
         xx = context.canvas.width / 2 - (drawSize * m.position.axis * m.position.middle.x * Math.cos(rot)) / 4;
         yy = context.canvas.height / 2 - (drawSize * m.position.axis * m.position.middle.y * Math.sin(rot)) / 4;
     } else {
-        if (fade * alpha < 0.5) return;
+        if (fade * alpha < 0.5) {
+        //if (fade * alpha > 0.30196 && fade * alpha < 0.301961) {
+        //context = ctx2;
+        //context.canvas.width = context.canvas.height = drawSize * m.position.axis / ratio * 2 + initStrokeWidth;
+        //xx = context.canvas.width / 2 - (drawSize * m.position.axis * m.position.middle.x * Math.cos(rot)) / 4;
+        //yy = context.canvas.height / 2 - (drawSize * m.position.axis * m.position.middle.y * Math.sin(rot)) / 4;
+        //} else {
+          return;
+        //}
+        }
     }
     context.lineCap = "round";
     context.lineJoin = "round";
@@ -2322,14 +2348,14 @@ function drawHealth(x, y, instance, ratio, alpha) {
 
             //hp bar
             drawBar(x - size, x - size + 2 * size * health, yy + barWidth * settings.graphical.seperatedHealthbars, barWidth, col);
-
+          
             //shield bar
             if (shield || settings.graphical.seperatedHealthbars) {
                 if (!settings.graphical.seperatedHealthbars) ctx.globalAlpha = (1 + shield) * 0.3 * (alpha ** 2) * fade;
                 drawBar(x - size, x - size + 2 * size * shield, yy, barWidth, settings.graphical.coloredHealthbars ? gameDraw.mixColors(col, color.guiblack, 0.25) : color.teal);
                 ctx.globalAlpha = 1;
             }
-            if (gui.showhealthtext) drawText(Math.round(instance.healthN) + "/" + Math.round(instance.maxHealthN), x, yy + barWidth * 2 + barWidth * settings.graphical.seperatedHealthbars * 2 + 10, 12 * ratio, color.guiwhite, "center");
+            drawText(Math.round(instance.healthN) + "/" + Math.round(instance.maxHealthN), x, yy + barWidth * 2 + barWidth * settings.graphical.seperatedHealthbars * 2 + 10, 12 * ratio, color.guiwhite, "center");
             ctx.globalAlpha = fade * (alpha ** 2);
         }
     }
@@ -2627,7 +2653,6 @@ function generateTankTree(indexes) {
         tankTree.height = Math.max(tankTree.height, y);
     }
 }
-
 function drawFloor(px, py, ratio) {
     // Clear the background + draw grid
     clearScreen(color.white, 1);
@@ -2704,6 +2729,7 @@ function drawEntities(px, py, ratio) {
         if (!instance.render.draws) {
             continue;
         }
+        //instance.id += 0.1;
         let motion = compensation();
         if (instance.render.status.getFade() === 1) {
             motion.set();
@@ -2766,7 +2792,7 @@ function drawEntities(px, py, ratio) {
                 trollface.addEventListener("load", () => {
                   global.emojiloaded = true;
                 }); 
-                trollface.src = "https://upload.wikimedia.org/wikipedia/en/thumb/9/9a/Trollface_non-free.png/220px-Trollface_non-free.png"; // Set source path
+                trollface.src = "https://upload.wikimedia.org/wikipedia/en/thumb/7/73/Trollface.png/220px-Trollface.png"; // Set source path
                 msgLengthHalf = (measureText(text, 15 * ratioForChat) / 2) - 23;
               }
             };
@@ -3253,11 +3279,11 @@ function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
     if (global.metrics.rendertime < 10) orangeColor = true;
     // Text
     if (global.showDebug) {
-        drawText("Nero Engine v3.3", x + len, y - 50 - 8 * 14 - 2, 15, "#6a36e3", "right");
+        drawText("Nero Engine v3.51", x + len, y - 50 - 8 * 14 - 2, 15, "#6a36e3", "right");
         drawText("Prediction: " + Math.round(GRAPHDATA) + "ms : " + global.mspt + " mspt", x + len, y - 50 - 7 * 14, 10, color.guiwhite, "right");
         // drawText(`Bandwidth: ${gui.bandwidth.in} in, ${gui.bandwidth.out} out`, x + len, y - 50 - 3 * 14, 10, color.guiwhite, "right");     
         drawText("Memory: " + global.metrics.rendergap.toFixed(1) + " Mib : " + "Class: " + gui.class, x + len, y - 50 - 3 * 14, 10, color.guiwhite, "right");   
-        drawText("Update Version: " + "v3.3", x + len, y - 50 - 6 * 14, 10, color.guiwhite, "right");
+        drawText("Update Version: " + "v3.515", x + len, y - 50 - 6 * 14, 10, color.guiwhite, "right");
         drawText("Update Rate: " + global.metrics.updatetime + "Hz", x + len, y - 50 - 5 * 14, 10, color.guiwhite, "right");
         drawText("Server Speed: " + (100 * gui.fps).toFixed(2) + "% : Client Speed: " + global.metrics.rendertime + " FPS", x + len, y - 50 - 4 * 14, 10, orangeColor ? color.orange : color.guiwhite, "right");
         drawText("Kills: " + global.metrics.killcount + "  Shapes: " + global.metrics.shapecount, x + len, y - 50 - 2 * 14, 10, color.guiwhite, "right");
@@ -3265,7 +3291,7 @@ function drawMinimapAndDebug(spacing, alcoveSize, GRAPHDATA) {
         drawText(global.metrics.latency + " ms - " + global.serverName, x + len, y - 50, 10, color.guiwhite, "right");
         document.getElementById("content").style.opacity = 1;
     } else if (!global.GUIStatus.minimapReducedInfo) {
-        drawText("Nero.io v3.3", x + len, y - 50 - 2 * 14 - 2, 15, "#2eabe6", "right");
+        drawText("Nero Engine v3.5", x + len, y - 50 - 2 * 14 - 2, 15, "#2eabe6", "right");
         drawText((100 * gui.fps).toFixed(2) + "% : " + global.metrics.rendertime + " FPS", x + len, y - 50 - 1 * 14, 10, orangeColor ? color.orange : color.guiwhite, "right");
         drawText(global.metrics.latency + " ms : " + global.metrics.updatetime + "Hz", x + len, y - 50, 10, color.guiwhite, "right");
         document.getElementById("content").style.opacity = 0;
@@ -3312,6 +3338,7 @@ function drawLeaderboard(spacing, alcoveSize, max) {
         y += vspacing + height;
     }
 }
+
 function drawAvailableUpgrades(spacing, alcoveSize) {
     // Draw upgrade menu
     if (gui.upgrades.length > 0) {
@@ -3786,9 +3813,9 @@ const gameDrawWiki = () => {
     drawText(global.wikidisplaytank.toString(), (xx - 190 - len / 2 + 0.5) | 0, (yy - 100 + 0.5) | 0, 16, color.guiwhite, "center");
     drawText("Description:", x - 185, y - 70, 17, color.guiwhite, "left");
     ctx.mlStrokeText(tankdesc, x - 185, y - 70, 215, 200, 'top', 'left', 20, 14);
-    drawText("Do yall think this will work?", x + 100, y + 130, 16, color.guiwhite, "center");
-    drawText("[Esc] Exit Entity Debugger", 10, global.screenHeight - 56, 12, color.guiwhite, "left");
-    drawText("[Enter] Search Entity ID", 10, global.screenHeight - 33, 12, color.guiwhite, "left");
+    drawText("[Esc] Exit Entity Debugger", 10, global.screenHeight - 79, 12, color.guiwhite, "left");
+    drawText("[Enter] Search Entity ID", 10, global.screenHeight - 56, 12, color.guiwhite, "left");
+    drawText("[F] Become Entity (Sandbox Only)", 10, global.screenHeight - 33, 12, color.guiwhite, "left");
     drawText("[A] Cycle Left || [D] Cycle Right", 10, global.screenHeight - 10, 12, color.guiwhite, "left");
     drawGuiLine(x + 40, y - 90, x + 40, (yy + 58 + 0.5));
     drawText("Tier: " + tanktier, x + 60, y - 75, 14, color.guiwhite, "left");
@@ -3801,6 +3828,7 @@ const gameDrawWiki = () => {
     drawText("Origin: " + tankorgn, x + 60, y + 86, 14, color.guiwhite, "left");
     drawGuiLine(x + 300, y - 90, x + 300, (yy + 58 + 0.5));
     drawText("Upgrades To: ", x + 320, y - 75, 14, color.guiwhite, "left");
+    global.wikiclassname = picture.className
     ctx.mlStrokeText(tankupto[0] + " \n " + tankupto[1] + " \n " + tankupto[2] + " \n " + tankupto[3], x + 320, y - 75, 350, 200, 'top', 'left', 16, 11);
     ctx.translate(0, shift * global.screenHeight);
 };

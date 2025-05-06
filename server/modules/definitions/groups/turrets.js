@@ -1088,7 +1088,7 @@ Class.revogun = {
     GUNS: [{
         POSITION: [13.5, 10, 1, 8, 0, 0, 0.5],
         PROPERTIES: {
-            SHOOT_SETTINGS: combineStats([g.basic, g.autoTurret, g.halfreload]),
+            SHOOT_SETTINGS: combineStats([g.basic, g.autoTurret]),
             TYPE: "bullet"
           }
         }
@@ -1249,17 +1249,25 @@ Class.jumpsmashBody = {
     PARENT: "smasherBody",
     SHAPE: 7
 }
+Class.autoTurret3 = {
+    LABEL: 'Auto Turret',
+    BODY: {
+        FOV: 0.9
+    },
+    COLOR: 16,
+    GUNS: [{
+        POSITION: [21.5, 10, 1, 0, 0, 0, 0],
+        PROPERTIES: {
+            SHOOT_SETTINGS: combineStats([g.basic, g.autoTurret, g.lesspower, g.bitlessreload]),
+            TYPE: "bullet"
+        }
+    }]
+};
 Class.skaterDeco = makeDeco("M 0 -1.1 A 1 1 0 0 0 0 1.1 A 1 1 0 0 0 0 -1.1 Z M 0 -1 A 0.001 0.001 0 0 1 0 1 A 0.001 0.001 0 0 1 0 -1");
 Class.skaterDeco.STROKE_WIDTH = 2;
 Class.switcherDeco = makeDeco('M 0 0 M 2 -1 L -2 -1 L -2 8 L -1 8 L 1 8 L 2 8')
 Class.effectBulletDeco = makeDeco(0)
 Class.firecrackerDeco = makeDeco(-6)
-Class.auraDamageGen = addAura(2, 1.3, 0.3, "red");
-Class.auraRangeGen = addAura(2, 1.8, 0.3, "teal", "rangeAuraSymbol");
-Class.auraDamageRangeGen = addAura(2, 1.8, 0.3, "red", "rangeAuraSymbol");
-Class.auraMoreDamageGen = addAura(3, 1.3, 0.3, "orange");
-Class.auraMoreRangeGen = addAura(1, 2.3, 0.3, "aqua", "rangeAuraSymbol");
-Class.auraSmasherGen = addAura(11, 1.3);
 Class.surgeDeco = makeDeco(-1, "spaceGem");
 Class.katanaDeco = makeDeco('M 0 2 L 0 -1 L 1 0 L 0 -1 L -1 0 L 0 -1', "#add6f7");
 Class.brellaDeco = makeDeco('M -0 2.2587 L 0.9 0.905 L 0.9 -0.9 L -0 -2.2537 L -0.9 -2.5245 L -0.9 2.5295 L -0 2.2587', "gray")

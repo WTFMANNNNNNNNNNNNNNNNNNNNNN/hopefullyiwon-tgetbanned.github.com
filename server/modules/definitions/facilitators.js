@@ -105,8 +105,9 @@ exports.dereference = type => {
 }
 
 // gun functions
-exports.makeGuard = (type, name = -1) => {
+exports.makeGuard = (type, name = -1, shotentity = "trap") => {
     type = ensureIsClass(type);
+    shotentity ?? "trap"
     let output = exports.dereference(type),
     cannons = [{
         POSITION: [13, 8, 1, 0, 0, 180, 0],
@@ -114,7 +115,7 @@ exports.makeGuard = (type, name = -1) => {
         POSITION: [4, 8, 1.7, 13, 0, 180, 0],
         PROPERTIES: {
             SHOOT_SETTINGS: exports.combineStats([g.trap]),
-            TYPE: "trap",
+            TYPE: shotentity,
             STAT_CALCULATOR: "trap",
         },
     }];
@@ -531,7 +532,7 @@ exports.addAura = (damageFactor = 1, sizeFactor = 1, opacity = 0.3, auraColor, s
     return {
         PARENT: "genericTank",
         INDEPENDENT: true,
-        LABEL: "",
+        LABEL: "Auras",
         COLOR: 17,
         GUNS: [
             {
@@ -671,6 +672,7 @@ exports.weaponArray = (weapons, count, delayIncrement = 0, delayOverflow = false
     }
     return output;
 }
+    
 class LayeredBoss {
     constructor(identifier, NAME, PARENT = "celestial", SHAPE = 9, COLOR = 0, trapTurretType = "baseTrapTurret", trapTurretSize = 6.5, layerScale = 5, BODY, SIZE, VALUE) {
         this.identifier = identifier ?? NAME.charAt(0).toLowerCase() + NAME.slice(1);

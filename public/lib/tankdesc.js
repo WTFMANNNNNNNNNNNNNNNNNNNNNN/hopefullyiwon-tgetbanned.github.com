@@ -231,7 +231,7 @@ const tankdescs = {
     origin: "diep.io",
     updateadded: "1.0",
   },
-    hewnDouble: {
+  hewnDouble: {
     type: "Assaulter",
     desc: "",
     tier: "4",
@@ -246,7 +246,7 @@ const tankdescs = {
     origin: "arras.io",
     updateadded: "1.0",
   },
-    pentaShot: {
+  pentaShot: {
     type: "Assaulter",
     desc: "",
     tier: "4",
@@ -486,7 +486,7 @@ const tankdescs = {
     origin: "arras.io",
     updateadded: "2.2",
   },
-  deadeye: {
+ /*deadeye: {
     type: "",
     desc: "Marksman but same stats as asassin",
     tier: "4",
@@ -530,7 +530,7 @@ const tankdescs = {
     upgradesfrom: "Rifle, Marksman",
     origin: "arras.io",
     updateadded: "N/A",
-  },
+  },*/
   fork: {
     type: "",
     desc: "Marksman but more split bullets",
@@ -593,7 +593,7 @@ const tankdescs = {
   },
   streamliner: {
     type: "Spammer",
-    desc: "",
+    desc: "Minigun with an extra 2 barrels with increased FOV",
     tier: "4",
     weapons: "Bullets",
     abilities: "N/A",
@@ -743,7 +743,7 @@ const tankdescs = {
   },
   auto3: {
     type: "Assaulter",
-    desc: "",
+    desc: "Flank Guard but with Automatic aiming turrets",
     tier: "3",
     weapons: "Bullets",
     abilities: "N/A",
@@ -752,7 +752,7 @@ const tankdescs = {
                  "Tier 3: ",
                  "Tier 4: ",
                  "Misc: "],
-    upgradesfrom: "Flank Guard, Auto-2",
+    upgradesfrom: "Flank Guard",
     origin: "diep.io",
     updateadded: "1.0",
   },
@@ -767,7 +767,7 @@ const tankdescs = {
                  "Tier 3: ",
                  "Tier 4: ",
                  "Misc: "],
-    upgradesfrom: "Flank Guard, Auto-2",
+    upgradesfrom: "Flank Guard",
     origin: "diep.io",
     updateadded: "1.0",
   }

@@ -37,9 +37,9 @@ server = require('http').createServer((req, res) => {
 
         //if this file does not exist, return the default;
         if (!fs.existsSync(fileToGet)) {
-            fileToGet = path.join(sharedRoot, Config.DEFAULT_FILE);
+            fileToGet = path.join(publicRoot, Config.DEFAULT_FILE);
         } else if (!fs.lstatSync(fileToGet).isFile()) {
-            fileToGet = path.join(sharedRoot, Config.DEFAULT_FILE);
+            fileToGet = path.join(publicRoot, Config.DEFAULT_FILE);
         }
 
         //return the file
@@ -75,9 +75,26 @@ server = require('http').createServer((req, res) => {
     }
     // CORS?
     res.setHeader('Access-Control-Allow-Origin', '*');
+  
+    const zlib = require("zlib");
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    let acceptEncoding = req.headers['accept-encoding'];
+    if (!acceptEncoding) {
+      acceptEncoding = '';
+    };
+    if (acceptEncoding.match(/\bdeflate\b/)) {
+        res.writeHead(200, { 'content-encoding': 'deflate' });
+        zlib.createDeflate().end(resStr).pipe(res);
+      } else if (acceptEncoding.match(/\bgzip\b/)) {
+        res.writeHead(200, { 'content-encoding': 'gzip' });
+        zlib.createGzip().end(resStr).pipe(res);
+      } else {
+        res.writeHead(200, {});
+        res.end(resStr);
+    }
 
-    res.writeHead(200);
-    res.end(resStr);
+    //res.writeHead(200);
+    //res.end(resStr);
 });
 
 server.on('upgrade', (req, socket, head) => wsServer.handleUpgrade(req, socket, head, ws => sockets.connect(ws, req)));

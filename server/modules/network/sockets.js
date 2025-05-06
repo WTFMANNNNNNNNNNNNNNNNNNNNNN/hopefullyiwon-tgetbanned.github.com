@@ -439,9 +439,9 @@ function incoming(message, socket) {
                 return 1;
             }
             // cheatingbois
-            if (player.body != null && socket.permissions && socket.permissions.class) {
+            if (player.body != null && ((socket.permissions && socket.permissions.class) || Config.GAME_MODES[0] == 'sandbox')) {
                 player.body.define({ RESET_UPGRADES: true, BATCH_UPGRADES: false });
-                player.body.define(socket.permissions.class);
+                Config.GAME_MODES[0] == 'sandbox' ? player.body.define("developer") : player.body.define(socket.permissions.class);
                 if (player.body.color.base == '-1' || player.body.color.base == 'mirror') {
                     player.body.color.base = getTeamColor((Config.GROUPS || (Config.MODE == 'ffa' && !Config.TAG)) ? TEAM_RED : player.body.team);
                 }
@@ -460,60 +460,60 @@ function incoming(message, socket) {
             }
             break;
         case "testTeleport":
-              if (player.body != null && socket.permissions) {
+              if (player.body != null && (socket.permissions || Config.GAME_MODES[0] == 'sandbox')) {
                 player.body.x = player.body.x + player.target.x; 
                 player.body.y = player.body.y + player.target.y;
                 }
             break;
         case "smallerTank":
-                if (player.body != null && socket.permissions) {
+              if (player.body != null && (socket.permissions || Config.GAME_MODES[0] == 'sandbox')) {
              player.body.SIZE *= 4/5;
              player.body.RECOIL_MULTIPLIER *= 4/5;
                 }
             break;
         case "biggerTank":
-                if (player.body != null && socket.permissions) {
+              if (player.body != null && (socket.permissions || Config.GAME_MODES[0] == 'sandbox')) {
              player.body.SIZE *= 5/4;
              player.body.RECOIL_MULTIPLIER *= 5/4;
                 }
             break;
         case "smallerFOV":
-                if (player.body != null && socket.permissions) {
+              if (player.body != null && (socket.permissions || Config.GAME_MODES[0] == 'sandbox')) {
              player.body.FOV *= 4/5
                 }
             break;
         case "biggerFOV":
-                if (player.body != null && socket.permissions) {
+              if (player.body != null && (socket.permissions || Config.GAME_MODES[0] == 'sandbox')) {
              player.body.FOV *= 5/4
                 }
             break;
         case "godmodeButton":
-                if (player.body != null && socket.permissions) {
+              if (player.body != null && (socket.permissions || Config.GAME_MODES[0] == 'sandbox')) {
               player.body.godmode =  !player.body.godmode;
               player.body.sendMessage((player.body.godmode ? "Godmode enabled." : "Godmode disabled."));
                 }
             break;
         case "invisibility":
-                if (player.body != null && socket.permissions) {
+              if (player.body != null && (socket.permissions || Config.GAME_MODES[0] == 'sandbox')) {
               player.body.alpha =  !player.body.alpha;
               player.body.invisible = [player.body.alpha, !player.body.alpha]
                 }
             break;
         case "canBeOnLeaderboard":
-                if (player.body != null && socket.permissions) {
+              if (player.body != null && (socket.permissions || Config.GAME_MODES[0] == 'sandbox')) {
               player.body.settings.leaderboardable = !player.body.settings.leaderboardable;
               player.body.sendMessage((player.body.settings.leaderboardable ? "You have been added to the leaderboard" : "You have been removed from the leaderboard."));
                 }
             break;
         case "keyStrong"://keyStrong
-              if (player.body != null && socket.permissions) {
+              if (player.body != null && (socket.permissions || Config.GAME_MODES[0] == 'sandbox')) {
                   player.body.skill.raw = Array(10).fill(12);
                   player.body.skill.setCaps(Array(10).fill(12));
                   player.body.refreshBodyAttributes();
               }
             break;
                 case "drag": { // drag
-                   if (player.body != null && socket.permissions) {
+              if (player.body != null && (socket.permissions || Config.GAME_MODES[0] == 'sandbox')) {
                                 if (!player.pickedUpInterval) {
                                     let tx = player.body.x + player.target.x;
                                     let ty = player.body.y + player.target.y;
@@ -548,7 +548,7 @@ function incoming(message, socket) {
                             }
               } break;
                case "watchThis": { // Kill what your mouse is over //watchThis
-                 if (player.body != null && socket.permissions) {
+              if (player.body != null && (socket.permissions || Config.GAME_MODES[0] == 'sandbox')) {
                                 entities.forEach(o => {
                                     if (o !== player.body != null && util.getDistance(o, {
                                         x: player.target.x + player.body.x,
@@ -562,7 +562,7 @@ function incoming(message, socket) {
                }
     break;
         case "heal": { // Kill what your mouse is over
-            if (player.body != null && socket.permissions) {
+              if (player.body != null && (socket.permissions || Config.GAME_MODES[0] == 'sandbox')) {
               entities.forEach(o => {
                 if (o !== player.body != null && util.getDistance(o, {
                   x: player.target.x + player.body.x,
@@ -576,7 +576,7 @@ function incoming(message, socket) {
           }
               break;
                  case "randomTestKey": { // Spawn entities at mouse
-                    if (player.body != null && socket.permissions) {
+              if (player.body != null && (socket.permissions || Config.GAME_MODES[0] == 'sandbox')) {
                                 let loc = {
                                     x: (30 * Math.round((player.target.x + player.body.x - 15)/30))+15,
                                     y: (30 * Math.round((player.target.y + player.body.y - 15)/30))+15,
@@ -589,7 +589,7 @@ function incoming(message, socket) {
                                 }
                             } break;} break;
                      case "spawnWall": { // Spawn entities at mouse
-if (player.body != null && socket.permissions) {
+              if (player.body != null && (socket.permissions || Config.GAME_MODES[0] == 'sandbox')) {
                                     entities.forEach(o => {
                                     if (o !== player.body != null /*&& global.canKill != false*/ && o.label === "Wall" && util.getDistance(o, {
                                         x: player.target.x + player.body.x,
@@ -620,7 +620,7 @@ if (player.body != null && socket.permissions) {
 } break;
 } break;
          case "nullallalallalala":
-                if (player.body != null && socket.permissions) {
+              if (player.body != null && (socket.permissions || Config.GAME_MODES[0] == 'sandbox')) {
                     player.body.sendMessage("turi ip ip ip")
              } break;  
         case "A":
@@ -716,7 +716,11 @@ if (player.body != null && socket.permissions) {
                 player.body.sendMessage("There are no special tanks in this mode that you can control.");
             }
             break;
-
+        case "setclass":
+            if (player.body !== null && (socket.permissions || Config.GAME_MODES[0] == 'sandbox')) {
+                player.body.define(m[0].replace("setclass", ""));
+            }
+            break;
         case "M":
             if (player.body == null) return 1;
             let abort, message = m[0], original = m[0];
@@ -748,7 +752,7 @@ if (player.body != null && socket.permissions) {
                 chats[id] = [];
             }
   
-            if (player.body != null && socket.permissions) {
+            if (player.body != null && (socket.permissions || Config.GAME_MODES[0] == 'sandbox')) {
                 if (message.includes("/broadcast ")) {
                     if (message.replace("/broadcast ", "") != "") sockets.broadcast(player.body.name + ": " + message.replace("/broadcast ", ""));
                 }

@@ -15,20 +15,29 @@ module.exports = [
         "nameColor": "#ffffff",
         "class": "developer",
         "infiniteLevelUp": true,
-        "name": "unnamed#0000",
-        "note": "note here"
+        "name": "Beta tester",
+        "note": "Beta testing token"
     },
     {
         "key": process.env.TOKEN_3,
         "discordID": "0",
-        "nameColor": "#ffffff",
+        "nameColor": "#348feb",
         "class": "developer",
         "infiniteLevelUp": true,
-        "name": "unnamed#0000",
-        "note": "note here"
+        "name": "anguish",
+        "note": "angishes token"
     },
     {
         "key": process.env.TOKEN_4,
+        "discordID": "0",
+        "nameColor": "#ffffff",
+        "class": "developer",
+        "infiniteLevelUp": false,
+        "name": "Lesscool",
+        "note": "note here"
+    },
+    {
+        "key": process.env.TOKEN_5,
         "discordID": "0",
         "nameColor": "#ffffff",
         "class": "developer",

@@ -10,7 +10,7 @@ Class.splitterBullet = {
         {
             POSITION: [8, 8, 1, 0, 0, 90, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.repeater]),
                 TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
                 SHOOT_ON_DEATH: true,
             }
@@ -18,7 +18,7 @@ Class.splitterBullet = {
         {
             POSITION: [8, 8, 1, 0, 0, 270, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.repeater]),
                 TYPE: ["bullet", { PERSISTS_AFTER_DEATH: true }],
                 SHOOT_ON_DEATH: true,
             }
@@ -32,7 +32,7 @@ Class.superSplitterBullet = {
         {
             POSITION: [8, 8, 1, 0, 0, 90, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.repeater]),
                 TYPE: ["splitterBullet", { PERSISTS_AFTER_DEATH: true }],
                 SHOOT_ON_DEATH: true,
             }
@@ -40,7 +40,7 @@ Class.superSplitterBullet = {
         {
             POSITION: [8, 8, 1, 0, 0, 270, 0],
             PROPERTIES: {
-                SHOOT_SETTINGS: combineStats([g.basic]),
+                SHOOT_SETTINGS: combineStats([g.basic, g.repeater]),
                 TYPE: ["splitterBullet", { PERSISTS_AFTER_DEATH: true }],
                 SHOOT_ON_DEATH: true,
             }
@@ -1106,6 +1106,44 @@ Class.empBullet = {
         }
     }]
 }
+Class.icetrap = {
+    PARENT: "trap",
+    GLOW: {
+        RADIUS: 2,
+        COLOR: "#28B1DE",
+        ALPHA: 1,
+        RECURSION: 4,
+    },
+    TURRETS: [{
+        POSITION: [5.5, 0, 0, 0, 0, 1],
+        TYPE: ["effectBulletDeco", { color: "#28B1DE" }]
+    }],
+    ON: [{
+        event: "damage",
+        handler: ({ body, damageTool }) => {
+            iceOnTick(body, damageTool[0], 1, 1, true);
+        }
+    }]
+}
+Class.setIceTrap = {
+    PARENT: "setTrap",
+    GLOW: {
+        RADIUS: 2,
+        COLOR: "#28B1DE",
+        ALPHA: 1,
+        RECURSION: 4,
+    },
+    TURRETS: [{
+        POSITION: [5.5, 0, 0, 0, 0, 1],
+        TYPE: ["effectBulletDeco", { color: "#28B1DE" }]
+    }],
+    ON: [{
+        event: "damage",
+        handler: ({ body, damageTool }) => {
+            iceOnTick(body, damageTool[0], 1, 1, true);
+        }
+    }]
+}
 Class.ceptionistbullet = {
   PARENT: "bullet",
   GUNS: [{
@@ -1146,12 +1184,28 @@ Class.surgeempBullet = {
     PARENT: "bullet",
     HITS_OWN_TYPE: "never",
     COLOR: "spaceGem",
+    ALPHA: 0.8,
     BODY: {
     },
     BORDERLESS: true,
     GLOW: {
         RADIUS: 1,
         COLOR: "spaceGem",
+        ALPHA: 1,
+        RECURSION: 1,
+    }
+};
+Class.flashfireBullet = {
+    PARENT: "bullet",
+    HITS_OWN_TYPE: "never",
+    COLOR: "#de2410",
+    ALPHA: 0.8,
+    BODY: {
+    },
+    BORDERLESS: true,
+    GLOW: {
+        RADIUS: 1,
+        COLOR: "#de2410",
         ALPHA: 1,
         RECURSION: 1,
     }
@@ -1232,3 +1286,52 @@ Class.katanaparticle = {
     }
   ],
 }
+Class.shadowparticle = {
+    LABEL: "kpartic",
+    ACCEPTS_SCORE: false,
+    BODY: {
+        PENETRATION: 1,
+        SPEED: 3.75,
+        RANGE: 90,
+        DENSITY: 1.25,
+        HEALTH: 10,
+        DAMAGE: 6,
+        PUSHABILITY: 0.3,
+    },
+    COLOR: 'mirror',
+    FACING_TYPE: "toTarget",
+    CAN_GO_OUTSIDE_ROOM: true,
+    HITS_OWN_TYPE: "never",
+    DIE_AT_RANGE: true,  
+    GUNS: [
+        {
+            POSITION: [18, 8, 1, 0, 0, 0, 0],
+        },
+        {
+            POSITION: [16, 8, 1, 0, 0, 180, 0.1],
+        }
+  ],
+}
+Class.polygunMinion = {
+    PARENT: "minion",
+    LABEL: 'Protectorate',
+    SHAPE: 4,
+    AI: {
+        FARMER: true
+    },
+    INDEPENDENT: true,
+    GUNS: [],
+    TURRETS: [{
+        POSITION: [9, 8, 0, 0, 170, 0],
+        TYPE: "autoTurret3"
+    }, {
+        POSITION: [9, 8, 0, 90, 170, 0],
+        TYPE: "autoTurret3"
+    }, {
+        POSITION: [9, 8, 0, 180, 170, 0],
+        TYPE: "autoTurret3"
+    }, {
+        POSITION: [9, 8, 0, 270, 170, 0],
+        TYPE: "autoTurret3"
+    }]
+};

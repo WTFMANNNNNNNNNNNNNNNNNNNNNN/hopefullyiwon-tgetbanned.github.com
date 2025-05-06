@@ -1,6 +1,6 @@
 module.exports = {
 	basePolygonDamage: 1,
-	basePolygonHealth: 2,
+	basePolygonHealth: 6,
 
 	// SKILL DEFINITIONS
 	dfltskl: 9,
@@ -75,6 +75,13 @@ module.exports = {
 			BULLET_DAMAGE: 'Ball Damage',
 			RELOAD: 'Ball Density',
 		},
+    lancer: {
+      BULLET_SPEED: "Lance Range", 
+      BULLET_HEALTH: "Lance Longevity", 
+      BULLET_PEN: "Lance Sharpness", 
+      BULLET_DAMAGE: "Lance Damage", 
+      RELOAD: "Lance Density",
+    },
 	},
 	base: {
 	    ACCEL: 1.6,

@@ -1,4 +1,76 @@
 <div class="slider2">
+    <h1 class="slider2">Update 3.5</h1>
+    <date class="slider2">[2025]</date>
+    <ul class="slider2">
+        <li>Added 3 new tracks</li>
+        <li>slightly improved server loading</li>
+        <li>added water with physics</li>
+        <li>added minishot</li>
+        <li>added the minishot branches</li>
+        <li>added new 75 kill achivement</li>
+        <li>minos prime skin</li>
+        <li>nerfed firecracker</li>
+        <li>added new ffa map</li>
+        <li>addded the rest of the tier 3 upgrade variants for minishot to the rest of the tier 2 branches</li>
+        <li>added mini mortar variations of the t2 tanks</li>
+        <li>made assblasters back thruster bullets transparent</li>
+        <li>added submachine gun branch to machine gun</li>
+        <li>fixed date since creation counter turning to a year ahead when its not supposed to</li>
+        <li>added missing tanks to unavailable developer</li>
+        <li>added missing stat names to tanks</li>
+        <li>fixed turret danger values</li>
+        <li>fixed a bug where recoil wouldnt exist if upgrading from beyonet</li>
+        <li>removed scope from twiper</li>
+        <li>added flashfire</li>
+        <li>buffed firecrackers reload time</li>
+        <li>buffed shape health</li>
+        <li>added shadow</li>
+        <li>fixed Hypothermia not actually shooting ice traps</li>
+        <li>renamed acidilizer and icilizer to arsenic and devils breath</li>
+        <li>allowed you to set your tank to any entity via debug/wiki menu in sandbox</li>
+        <li>fixed the rocks not reflecting bullets in sandbox server</li>
+        <li>added numbers for health bar</li>
+        <li>buffed swarm tank damage by a multiplier of 2</li>
+        <li>nerfed flail damage from 3 to 1.95</li>
+        <li>buffed whirlwind damage from 1.875 to 4</li>
+        <li>buffed revolutionist turrets reload from 0.45 to 0.9</li>
+        <li>made jump smashers bullets half opacity</li>
+        <li>bayonet reload nerfed from 1 to 1.3</li>
+        <li>fixed cloner not cloning</li>
+        <li>nerfed probe cloning reload</li>
+        <p style="color:red;">Ay, Anguish on that beat ho'</p>
+    </ul>
+</div>
+<div class="slider2">
+    <h1 class="slider2">Update 3.4</h1>
+    <date class="slider2">[2024]</date>
+    <ul class="slider2">
+        <li>buffed backshield</li>
+        <li>added slasher and attacker</li>
+        <li>readded trapception</li>
+        <li>added homing auto basic to desmos branch</li>
+        <li>made homing auto-2 upgrade from auto-3</li>
+        <li>removed auto-2 (except homing auto-2)</li>
+        <li>fixed upgrading issus</li>
+        <li>fixed kivaaritehdas</li>
+        <li>fixed trollface emoji</li>
+        <li>added sandbox mode</li>
+        <li>updated sound effects</li>
+        <li>fixed favicon not appearing on neroio.xyz</li>
+        <li>balanced rainmaker</li>
+        <li>fixed wall spawning shift key</li>
+        <li>added developer basic to testbed</li>
+        <li>removed mini defender</li>
+        <li>added ice Trapper branch</li>
+        <li>nerfed destroyer</li>
+        <li>nerfed repeater branch</li>
+        <li>added Kevin and Speed Triple</li>
+        <li>fixed visual bug with speedtriple</li>
+        <li>patched crash exploit</li>
+        <p style="color:red;" class="vsaucereference" onclick="PlaySoundpianioio2()" >RANDOM BULLSHIT, GO AGAIN!</p>
+    </ul>
+</div>
+<div class="slider2">
     <h1 class="slider2">Update 3.3</h1>
     <date class="slider2">[2024]</date>
     <ul class="slider2">
@@ -58,6 +130,11 @@
         <li>fixed bug where scowerer and swivel2brid did not upgrade from its intended branches</li>
         <li>fixed grazerbrid not having its autocannon</li>
         <li>fixed the skype achievement</li>
+        <li>updated loading screen tooltips</li>
+        <li>fixed wark upgrades</li>
+        <li>nerfed solarios health from 8000 to 5500</li>
+        <li>nerfed solarios spin speed</li>
+        <li>disabled regen during solarios laser attack</li>
         <p style="color:red;" >Big ass update :blehh:</p>
     </ul>
 </div>

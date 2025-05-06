@@ -45,7 +45,7 @@ global.tips = [[ // You can edit this!
         "Tip: You can change ui stuff like seperate health wnd shield bars and curvy traps in the options menu.",
         "Tip: If nero is running like gta 5 on windows xp, you can either go to the optomization section \n"
         +"in the options menu or get a pc that didnt come from a macdonalds happy meal 💀.",
-        "Tip: Dont like death sounds? wanna get rid of them? disable them in the options menu!",
+        "Tip: Like death sounds? think they are funny? enable them in the options menu!",
         "Tip: You can change what soundtracks play ingame when music is turned on by going to the options menu",
         "Tip: You can view and change your keybinds in the options menu.",
         "Tip: You can create your own theme with the custom theme maker using the link in the options menu."
@@ -88,7 +88,12 @@ global.tips = [[ // You can edit this!
         "Don't you have something else better to do?",
         "Stop procrastinating, finish what you need to do",
         "i hope you die over and over again",
-        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "I WOKE UP AND I GOT FRESH AS HELL ON A MONDAY",
+        "HE HAS EBOL-LALALALALA",
+        "I JUST LOST MY DAAAAAWG",
+      	"The plural of Moose is Moose. \n"
+      	+"And the singular of Moose is Moose."
     ]
 ];
 global.createMessage = (content, duration) => createMessage(content, duration);

@@ -708,8 +708,6 @@ Class.turretStatScaleTest = {
     }))
 }
 
-Class.auraBasicGen = addAura(1, 1.3);
-Class.auraHealerGen = addAura(-1);
 Class.auraHealer = {
     PARENT: "genericTank",
     LABEL: "Aura Healer",
@@ -2061,7 +2059,7 @@ Class.jumpSmasher = {
             POSITION: [2, 12, 1, 0, 0, 180, 0],
             PROPERTIES: {
                 SHOOT_SETTINGS: combineStats([g.basic, { recoil: 12, reload: 13, damage: 0.2, range: 0.13 }]),
-                TYPE: "bullet",
+                TYPE: ["bullet", { ALPHA: 0.5 }],
             },
         },
     ],
@@ -2371,7 +2369,7 @@ Class.flailBall = {
                     maxSpeed: 0,
                     recoil: 0,
                     reload: 0.1,
-                    damage: 4,
+                    damage: 2.6,
                     size: 2,
                     health: 1,
                 }]),
@@ -3852,6 +3850,26 @@ Class.lavenderspawner = {
                 },
             }],
         };
+Class.solariospawner = {
+            PARENT: "spectator",
+            LABEL: "Solario Spawner",
+            SKILL_CAP: [31, 0, 0, 0, 0, 0, 0, 0, 0, 31],
+            GUNS: [{
+                POSITION: [14, 12, 1, 4, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, { recoil: 0 }]),
+                    TYPE: "bullet"
+                }
+            }, {
+                POSITION: [12, 12, 1.4, 4, 0, 0, 0],
+                PROPERTIES: {
+                    SHOOT_SETTINGS: combineStats([g.basic, { recoil: 0 }]),
+                    INDEPENDENT_CHILDREN: true,
+                    TYPE: "solario",
+                    ALT_FIRE: true
+                },
+            }],
+        };
 Class.imagetest = {
     PARENT: "genericTank",
     UPGRADE_COLOR: "black",
@@ -4381,6 +4399,27 @@ Class.trapperdesmos = {
         }
     ]
 }
+Class.brokenanni = {
+    PARENT: "genericTank",
+    LABEL: "PPilator",
+    DANGER: 19041942194198412,
+    GUNS: [
+        {
+            POSITION: [20.5, 19.5, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, g.annihilator, { reload: 0.05, recoil: 0.1, speed: 2 }]),
+                TYPE: "bullet",
+            },
+        },
+        {
+            POSITION: [17, 19.5, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.destroyer, g.annihilator, { reload: 0.05, recoil: 0.1, speed: 2 }]),
+                TYPE: "bullet",
+            },
+        },
+    ],
+}
 Class.utilities = {
     PARENT: "genericTank",
     LABEL: "Utilities",
@@ -4398,11 +4437,11 @@ Class.billcipher = {
 }
 Class.AIT = menu("AIT")
 
-Class.developer.UPGRADES_TIER_0 = ["basic", "tanks", "AIT", "utilities", "addons"]
+Class.developer.UPGRADES_TIER_0 = ["basic", "tanks", "AIT", "utilities", "addons", ["developer", "basic"]]
     Class.tanks.UPGRADES_TIER_0 = ["developer", "overpowered", "testing", "unavailable", "features"]
         Class.AIT.UPGRADES_TIER_0 = ["developer", "bosses", "dominators", "sanctuaries", "mothership", "baseProtector", "antiTankMachineGun", "arenaCloser"]
-        Class.utilities.UPGRADES_TIER_0 = ["developer", "levels", "teams", "eggGenerator", "spectator", "wallPlacer", "lavenderspawner"]
-        Class.unavailable.UPGRADES_TIER_0 = ["developer", "healer", "doubleFlail", "mace", "flangle", "winsor0", "volute", "tetraGunner", "sidewinder", "marksman", "basicCeption", "mirrorBackShield"]
+        Class.utilities.UPGRADES_TIER_0 = ["developer", "levels", "teams", "eggGenerator", "spectator", "wallPlacer", "lavenderspawner", "solariospawner"]
+        Class.unavailable.UPGRADES_TIER_0 = ["developer", "healer", "doubleFlail", "mace", "flangle", "winsor0", "volute", "tetraGunner", "sidewinder", "marksman", "basicCeption", "mirrorBackShield", "auto2", "bascrid", "autoBasic", "auraBasic"]
         Class.sidewinder.UPGRADES_TIER_3 = ["coil", "oroboros", "cocci", "ranch", "python"]
             Class.marksman.UPGRADES_TIER_3 = ["deadeye", "nimrod", "revolver", "fork"]
             Class.volute.UPGRADES_TIER_3 = ["sidewinderOld"]
@@ -4415,7 +4454,7 @@ Class.developer.UPGRADES_TIER_0 = ["basic", "tanks", "AIT", "utilities", "addons
                 Class.whirlwind.UPGRADES_TIER_3 = ["hexaWhirl", "munition", "whirl3", "whirlGuard",/* "prophet",*/ "vortex"]
                 Class.tornado.UPGRADES_TIER_3 = ["megaTornado", "tempest", "thunderbolt"]
                 Class.hurricane.UPGRADES_TIER_3 = ["typhoon", "blizzard"]
-        Class.testing.UPGRADES_TIER_0 = ["tanks", "vanquisher", "mummifier", "tracker3", ["grappletest", "basic"], "grappletest2", "dasher"]
+        Class.testing.UPGRADES_TIER_0 = ["tanks", "vanquisher", "mummifier", "tracker3", ["grappletest", "basic"], "grappletest2", "dasher", "ak47"]
         Class.dominators.UPGRADES_TIER_0 = ["AIT", "destroyerDominator", "gunnerDominator", "trapperDominator"]
         Class.sanctuaries.UPGRADES_TIER_0 = ["AIT", "sanctuaryTier1", "sanctuaryTier2", "sanctuaryTier3", "sanctuaryTier4", "sanctuaryTier5", "sanctuaryTier6"]
 
@@ -4432,7 +4471,7 @@ Class.developer.UPGRADES_TIER_0 = ["basic", "tanks", "AIT", "utilities", "addons
         Class.devBosses.UPGRADES_TIER_0 = ["taureonBoss", "zephiBoss", "dogeiscutBoss", "trplnrBoss", "frostBoss", "toothlessBoss", "AEMKShipBoss", "helenaBoss"]
 
         Class.features.UPGRADES_TIER_0 = ["tanks", "diamondShape", "rotatedTrap", "colorMan", "miscTest", "mmaTest", "vulnturrettest", "onTest", "alphaGunTest", "strokeWidthTest", "testLayeredBoss", "tooltipTank", "turretLayerTesting", "bulletSpawnTest", "propTest", "weaponArrayTest", "radialAutoTest", "makeAutoTest", "imageShapeTest", "turretStatScaleTest", "auraBasic", "auraHealer", "weirdAutoBasic", "ghoster", "gunBenchmark", "switcheroo", ["developer", "developer"], "armyOfOne", "vanquisher", "mummifier"]
-        Class.overpowered.UPGRADES_TIER_0 = ["tanks", "goofytanks", "armyOfOne", "godbasic", "maximumOverdrive", "oppenheimer", "homingdev", ["maxStatTank", "basic"], "quiteliterallyAMachineGun", "speedoflight", "rayofdeath", "biggerCheese", "kivaship", "blaster", "trapperdesmos"]
+        Class.overpowered.UPGRADES_TIER_0 = ["tanks", "goofytanks", "armyOfOne", "godbasic", "maximumOverdrive", "oppenheimer", "homingdev", ["maxStatTank", "basic"], "quiteliterallyAMachineGun", "speedoflight", "rayofdeath", "biggerCheese", "kivaship", "blaster", "trapperdesmos","brokenanni"]
         Class.goofytanks.UPGRADES_TIER_0 = ["overpowered", "pisseroo", "papyrus", "Trapper_guy", "watertank", "piszerbeam", "baseThrowerDelta", "pouner", "adsfoipuasdfiopu", "goofywhirlwind", "gettingoverit", "alchem", "stupidpony", "billcipher"]
 
         //the "winsor" tank needs this to function, it worked before the "ON" thing was added

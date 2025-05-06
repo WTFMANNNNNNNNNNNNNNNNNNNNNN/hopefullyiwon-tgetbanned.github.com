@@ -230,20 +230,16 @@ var gameDraw = {
         flashBlueRed: true,  
 
         21: true,
-        flashBlueGrey: true,
         flashBlueGray: true,
 
         22: true,
         flashGreyBlue: true,
-        flashGrayBlue: true,
 
         23: true,
         flashRedGrey: true,
-        flashRedGray: true,
 
         24: true,
         flashGreyRed: true,
-        flashGrayRed: true,
 
         // lesbian
         29: true,
