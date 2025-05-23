@@ -113,7 +113,7 @@ module.exports = {
     },
 
     // Default skill caps.
-    MAX_SKILL: 9,
+    MAX_SKILL: 9, //9
 
     // Amount of tank tiers.
     MAX_UPGRADE_TIER: 9,

@@ -2841,6 +2841,47 @@ Class.assembler = {
         }
     ]
 }
+Class.ramrod = {
+  PARENT: "genericTank",
+  LABEL: "RamRod (BETA)",
+  DANGER: 6,
+  STAT_NAMES: statnames.trap,
+  MAX_CHILDREN: 1,
+  BODY: {
+  	SPEED: 0.8 * base.SPEED,
+    FOV: 1.2 * base.FOV
+  },
+	GUNS: [
+    {
+      POSITION: [18, 12, 1, 0, 0, 0, 0],
+    }, {
+      POSITION: [2, 12, 1.1, 18, 0, 0, 0],
+      PROPERTIES: {
+        SHOOT_SETTINGS: combineStats([g.trap, g.setTrap, {size: 2, health: 1.5, damage: 0.7}]),
+        TYPE: "ramrodTrap",
+        STAT_CALCULATOR: "block"
+      }
+    }
+  ]
+}
+
+for (let i = 0; i < 2; i++) {
+  Class.ramrod.GUNS.push(
+  	{
+    	POSITION: [3, 3, 0.001, -5, 14 - (i * 3), -90, 0]
+  	}, {
+  		POSITION: [3, 3, 0.001, -5, -14 + (i * 3), 90, 0]
+  	}
+  )
+}
+
+Class.ramrod.GUNS.push(
+  {
+    POSITION: [15, 2, 1, 0, -6, 0, 0]
+  }, {
+    POSITION: [15, 2, 1, 0, 6, 0, 0]
+  }
+)
 
 // Tri-Trapper upgrades
 Class.hexaTrapper = makeAuto({
@@ -4404,7 +4445,7 @@ Class.hivemind = {
       }
     },
     {
-      POSITION: [0, 20, 1, 0, 0, 90, 3],
+      POSITION: [0, 20, 1, 0, 0, 90, 1],
       PROPERTIES: {
         SHOOT_SETTINGS: combineStats([g.basic, g.slow, { reload: 5 }]),
         TYPE: "hiveprobe",
@@ -4413,9 +4454,9 @@ Class.hivemind = {
       }
     },
     {
-      POSITION: [0, 20, 1, 0, 0, 270, 3.5],
+      POSITION: [0, 20, 1, 0, 0, 270, 1],
       PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.basic, g.slow, { reload: 10 }]),
+        SHOOT_SETTINGS: combineStats([g.basic, g.slow, { reload: 5 }]),
         TYPE: "hiveprobe",
         MAX_CHILDREN: 1,
         WAIT_TO_CYCLE: true
@@ -4444,9 +4485,9 @@ Class.cloner = {
       }
     },
     {
-      POSITION: [0, 20, 1, 0, 0, 270, 3.5],
+      POSITION: [0, 20, 1, 0, 0, 270, 1],
       PROPERTIES: {
-        SHOOT_SETTINGS: combineStats([g.basic, g.slow, { reload: 10 }]),
+        SHOOT_SETTINGS: combineStats([g.basic, g.slow, { reload: 5 }]),
         TYPE: "clonerprobe",
         MAX_CHILDREN: 1,
         WAIT_TO_CYCLE: true
@@ -6730,7 +6771,8 @@ Class.radon = {
 }
 Class.accelmachinegun = {
 		PARENT: "genericTank",
-    LABEL: "Machine Gun",
+    LABEL: "Watt",
+  	DANGER: 6,
     GUNS: [
       	{
           	POSITION: [8, .1, -54, 19, 0, 0, 0],
@@ -6748,6 +6790,55 @@ Class.accelmachinegun = {
             }
         }
     ]
+}
+Class.accelArtillery = {
+    PARENT: "genericTank",
+    LABEL: "Cannon",
+    DANGER: 7,
+    GUNS: [
+      	{
+          	POSITION: [8, .1, -37, 19, -6, -7, 0.25],
+          	PROPERTIES: {
+              	SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.artillery, g.fake]),
+              	TYPE: "bullet",
+              	COLOR: 12
+            }
+        },
+      	{
+          	POSITION: [8, .1, -37, 19, 6, 7, 0.75],
+          	PROPERTIES: {
+              	SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.artillery, g.fake]),
+              	TYPE: "bullet",
+              	COLOR: 12
+            }
+        },
+        {
+            POSITION: [17, 3, 1, 0, -6, -7, 0.25],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.artillery, g.rainmaker]),
+                TYPE: "bullet",
+                LABEL: "Secondary",
+              	MOTION_TYPE: "accelerate"
+            },
+        },
+        {
+            POSITION: [17, 3, 1, 0, 6, 7, 0.75],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pelleter, g.artillery, g.rainmaker]),
+                TYPE: "bullet",
+                LABEL: "Secondary",
+              	MOTION_TYPE: "accelerate"
+            },
+        },
+        {
+            POSITION: [19, 12, 1, 0, 0, 0, 0],
+            PROPERTIES: {
+                SHOOT_SETTINGS: combineStats([g.basic, g.pounder, g.artillery]),
+                TYPE: "bullet",
+                LABEL: "Heavy",
+            },
+        },
+    ],
 }
 Class.gatlinggun = {
     PARENT: "genericTank",
@@ -8585,6 +8676,7 @@ Class.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "di
         Class.gunner.UPGRADES_TIER_3 = ["autoGunner", "nailgun", "auto4", "machineGunner", "gunnerTrapper", "cyclone", "overgunner", "waterfall", "helecopter", "auraGunner"]
         Class.sprayer.UPGRADES_TIER_3 = ["redistributor", "phoenix", "atomizer", "focal", "Sprayinception", "autoSprayer", "spraybrid", "auraSprayer"]
         Class.gatlinggun.UPGRADES_TIER_3 = ["focal", "Gatlinception", "accelgatlinggun", "autoGatlinggun", "gatlinggunbrid", "auraGatlinggun"]
+				Class.accelmachinegun.UPGRADES_TIER_3 = ["accelArtillery", "accelminigun", "accelgatlinggun"]
         Class.miniVulc.UPGRADES_TIER_3 = ["nailgun", "vulcan", "miniVulcTrap", "autominiVulc", "miniVulcbrid", "auraMiniVulc"]
 
     Class.flankGuard.UPGRADES_TIER_2 = ["hexaTank", "triAngle", "auto3", "trapGuard", "triTrapper", "autoFlank", "flankbrid", "flankdue", /*"flankinception", */"backShield", "littleFlankArtillery", "auraFlankGuard"]
@@ -8610,7 +8702,7 @@ Class.basic.UPGRADES_TIER_1 = ["twin", "sniper", "machineGun", "flankGuard", "di
 
     Class.trapper.UPGRADES_TIER_2 = ["builder", "triTrapper", "trapGuard", "wark", "contagion", "icetrapper", "autoTrap", "trapbrid", "littleTrapArtillery", "auraTrapper"]
         Class.trapper.UPGRADES_TIER_3 = ["barricade"]
-        Class.builder.UPGRADES_TIER_3 = ["construct", "engineer", "boomer", "assembler", "architect", "conqueror", "fort", "icebuilder", "autoBuilder", "builderbrid", "auraBuilder"]
+        Class.builder.UPGRADES_TIER_3 = ["construct", "engineer", "boomer", "assembler", "architect", "conqueror", "fort", "icebuilder", "ramrod", "autoBuilder", "builderbrid", "auraBuilder"]
         Class.triTrapper.UPGRADES_TIER_3 = ["fortress", "hexaTrapper", "septaTrapper", "architect", "triContagion", "icetriTrapper", "tritrapperbrid", "auraTriTrapper"]
         Class.trapGuard.UPGRADES_TIER_3 = ["bushwhacker", "gunnerTrapper", "bomber", "conqueror", "bulwark", "icetrapGuard", "miniVulcTrap", "autoTrapGuard", "trapguardbrid", "auraTrapGuard", "whirlGuard"]
         Class.wark.UPGRADES_TIER_3 = ["bulwark", "twincontagion", "icewark", "autowark", "warkbrid", "auraWark"]

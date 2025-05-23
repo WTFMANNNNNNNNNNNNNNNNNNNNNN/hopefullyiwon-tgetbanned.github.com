@@ -1976,6 +1976,9 @@ class Entity extends EventEmitter {
             case "locksFacing":
                 if (!this.control.alt) this.facing = Math.atan2(t.y, t.x);
                 break;
+          case "withMaster":
+            		if (this.master.independent) this.facing = this.master.facing
+            		break;
             case "looseWithTarget":
             case "looseToTarget":
             case "smoothToTarget":

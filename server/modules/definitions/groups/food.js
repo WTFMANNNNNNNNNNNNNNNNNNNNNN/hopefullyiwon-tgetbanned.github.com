@@ -127,7 +127,6 @@ Class.pentagon = {
         DENSITY: 80,
         HEALTH: 10 * basePolygonHealth,
         RESIST: 1,
-        //PENETRATION: 0.7,
         PENETRATION: 0.7,
         ACCELERATION: 0.0035
     },
