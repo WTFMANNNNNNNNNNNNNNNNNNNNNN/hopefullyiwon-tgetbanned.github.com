@@ -6,7 +6,9 @@
 ![Discord](https://img.shields.io/discord/1004907608018264094)
 ![GitHub repo size](https://img.shields.io/github/repo-size/Taureon/aps-plus-plus)
 
-We're currently in the process of [rebuilding OSA from scratch on Codeberg](https://codeberg.org/Taureon/OpenSourceArras). This repository will be archived once the Codeberg repo is in a playable state and has most of the features from regular OSA.
+# IMPORTANT MESSAGE
+
+The rewrite of aps++ is now available, you can get the latest version on aps++ [here](https://www.google.com). This version of aps++ will no longer receive updates.
 
 ## Important Notice
 
