@@ -101,10 +101,10 @@ function collide(instance, other) {
             break;
         case instance.team !== other.team ||
             (instance.team === other.team &&
-            (
-                instance.healer ||
-                other.healer
-            )):
+                (
+                    instance.healer ||
+                    other.healer
+                )):
             // Exits if the aura is not hitting a boss, tank, food, or crasher
             if (instance.type === "aura") {
                 if (!(auraCollideTypes.includes(other.type))) return;
@@ -203,55 +203,31 @@ const gameloop = () => {
             instance.destroy();
             continue;
         }
-        if (isRegenTick) {
-            if (instance.shield.max) {
-                instance.shield.regenerate();
-            }
-            if (instance.health.max) {
-                instance.health.regenerate(instance.shield.max && instance.shield.max === instance.shield.amount);
-            }
-        }
         if (instance.activation.active || instance.isPlayer) {
             if (instance.bond == null) {
-                // Resolve the physical behavior from the last collision cycle.
-                logs.physics.startTracking();
                 instance.physics();
-                logs.physics.endTracking();
             }
-            logs.entities.tally();
-            // Think about my actions.
-            logs.life.startTracking();
-            instance.life();
-            logs.life.endTracking();
-            // Apply friction.
             instance.friction();
             instance.confinementToTheseEarthlyShackles();
-            logs.selfie.startTracking();
-            instance.takeSelfie();
-            logs.selfie.endTracking();
         }
-        // Update collisions.
-        instance.collisionArray = [];
-        // Activation
-        instance.activation.update();
         instance.updateAABB(instance.activation.active);
-
-        logs.collide.startTracking();
-        instance.collisionArray = [];
         if (instance.activation.active) {
-            for (const other of grid.query(instance.minX, instance.minY, instance.maxX, instance.maxY).values()) {
-				collide(instance, other);
-			}
-			grid.insert(instance, instance.minX, instance.minY, instance.maxX, instance.maxY);
+            grid.insert(instance, instance.minX, instance.minY, instance.maxX, instance.maxY);
         }
-        logs.collide.endTracking();
-
+    }
+    for (const instance of entities.values()) {
+        if (!instance.isDead() && (instance.activation.active || instance.isPlayer)) {
+            instance.life();
+            instance.collisionArray = [];
+            for (const other of grid.query(instance.minX, instance.minY, instance.maxX, instance.maxY).values()) {
+                if (instance.id !== other.id) {
+                    collide(instance, other);
+                }
+            }
+        }
+        instance.activation.update();
+        instance.takeSelfie();
         instance.emit('tick', { body: instance });
-
-        const tile = room.getAt(instance);
-		if (tile !== null) {
-			tile.entities.push(instance);
-		}
     }
     logs.entities.endTracking();
     logs.master.endTracking();
@@ -309,7 +285,7 @@ const maintainloop = () => {
             o.skill.score += Config.BOT_XP;
         }
         o.skill.maintain();
-        o.skillUp([ "atk", "hlt", "spd", "str", "pen", "dam", "rld", "mob", "rgn", "shi" ][ran.chooseChance(...Config.BOT_SKILL_UPGRADE_CHANCES)]);
+        o.skillUp(["atk", "hlt", "spd", "str", "pen", "dam", "rld", "mob", "rgn", "shi"][ran.chooseChance(...Config.BOT_SKILL_UPGRADE_CHANCES)]);
         if (o.leftoverUpgrades && o.upgrade(ran.irandomRange(0, o.upgrades.length))) {
             o.leftoverUpgrades--;
         }
@@ -365,12 +341,12 @@ setInterval(() => {
     gameloop();
     gamemodeLoop();
     for (let y = 0; y < room.setup.length; y++) {
-		for (let x = 0; x < room.setup[y].length; x++) {
-			let tile = room.setup[y][x];
-			tile.tick(tile);
-			tile.entities = [];
-		}
-	}
+        for (let x = 0; x < room.setup[y].length; x++) {
+            let tile = room.setup[y][x];
+            tile.tick(tile);
+            tile.entities = [];
+        }
+    }
 
     for (let y = 0; y < room.setup.length; y++) {
         for (let x = 0; x < room.setup[y].length; x++) {
