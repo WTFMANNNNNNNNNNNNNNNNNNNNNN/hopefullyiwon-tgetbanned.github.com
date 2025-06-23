@@ -236,6 +236,10 @@ const gameloop = () => {
         instance.activation.update();
         instance.takeSelfie();
         instance.emit('tick', { body: instance });
+		const tile = room.getAt(instance);
+		if (tile) {
+			tile.entities.push(instance);
+		}
     }
     logs.entities.endTracking();
     logs.master.endTracking();
