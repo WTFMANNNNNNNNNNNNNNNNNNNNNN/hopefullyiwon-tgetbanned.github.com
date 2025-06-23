@@ -203,6 +203,14 @@ const gameloop = () => {
             instance.destroy();
             continue;
         }
+        if (isRegenTick) {
+			if (instance.shield.max) {
+				instance.shield.regenerate();
+			}
+			if (instance.health.max) {
+				instance.health.regenerate((instance.shield.max && instance.shield.max === instance.shield.amount) ? 1 : 0);
+			}
+		}
         if (instance.activation.active || instance.isPlayer) {
             if (instance.bond == null) {
                 instance.physics();

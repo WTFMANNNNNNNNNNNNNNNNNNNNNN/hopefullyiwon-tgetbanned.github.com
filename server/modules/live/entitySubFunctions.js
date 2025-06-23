@@ -190,7 +190,7 @@ class HealthType {
                     damageToMax);
         }
     }
-    regenerate(boost = false) {
+    regenerate(boost = 0) {
         boost /= 2;
         let cons = 5;
         switch (this.type) {
