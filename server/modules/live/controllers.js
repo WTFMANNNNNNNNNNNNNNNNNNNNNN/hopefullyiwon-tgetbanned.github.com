@@ -431,6 +431,7 @@ class io_stackGuns extends IO {
     }
 }
 class io_nearestDifferentMaster extends IO {
+    static validEntityTypes = new Set(["tank", "miniboss", "crasher", "ally"]);
     constructor(body, opts = {}) {
         super(body);
         this.accountForMovement = opts.accountForMovement ?? true;
@@ -441,43 +442,74 @@ class io_nearestDifferentMaster extends IO {
         this.oldHealth = body.health.display();
     }
     validate(e, m, mm, sqrRange, sqrRangeMaster) {
-        return (e.health.amount > 0) && (!e.master.master.ignoredByAi) && (e.master.master.team !== this.body.master.master.team) && (e.master.master.team !== TEAM_ROOM) && (!isNaN(e.dangerValue)) && (!e.invuln && !e.master.master.passive && !this.body.master.master.passive) && (this.body.aiSettings.seeInvisible || this.body.isArenaCloser || e.alpha > 0.5) && (!e.bond) && (e.type === "miniboss" || e.type === "tank" || e.type === "crasher" || e.type === "ally" || (!this.body.aiSettings.IGNORE_SHAPES && e.type === 'food')) && (this.body.aiSettings.BLIND || ((e.x - m.x) * (e.x - m.x) < sqrRange && (e.y - m.y) * (e.y - m.y) < sqrRange)) && (this.body.aiSettings.SKYNET || ((e.x - mm.x) * (e.x - mm.x) < sqrRangeMaster && (e.y - mm.y) * (e.y - mm.y) < sqrRangeMaster));
-    }
-    wouldHitWall(me, enemy) {
-        wouldHitWall(me, enemy);
+        const myMaster = this.body.master.master;
+        const aiSettings = this.body.aiSettings;
+        const theirMaster = e.master.master;
+        if (e.health.amount <= 0) return false;
+        if (theirMaster.team === myMaster.team || theirMaster.team === TEAM_ROOM) return false;
+        if (theirMaster.ignoredByAi) return false;
+        if (e.bond) return false;
+        if (aiSettings.IGNORE_SHAPES && e.type === "food") return false;
+        if (e.invuln || theirMaster.passive || myMaster.passive) return false;
+        if (isNaN(e.dangerValue)) return false;
+        if (!(aiSettings.seeInvisible || this.body.isArenaCloser || e.alpha > 0.5)) return false;
+        if (!io_nearestDifferentMaster.validEntityTypes.has(e.type)) {
+            if (e.type !== "food") return false;
+        }
+        if (!aiSettings.BLIND) {
+            if ((e.x - m.x) * (e.x - m.x) >= sqrRange) return false;
+            if ((e.y - m.y) * (e.y - m.y) >= sqrRange) return false;
+        }
+        if (!aiSettings.SKYNET) {
+            if ((e.x - mm.x) * (e.x - mm.x) >= sqrRangeMaster) return false;
+            if ((e.y - mm.y) * (e.y - m.y) >= sqrRangeMaster) return false;
+        }
+        return true;
     }
     buildList(range) {
-        const {
-            x,
-            y
-        } = this.body;
-        const potentialTargets = global.grid.query(x - range, y - range, x + range, y + range);
+        const body = this.body;
+        const { x, y, master, aiSettings, firingArc } = body;
+        const targetLock = this.targetLock;
+        const isFarm = aiSettings.farm;
+        const view360 = aiSettings.view360;
         const sqrRange = range * range;
-        const sqrRangeMaster = sqrRange * 4 / 3;
-        const validCandidates = [];
-        for (const e of potentialTargets) {
-            if (this.validate(e, this.body, this.body.master.master, sqrRange, sqrRangeMaster) && (this.body.aiSettings.view360 || Math.abs(util.angleDifference(util.getDirection(this.body, e), this.body.firingArc[0])) < this.body.firingArc[1]) && !this.wouldHitWall(this.body, e)) {
-                validCandidates.push(e);
+        const halfrange = range / 2;
+        const fourThirdsSqrRange = sqrRange * 4 / 3;
+        let mostDangerous = -1;
+        let finalTargets = [];
+        for (const e of grid.query(x - halfrange, y - halfrange, x + halfrange, y + halfrange).values()) {
+            if (!view360) {
+                const angleDiff = util.angleDifference(util.getDirection(body, e), firingArc[0]);
+                if (Math.abs(angleDiff) >= firingArc[1]) {
+                    continue;
+                }
+            }
+            if (this.validate(e, body, master.master, sqrRange, fourThirdsSqrRange) && !wouldHitWall(body, e)) {
+                if (isFarm) {
+                    finalTargets.push(e);
+                } else {
+                    if (e.dangerValue > mostDangerous) {
+                        mostDangerous = e.dangerValue;
+                        finalTargets = [e];
+                    } else if (e.dangerValue === mostDangerous) {
+                        finalTargets.push(e);
+                    }
+                }
             }
         }
-        if (!validCandidates.length) {
+        if (finalTargets.length === 0) {
             this.targetLock = undefined;
             return [];
         }
-        let mostDangerous = 0;
-        for (const e of validCandidates) {
-            mostDangerous = Math.max(e.dangerValue, mostDangerous);
-        }
         let keepTarget = false;
-        const finalTargets = validCandidates.filter(e => {
-            if (this.body.aiSettings.farm || e.dangerValue === mostDangerous) {
-                if (this.targetLock && e.id === this.targetLock.id) {
+        if (targetLock) {
+            for (const e of finalTargets) {
+                if (e.id === targetLock.id) {
                     keepTarget = true;
+                    break;
                 }
-                return true;
             }
-            return false;
-        });
+        }
         if (!keepTarget) {
             this.targetLock = undefined;
         }
@@ -505,7 +537,7 @@ class io_nearestDifferentMaster extends IO {
         if (!Number.isFinite(range)) {
             range = 640 * this.body.FOV;
         }
-        if (this.targetLock && (!this.validate(this.targetLock, this.body, this.body.master.master, range * range, range * range * 4 / 3) || this.wouldHitWall(this.body, this.targetLock))) {
+        if (this.targetLock && (!this.validate(this.targetLock, this.body, this.body.master.master, range * range, range * range * 4 / 3) || wouldHitWall(this.body, this.targetLock))) {
             this.targetLock = undefined;
             this.tick = 100;
         }

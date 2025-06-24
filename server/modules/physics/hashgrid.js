@@ -23,16 +23,18 @@ module.exports = class HashGrid {
 	}
 
 	query(minX, minY, maxX, maxY) {
+		const cells = this.cells;
+		const cellSize = this.cellSize;
+		const stride = HashGrid.stride;
 		const output = new Set();
-		const endX = maxX >> this.cellSize;
-		const endY = maxY >> this.cellSize;
-		for (let x = minX >> this.cellSize; x <= endX; x++) {
-			for (let y = minY >> this.cellSize; y <= endY; y++) {
-				const key = x + y * HashGrid.stride;
-				const cell = this.cells.get(key);
+		const endX = maxX >> cellSize;
+		const endY = maxY >> cellSize;
+		for (let x = minX >> cellSize; x <= endX; x++) {
+			for (let y = minY >> cellSize; y <= endY; y++) {
+				const key = x + y * stride;
+				const cell = cells.get(key);
 				if (cell !== undefined) {
-					for (let i = 0; i < cell.length; i++) {
-						const entity = cell[i];
+					for (const entity of cell) {
 						if (entity.minX < maxX && entity.maxX > minX && entity.minY < maxY && entity.maxY > minY) {
 							output.add(entity);
 						}
