@@ -23,7 +23,7 @@ module.exports = {
 
     // The \modules\setup\gamemodeconfigs\ files to load.
     // To change specific things about specific gamemodes (such as team count for tdm), edit their config file in \modules\setup\gamemodeconfigs\.
-    GAME_MODES: ['tdm', 'growth'],
+    GAME_MODES: ['ffa', 'growth'],
 
     // The room files to load in the setup/rooms folder.
     // NOTE: If a /gamemodeconfig/ file "replaces" the value of ROOM_SETUP, it just adds its own ROOM_SETUP's content to this array.
@@ -215,8 +215,27 @@ module.exports = {
     ],
 
     // The possible boss types that can spawn.
-
-
+// The possible boss types that can spawn.
+    BOSS_TYPES: [{
+        bosses: ["eliteDestroyer", "eliteGunner", "eliteSprayer", "eliteBattleship", "eliteSpawner"],
+        amount: [5, 5, 4, 2, 1], chance: 2, nameType: "a",
+    },{
+        bosses: ["roguePalisade"],
+        amount: [4, 1], chance: 1, nameType: "castle",
+        message: "A strange trembling...",
+    },{
+        bosses: ["summoner", "eliteSkimmer", "nestKeeper"],
+        amount: [2, 2, 1], chance: 1, nameType: "a",
+        message: "A strange trembling...",
+    },{
+        bosses: ["paladin", "freyja", "zaphkiel", "nyx", "theia"],
+        amount: [1], chance: 0.01,
+        message: "The world tremors as the celestials are reborn anew!",
+    },{
+        bosses: ["julius", "genghis", "napoleon"],
+        amount: [1], chance: 0.1,
+        message: "The darkness arrives as the realms are torn apart!",
+    }],
 
     // Default values for gamemode related things.
     // Do not change these, you'll likely break stuff!
@@ -231,7 +250,7 @@ module.exports = {
     GROUPS: false,
     TRAIN: false,
     MAZE: false,
-    HUNT: false,
+    HUNT: true,
     MODE: "ffa",
     TAG: false,
     SPAWN_CONFINEMENT: {},
