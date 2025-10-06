@@ -6,7 +6,7 @@ module.exports = {
     host: "hopefullyiwon-tgetbanned-github-com.onrender.com",
 
     // Which port to run the web server on.
-    port: 3000,
+    port: 8080,
 
     // How often to update the list of the entities that players can see.
     // Has effects of when entities are activated.
