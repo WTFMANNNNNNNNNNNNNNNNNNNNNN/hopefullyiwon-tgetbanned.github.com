@@ -32,8 +32,8 @@ module.exports = {
     ROOM_SETUP: ['map_apspp_default'],
 
     // The dimensions of a single tile on the map.
-    TILE_WIDTH: 250,
-    TILE_HEIGHT: 250,
+    TILE_WIDTH: 500,
+    TILE_HEIGHT: 500,
 
 
 
