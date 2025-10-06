@@ -5,8 +5,8 @@ const settings = {
         barChunk: 4,
         mininumBorderChunk: 0.5,
         deathBlurAmount: 3,
-        darkBorders: false,
-        fancyAnimations: true,
+        darkBorders: true,
+        fancyAnimations: false,
         lowResolution: false,
         colors: 'normal',
         pointy: true,
@@ -14,7 +14,7 @@ const settings = {
         fontSizeBoost: 1.4,
         fontStrokeRatio: 4.5,
         neon: false,
-        coloredHealthbars: false,
+        coloredHealthbars: true,
         seperatedHealthbars: false,
         showHealthText: false,
     },
@@ -23,7 +23,7 @@ const settings = {
         memory: 500
     },
     game: {
-        autoLevelUp: false
+        autoLevelUp: true
     }
 };
 export { settings }
