@@ -6,11 +6,11 @@ module.exports = {
     host: "hopefullyiwon-tgetbanned-github-com.onrender.com",
 
     // Which port to run the web server on.
-    port: 8080,
+    port: 3000,
 
     // How often to update the list of the entities that players can see.
     // Has effects of when entities are activated.
-    visibleListInterval: 250,
+    visibleListInterval: 500,
 
     // How long (in ms) a socket can be disconnected without their player dying.
     maxHeartbeatInterval: 300000,
@@ -59,7 +59,7 @@ module.exports = {
     // Welcome message once a player spawns.
     WELCOME_MESSAGE: "You have spawned! Welcome to the game.\n"
                     +"You will be invulnerable until you move or shoot.\n"
-                    +"Please report any bugs you encounter!",
+                    +"for dev use token devtesttoken and click p to activate!",
     
     // How long a popup message lasts before fading out in milliseconds.
     MESSAGE_DISPLAY_TIME: 10_000,
@@ -119,7 +119,7 @@ module.exports = {
     LEVEL_CHEAT_CAP: 45,
 
     // Amount of player-bots to spawn.
-    BOTS: 25,
+    BOTS: 0,
 
     // How much XP player-bots get per second until they reach LEVEL_CAP.
     BOT_XP: 125,
