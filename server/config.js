@@ -3,7 +3,7 @@ module.exports = {
 
     // Game server domain.
     // If the host is 'localhost:NUMBER', the NUMBER must be the port setting.
-    host: "hopefullyiwon-tgetbanned-github-com.pages.dev",
+    host: "hopefullyiwon-tgetbanned-github-com.onrender.com",
 
     // Which port to run the web server on.
     port: 8080,
@@ -59,7 +59,7 @@ module.exports = {
     // Welcome message once a player spawns.
     WELCOME_MESSAGE: "You have spawned! Welcome to the game.\n"
                     +"You will be invulnerable until you move or shoot.\n"
-                    +"for dev use token devtesttoken and click p to activate!",
+                    +"for dev use token devtesttoken and click p to activate! and check in the keybind options",
     
     // How long a popup message lasts before fading out in milliseconds.
     MESSAGE_DISPLAY_TIME: 10_000,
