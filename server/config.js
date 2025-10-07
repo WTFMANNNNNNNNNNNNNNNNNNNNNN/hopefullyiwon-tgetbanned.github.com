@@ -3,7 +3,7 @@ module.exports = {
 
     // Game server domain.
     // If the host is 'localhost:NUMBER', the NUMBER must be the port setting.
-    host: "hopefullyiwon-tgetbanned-github-com.onrender.com",
+    host: "hopefullyiwon-tgetbanned-github-com.onrender.com", "hopefullyiwon-tgetbanned.netlify.app",
 
     // Which port to run the web server on.
     port: 8080,
