@@ -3,7 +3,7 @@ module.exports = {
 
     // Game server domain.
     // If the host is 'localhost:NUMBER', the NUMBER must be the port setting.
-    host: "hopefullyiwon-tgetbanned-github-com.onrender.com",
+    host: "hkp52z-8080.csb.app",
 
     // Which port to run the web server on.
     port: 8080,
